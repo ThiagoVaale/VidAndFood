@@ -1,0 +1,25 @@
+.wine-container{
+    width: 15rem;
+}
+
+.rating-stars{
+    display: flex;
+    gap: 4px;
+    margin: 8px 0;
+}
+
+.card {
+    height: 100%;
+    max-width: 230px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px;
+} 
+
+.card-img{
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+

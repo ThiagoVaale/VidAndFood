@@ -1,12 +1,12 @@
 import DonNicanorMalbec from '../images/DonNicanorMalbec.png'
 import SalenteinReserveChardonnay from '../images/SalenteinReserveChardonnay.png'
-import LuigiBoscaCabernetSauvignon from '../images/LuigiBoscaCabernetSauvignon.png'
+import LuigiBoscaCabernetSauvignon from '../images/LuigiBoscaCaberneSauvignon.png'
 import ElEnemigoBonarda from '../images/ElEnemigoBonarda.png'
-import TrapicheIscaySyrah from '../images/TrapicheIscaySyrah.png'
+import TrapicheIscaySyrah from '../images/TrapichIscaySyrahViognier.png'
 import ZuccardiQTempranillo from '../images/ZuccardiQTempranillo.png'
-import Andeluma1300Torrontés from '../images/Andeluma1300Torrontés.png'
+import Andeluma1300Torrontés from '../images/Andeluna1300Torrontés.png'
 import ColoméAlturaMáximaMalbec from '../images/ColoméAlturaMáximaMalbec.png'
-import CadusSignatureBlend from '../images/CadusSignatureBlend.png'
+import CadusSignatureBlend from '../images/CadusSignaturBlend.png'
 
 export const wines = [
     {
