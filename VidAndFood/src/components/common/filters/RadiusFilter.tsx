@@ -1,0 +1,65 @@
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
+import { RatingOption } from "../types/FilterTypes";
+import { Star, StarFill } from "react-bootstrap-icons";
+
+interface RatingFilterProps {
+  options: RatingOption[];
+  filterId: string;
+  selectedValue?: string;
+  onFilterChange?: (filterId: string, value: string) => void;
+}
+
+const RatingFilter: React.FC<RatingFilterProps> = ({
+  options,
+  filterId,
+  selectedValue,
+  onFilterChange,
+}) => {
+ 
+    
+    const renderStars = (rating: number) => {
+      const fullStars = Math.floor(rating);
+      const hasHalf = rating % 1 >= 0.5;
+      const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+    return (
+      <div className="flex gap-0.5">
+        {Array.from({ length: fullStars }, (_, i) => (
+          <StarFill key={`fill-${i}`} color="#a52a2a" />
+        ))}
+        {hasHalf && <Star key="half" color="#a52a2a" />}
+        {Array.from({ length: emptyStars }, (_, i) => (
+          <Star key={`empty-${i}`} color="#d1d5db" />
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      {options.map((option) => (
+        <label key={option.value}>
+          <input
+            type="radio" 
+            name="rating-filter"
+            value={option.value}
+            checked={selectedValue === option.value}
+            onChange={() => onFilterChange?.(filterId, option.value)}
+          />
+          {renderStars(option.rating)}
+          <span>{option.rating}</span>
+          <p>{option.label}</p>
+        </label>
+      ))}
+    </div>
+  )
+
+};
+
+export default RatingFilter;
