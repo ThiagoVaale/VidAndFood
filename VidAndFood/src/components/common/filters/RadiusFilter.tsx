@@ -7,6 +7,7 @@ import { ChevronUpIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
 import { RatingOption } from "../types/FilterTypes";
 import { Star, StarFill } from "react-bootstrap-icons";
+import { FilterDisclousure } from "../FilterDisclousure";
 
 interface RatingFilterProps {
   options: RatingOption[];
@@ -21,15 +22,13 @@ const RatingFilter: React.FC<RatingFilterProps> = ({
   selectedValue,
   onFilterChange,
 }) => {
- 
-    
-    const renderStars = (rating: number) => {
-      const fullStars = Math.floor(rating);
-      const hasHalf = rating % 1 >= 0.5;
-      const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
 
     return (
-      <div className="flex gap-0.5">
+      <div className="d-flex gap-1">
         {Array.from({ length: fullStars }, (_, i) => (
           <StarFill key={`fill-${i}`} color="#a52a2a" />
         ))}
@@ -42,24 +41,27 @@ const RatingFilter: React.FC<RatingFilterProps> = ({
   };
 
   return (
-    <div>
+    <div className="d-flex flex-column gap-2">
       {options.map((option) => (
-        <label key={option.value}>
+        <label key={option.value} className="d-flex align-items-center gap-2 cursor-pointer">
           <input
-            type="radio" 
-            name="rating-filter"
+            type="radio"
+            name={`rating-filter-${filterId}`}
             value={option.value}
             checked={selectedValue === option.value}
             onChange={() => onFilterChange?.(filterId, option.value)}
+            className="form-check-input"
           />
           {renderStars(option.rating)}
-          <span>{option.rating}</span>
-          <p>{option.label}</p>
+          <div className="d-flex align-items-center gap-2">
+            {renderStars(option.rating)}
+            <span className="small text-muted">{option.rating}</span>
+            <span className="small">{option.label}</span>
+          </div>
         </label>
       ))}
     </div>
-  )
-
+  );
 };
 
 export default RatingFilter;

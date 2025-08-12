@@ -4,7 +4,7 @@ import RadiusFilter from './filters/RadiusFilter';
 import CheckBoxFilter from './filters/CheckBoxFilter';
 import RangerFilter from './filters/RangeFilter';
 import RatingFilter from './filters/RadiusFilter';
-import FilterSection from './filters/FilterSection';
+import { FilterDisclousure } from './FilterDisclousure';
 
 interface GenericSideBarFilterProps {
   filters: FilterConfig[];
@@ -19,20 +19,6 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   maxVisibleFilters,
   onFilterChange,
 }) => {
-  const [collapsedState, setCollapsedState] = useState<Record<string, boolean>>(
-    filters.reduce((acc, filter) => ({
-      ...acc,
-      [filter.id]: filter.isCollapsed || false
-    }), {})
-  )
-
-  const toggleCollapse = (filterId: string) => {
-    setCollapsedState( prev => ({
-      ...prev,
-      [filterId] : !prev[filterId]
-    }));
-  }
-
   const [showAllFilters, setShowAllFilters] = useState(false)
 
   const shouldLimitFilters = maxVisibleFilters && maxVisibleFilters > 0 && filters.length > maxVisibleFilters
@@ -71,25 +57,27 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   }
   return (
     <div>
-      <div>
-        <h3>{title}</h3>
+      <div className="mb-4">
+        <h3 className="h5 fw-bold">
+          {title}
+        </h3>
       </div>
 
-      <div>
+      <div className="d-flex flex-column gap-2">
         {visibleFilters.map((filter) => (
-          <FilterSection
+          <FilterDisclousure 
             key={filter.id}
             title={filter.title}
-            isCollapsed={collapsedState[filter.id]}
-            onToggle={() => toggleCollapse(filter.id)}
+            isCollapsed={filter.isCollapsed}
           >
             {renderFilterContent(filter)}
-          </FilterSection>
+          </FilterDisclousure>
         ))}
 
         {shouldLimitFilters && (
-          <div>
+          <div className="mt-3">
             <button
+              className="btn btn-link p-0 text-decoration-none"
               onClick={() => setShowAllFilters(!showAllFilters)}
             >
               {showAllFilters ? 'Mostrar menos filtros' : `Mostrar ${hiddenFilterCount} filtros más`}
