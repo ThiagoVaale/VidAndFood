@@ -25,15 +25,16 @@ const CheckBoxFilter: React.FC<CheckBoxFilterProps> = ({
     onFilterChange?.(filterId, updatedOptions);
    }
 
+
    return (
     <div>
         {options.map((option) => (
             <div key={option.id}>
                 <Checkbox 
-                checked={enabledOption.some(selected => selected.id === option.id)} 
-                onChange={(checked) => handleCheckBoxChange(option, checked)}
+                    checked={enabledOption.some(selected => selected.id === option.id)} 
+                    onChange={(checked) => handleCheckBoxChange(option, checked)}
                 >
-                    <CheckIcon/>
+                    {/* <CheckIcon/> */}
                 </Checkbox>
                 <label>{option.label}</label>
             </div>

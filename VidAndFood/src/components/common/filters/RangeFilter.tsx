@@ -83,7 +83,7 @@ const RangerFilter: React.FC<RangeFilterProps> = ({
                                 boxShadow: '0 2px 6px #AAA',
                                 cursor: 'pointer',
                                 transform: isDragged ? 'scale(1.1)' : 'scale(1)',
-                                transition: 'transform 0.2s ease'
+                                transition: 'transform 0.01s ease'
                             }}
                         />
                     )}

@@ -4,7 +4,6 @@ import RadiusFilter from './filters/RadiusFilter';
 import CheckBoxFilter from './filters/CheckBoxFilter';
 import RangerFilter from './filters/RangeFilter';
 import RatingFilter from './filters/RadiusFilter';
-import { BsFillSignIntersectionFill } from 'react-icons/bs';
 import FilterSection from './filters/FilterSection';
 
 interface GenericSideBarFilterProps {
@@ -12,7 +11,6 @@ interface GenericSideBarFilterProps {
   title: string;
   maxVisibleFilters?: number;
   onFilterChange?: (filterId: string, value: any) => void;
-  className?: string;
 }
 
 const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
@@ -20,7 +18,6 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   title,
   maxVisibleFilters,
   onFilterChange,
-  className
 }) => {
   const [collapsedState, setCollapsedState] = useState<Record<string, boolean>>(
     filters.reduce((acc, filter) => ({
@@ -52,7 +49,7 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
             onFilterChange={onFilterChange}
           />
         );
-      case 'checkbox':
+      case 'range':
         return (
           <RangerFilter
             options={filter.options as RangeOption}
@@ -60,7 +57,7 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
             onFilterChange={onFilterChange}
           />
         );
-      case 'checkbox':
+      case 'rating':
         return (
           <RatingFilter
             options={filter.options as RatingOption[]}
