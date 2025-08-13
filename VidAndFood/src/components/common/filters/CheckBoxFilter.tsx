@@ -29,35 +29,46 @@ const CheckBoxFilter: React.FC<CheckBoxFilterProps> = ({
   };
 
   return (
-    <div className="d-flex flex-column gap-2">
+    <div className="d-flex flex-column gap-3">
       {options.map((option) => (
-        <div key={option.id} className="d-flex align-items-center gap-2">
-          <Checkbox
-            checked={enabledOption.some(
-              (selected) => selected.id === option.id
-            )}
-            onChange={(checked) => handleCheckBoxChange(option, checked)}
-            className="form-check-input"
-          >
-            {({ checked }) => (
-              <div
-                className={`d-flex align-items-center justify-content-center ${
-                  checked
-                    ? "bg-primary border-primary"
-                    : "bg-white border-secondary"
-                }`}
-                style={{ width: "16px", height: "16px", borderRadius: "3px" }}
-              >
-                {checked && (
-                  <CheckIcon
-                    className="text-white"
-                    style={{ width: "12px", height: "12px" }}
-                  />
-                )}
-              </div>
-            )}
-          </Checkbox>
-          <label className="form-check-label mb-0">{option.label}</label>
+        <div
+          key={option.id}
+          className="d-flex align-items-center justify-content-between"
+        >
+          <label className="d-flex align-items-center gap-3 cursor-pointer mb-0 flex-grow-1">
+            <Checkbox
+              checked={enabledOption.some(
+                (selected) => selected.id === option.id
+              )}
+              onChange={(checked) => handleCheckBoxChange(option, checked)}
+              className="position-relative"
+            >
+              {({ checked }) => (
+                <div
+                  className={`d-flex align-items-center justify-content-center border rounded ${
+                    checked
+                      ? "bg-danger border-danger"
+                      : "bg-white border-secondary"
+                  }`}
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {checked && (
+                    <CheckIcon
+                      className="text-white"
+                      style={{ width: "12px", height: "12px" }}
+                    />
+                  )}
+                </div>
+              )}
+            </Checkbox>
+            <span className="text-dark" style={{ fontSize: "0.9rem" }}>
+              {option.label}
+            </span>
+          </label>
         </div>
       ))}
     </div>

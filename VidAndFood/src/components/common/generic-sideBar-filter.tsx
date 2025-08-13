@@ -55,39 +55,39 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
         return null;
     }
   }
-  return (
-    <div>
-      <div className="mb-4">
-        <h3 className="h5 fw-bold">
-          {title}
-        </h3>
-      </div>
-
-      <div className="d-flex flex-column gap-2">
-        {visibleFilters.map((filter) => (
-          <FilterDisclousure 
-            key={filter.id}
-            title={filter.title}
-            isCollapsed={filter.isCollapsed}
-          >
-            {renderFilterContent(filter)}
-          </FilterDisclousure>
-        ))}
-
-        {shouldLimitFilters && (
-          <div className="mt-3">
-            <button
-              className="btn btn-link p-0 text-decoration-none"
-              onClick={() => setShowAllFilters(!showAllFilters)}
-            >
-              {showAllFilters ? 'Mostrar menos filtros' : `Mostrar ${hiddenFilterCount} filtros más`}
-            </button>
-          </div>
-        )}
-
-      </div>
+return (
+  <div className="w-100"> 
+    <div className="mb-4">
+      <h3 className="h5 fw-bold text-dark mb-0">
+        {title}
+      </h3>
     </div>
-  )
+
+    <div className="d-flex flex-column">
+      {visibleFilters.map((filter) => (
+        <FilterDisclousure 
+          key={filter.id}
+          title={filter.title}
+          isCollapsed={filter.isCollapsed}
+        >
+          {renderFilterContent(filter)}
+        </FilterDisclousure>
+      ))}
+
+      {shouldLimitFilters && (
+        <div className="mt-4 pt-3">
+          <button
+            className="btn btn-link p-0 text-decoration-none text-danger fw-medium"
+            onClick={() => setShowAllFilters(!showAllFilters)}
+            style={{ fontSize: '0.9rem' }}
+          >
+            {showAllFilters ? 'Mostrar menos filtros' : `Mostrar ${hiddenFilterCount} filtros más`}
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)
 }
 
 export default GenericSidebarFilter

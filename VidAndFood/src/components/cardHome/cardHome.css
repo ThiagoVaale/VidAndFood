@@ -1,25 +1,37 @@
-.wine-container{
-    width: 15rem;
+.wine-card {
+  border-radius: 12px;
+  background: #fff;
+  overflow: visible; 
+  margin-top: 60px;
+  position: relative;
+  padding-top: 70px;
 }
 
-.rating-stars{
-    display: flex;
-    gap: 4px;
-    margin: 8px 0;
+.wine-img-floating {
+  position: absolute;
+  top: -120px; 
+  left: 100px;
+  transform: translateX(-50%);
+  width: 100px; 
+  height: 205px;
+  z-index: 2;
 }
 
-.card {
-    height: 100%;
-    max-width: 230px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin: 20px;
-} 
-
-.card-img{
-    height: 300px;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0;
 }
 
+.valoraciones {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.precio {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  margin-top: 4px;
+}

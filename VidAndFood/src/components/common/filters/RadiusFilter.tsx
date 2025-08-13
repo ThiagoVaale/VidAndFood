@@ -41,27 +41,34 @@ const RatingFilter: React.FC<RatingFilterProps> = ({
   };
 
   return (
-    <div className="d-flex flex-column gap-2">
-      {options.map((option) => (
-        <label key={option.value} className="d-flex align-items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            name={`rating-filter-${filterId}`}
-            value={option.value}
-            checked={selectedValue === option.value}
-            onChange={() => onFilterChange?.(filterId, option.value)}
-            className="form-check-input"
-          />
+  <div className="d-flex flex-column gap-3">
+    {options.map((option) => (
+      <label 
+        key={option.value} 
+        className="d-flex align-items-center gap-3 cursor-pointer mb-0"
+      >
+        <input
+          type="radio"
+          name={`rating-filter-${filterId}`}
+          value={option.value}
+          checked={selectedValue === option.value}
+          onChange={() => onFilterChange?.(filterId, option.value)}
+          className="form-check-input"
+          style={{ transform: 'scale(0.9)' }}
+        />
+        <div className="d-flex align-items-center gap-2">
           {renderStars(option.rating)}
-          <div className="d-flex align-items-center gap-2">
-            {renderStars(option.rating)}
-            <span className="small text-muted">{option.rating}</span>
-            <span className="small">{option.label}</span>
-          </div>
-        </label>
-      ))}
-    </div>
-  );
+          <span className="text-muted" style={{ fontSize: '0.85rem' }}>
+            {option.rating}
+          </span>
+          <span className="text-dark" style={{ fontSize: '0.9rem' }}>
+            {option.label}
+          </span>
+        </div>
+      </label>
+    ))}
+  </div>
+);
 };
 
 export default RatingFilter;

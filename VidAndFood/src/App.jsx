@@ -74,14 +74,18 @@ import GenericSidebarFilter from './components/common/generic-sideBar-filter'
   ];
 
 function App() {
-  return (
-    <div className='container-fluid'>
-      <div className='row'>
-        <aside className='col-md-3 col-lg-2 bg-light border-end p-5 mt-5 ml-1'>
-          <GenericSidebarFilter filters={wineFilters} title='Filtros de vinos' />
+    return (
+    <div className='container-fluid p-0'>
+      <div className='row g-0'>
+        <aside className='col-md-3 col-lg-2 bg-white border-end vh-100 sticky-top overflow-auto sidebar-integrated'>
+          <div className='p-4 pt-5'>
+            <GenericSidebarFilter filters={wineFilters} title='Filtros de vinos' />
+          </div>
         </aside>
-        <main className='col-md-9 col-lg-10 p-4 mt-5'>
-          <Wines wines={wines}/>
+        <main className='col-md-9 col-lg-10 bg-light min-vh-100'>
+          <div className='p-4 pt-5'>
+            <Wines wines={wines}/>
+          </div>
         </main>
       </div>
     </div>
