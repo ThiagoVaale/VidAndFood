@@ -1,4 +1,4 @@
-import Navbar from "./nav-bar/navbar"
+import Navbar from "./nav-bar/Navbar"
 
 const MainLayout = () => {
   return (

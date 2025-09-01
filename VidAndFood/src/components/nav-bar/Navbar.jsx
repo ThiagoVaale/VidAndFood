@@ -8,7 +8,9 @@ const CustomNavbar = () => {
         { name: 'Grapes', href: '/grapes' },
         { name: 'Regions', href: '/regions' },
         { name: 'Premium', href: '/premium' },
+        { name: 'Sommelier AI', href: '/sommelier-ai' },
         { name: 'My Cellar', href: '/my-cellar' },
+        
     ];
 
     return <Navbar
@@ -19,7 +21,7 @@ const CustomNavbar = () => {
     >
         <Container fluid>
             {/* Logo */}
-            <Navbar.Brand href="#" className="fs-3 fw-bold mx-3" style={{ fontFamily: 'playfair', color: COLORS.green }}>
+            <Navbar.Brand href="#" className="fs-3 fw-bold mx-3" style={{ fontFamily: 'playfair', color: COLORS.darkGreen }}>
                 Vid & Food
             </Navbar.Brand>
 

@@ -1,0 +1,35 @@
+/* Subrayado suave para el link activo/hover */
+.navlink-underline {
+  position: relative;
+  text-decoration: none !important;
+}
+.navlink-underline:hover,
+.navlink-underline:focus {
+  color: #111 !important;
+}
+.navlink-underline.active {
+  color: #111 !important;
+}
+.navlink-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .2s ease;
+  opacity: 0.7;
+}
+.navlink-underline:hover::after,
+.navlink-underline.active::after {
+  transform: scaleX(1);
+}
+
+/* Asegurar foco visible en teclado */
+:focus-visible {
+  outline: 2px dashed rgba(0,0,0,.4);
+  outline-offset: 2px;
+}
