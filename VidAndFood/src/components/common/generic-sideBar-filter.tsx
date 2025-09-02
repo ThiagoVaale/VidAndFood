@@ -128,8 +128,6 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
 
   return (
     <div className="filter-container">
-      <div className="filter-header">{title}</div>
-
       <div className="filter-content">
         {visibleFilters.map((filter, index) => (
           <WineFilterDisclosure

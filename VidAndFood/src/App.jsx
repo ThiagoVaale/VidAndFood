@@ -69,56 +69,58 @@ const wineFilters = [
 function App() {
   const [filters, setFilters] = useState({});
 
-  const filteredWines = useMemo(
-    () => applyFilters(wines, filters),
-    [filters]
-  );
+  const filteredWines = useMemo(() => applyFilters(wines, filters), [filters]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: "#fdf9f2ff",
-      }}
-    >
+    <>
       <div
-        className="sidebar-container"
         style={{
-          width: "400px",
-          minWidth: "400px",
-          flex: "0 0 400px",
-          height: "100vh",
-          position: "sticky",
-          top: 0,
-          background: "transparent",
+          display: "flex",
+          minHeight: "100vh",
+          backgroundColor: "#fdf9f2ff",
         }}
       >
         <div
-          className="sidebar-content"
-          style={{ background: "transparent", backgroundColor: "transparent" }}
+          className="sidebar-container"
+          style={{
+            width: "400px",
+            minWidth: "400px",
+            flex: "0 0 400px",
+            height: "100vh",
+            position: "sticky",
+            top: 0,
+            background: "transparent",
+          }}
         >
-          <GenericSidebarFilter
-            filters={wineFilters}
-            value={filters}          
-            onChange={setFilters}   
-            rangeDebounceMs={120}
-          />
+          <div
+            className="sidebar-content"
+            style={{
+              background: "transparent",
+              backgroundColor: "transparent",
+            }}
+          >
+            <GenericSidebarFilter
+              filters={wineFilters}
+              value={filters}
+              onChange={setFilters}
+              rangeDebounceMs={120}
+            />
+          </div>
         </div>
-      </div>
 
-      <main
-        style={{
-          flexGrow: 1,
-          backgroundColor: "#fdf9f2ff",
-          minHeight: "100vh",
-        }}
-      >
-        <div className="p-4 pt-5">
-          <Wines wines={filteredWines} />
-        </div>
-      </main>
-    </div>
+        <main
+          style={{
+            flexGrow: 1,
+            backgroundColor: "#fdf9f2ff",
+            minHeight: "100vh",
+          }}
+        >
+          <div className="p-4 pt-5">
+            <Wines wines={filteredWines} />
+          </div>
+        </main>
+      </div>
+    </>
   );
 }
 
