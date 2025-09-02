@@ -1,0 +1,159 @@
+
+.sidebar-container {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent; 
+}
+
+.sidebar-content {
+  padding: 20px 16px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: rgba(165, 42, 42, 0.05);
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #d4a574;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #a52a2a;
+}
+
+.filter-container {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  overflow: visible;
+}
+
+.filter-header {
+  background: linear-gradient(135deg, #a52a2a 0%, #8b1e1e 100%);
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  position: relative;
+
+}
+
+.filter-title {
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.filter-content {
+  background: transparent !important;
+  max-height: none;
+  overflow: visible;
+}
+
+.filter-disclosure {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 0;
+}
+
+.filter-disclosure:last-child {
+  background: transparent !important; 
+  background-color: transparent !important;
+  border-bottom: none;
+}
+
+.filter-disclosure:hover {
+  background: rgba(165, 42, 42, 0.02);
+}
+
+.disclosure-header {
+  padding: 12px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.disclosure-title {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 14px;
+  margin: 0;
+}
+
+.disclosure-preview {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 400;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.disclosure-icon {
+  color: #a52a2a;
+  transition: transform 0.2s ease;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.disclosure-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.disclosure-content {
+  padding: 0 0 12px 0;
+  background: transparent !important;
+}
+
+.show-more-container {
+  padding: 12px 0;
+  background: transparent !important;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.show-more-button {
+  background: transparent !important;
+  border: 1px solid #d4a574;
+  color: #a52a2a;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.show-more-button:hover {
+  background: #a52a2a;
+  color: white;
+  border-color: #a52a2a;
+}

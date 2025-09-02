@@ -1,0 +1,31 @@
+.wine-card {
+  border-radius: 10px;  
+  background: #fff;
+  overflow: visible; 
+  margin-top: 20px;
+  position: relative;
+  padding-top: 20px;
+  transition: all 0.2s ease; 
+  box-shadow: 0 20px 20px #a52a2a;
+}
+
+.wine-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 20px #a52a2a;
+}
+
+.wine-img-floating {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto; 
+  max-height: 220px;
+  z-index: 2;
+  transition: transform 0.3s ease;
+  object-fit: contain;
+}
+
+.wine-card:hover .wine-img-floating {
+  transform: translateX(-50%) scale(1.1); 
+}
