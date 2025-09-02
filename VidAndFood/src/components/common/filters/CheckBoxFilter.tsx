@@ -1,76 +1,80 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CheckBoxOption } from "../types/FilterTypes";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
-import { FilterDisclousure } from "../FilterDisclousure";
+import { X } from "react-bootstrap-icons";
 
 interface CheckBoxFilterProps {
   options: CheckBoxOption[];
   filterId: string;
-  onFilterChange?: (filterId: string, value: CheckBoxOption[]) => void;
+  value: string[];
+  onChange: (ids: string[]) => void;
 }
 
 const CheckBoxFilter: React.FC<CheckBoxFilterProps> = ({
   options,
   filterId,
-  onFilterChange,
+  value,
+  onChange,
 }) => {
-  const [enabledOption, setEnabledOption] = useState<CheckBoxOption[]>(
-    options.filter((options) => options.checked)
-  );
+  const isChecked = (id: string) => value.includes(id)
 
-  const handleCheckBoxChange = (option: CheckBoxOption, checked: boolean) => {
-    const updatedOptions = checked
-      ? [...enabledOption, option]
-      : enabledOption.filter((selected) => selected.id !== option.id);
-
-    setEnabledOption(updatedOptions);
-    onFilterChange?.(filterId, updatedOptions);
-  };
+  const toggle = (id: string) => {
+    const next = isChecked(id) ? value.filter(x => x !== id) : [ ...value, id ];
+    onChange(next);
+  }
 
   return (
     <div className="d-flex flex-column gap-3">
-      {options.map((option) => (
-        <div
-          key={option.id}
-          className="d-flex align-items-center justify-content-between"
-        >
-          <label className="d-flex align-items-center gap-3 cursor-pointer mb-0 flex-grow-1">
-            <Checkbox
-              checked={enabledOption.some(
-                (selected) => selected.id === option.id
-              )}
-              onChange={(checked) => handleCheckBoxChange(option, checked)}
-              className="position-relative"
-            >
-              {({ checked }) => (
-                <div
-                  className={`d-flex align-items-center justify-content-center border rounded ${
-                    checked
-                      ? "bg-danger border-danger"
-                      : "bg-white border-secondary"
-                  }`}
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  {checked && (
-                    <CheckIcon
-                      className="text-white"
-                      style={{ width: "12px", height: "12px" }}
-                    />
-                  )}
-                </div>
-              )}
-            </Checkbox>
-            <span className="text-dark" style={{ fontSize: "0.9rem" }}>
-              {option.label}
-            </span>
-          </label>
-        </div>
-      ))}
+      {options.map((option) => {
+        const checked = isChecked(option.id);
+
+        return (
+          <div
+            key={option.id}
+            className="d-flex align-items-center justify-content-between"
+          >
+            <div className="d-flex align-items-center gap-3 flex-grow-1">
+              <Checkbox
+                checked={checked}
+                onChange={() => toggle(option.id)}
+                className="position-relative"
+              >
+                {({ checked }) => (
+                  <div
+                    className={`d-flex align-items-center justify-content-center border rounded ${
+                      checked ? "bg-danger border-danger" : "bg-white border-secondary"
+                    }`}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      transition: "all 0.2s ease",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {checked && (
+                      <CheckIcon
+                        className="text-white"
+                        style={{ width: 12, height: 12 }}
+                      />
+                    )}
+                  </div>
+                )}
+              </Checkbox>
+
+              <button
+                type="button"
+                onClick={() => toggle(option.id)}
+                className="btn p-0 text-start"
+                aria-pressed={checked}
+                style={{ fontSize: "0.9rem", userSelect: "none" }}
+              >
+                {option.label}
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

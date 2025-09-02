@@ -1,4 +1,4 @@
-import DonNicanorMalbec from '../images/DonNicanorMalbec.png'
+import DonNicanorMalbec from '../images/DonNicanorRecortada.png'
 import SalenteinReserveChardonnay from '../images/SalenteinReserveChardonnay.png'
 import LuigiBoscaCabernetSauvignon from '../images/LuigiBoscaCaberneSauvignon.png'
 import ElEnemigoBonarda from '../images/ElEnemigoBonarda.png'

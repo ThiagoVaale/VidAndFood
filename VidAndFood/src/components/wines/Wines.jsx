@@ -1,13 +1,11 @@
-import React from 'react'
-import CardHome from '../cardHome/CardHome'
-import { Col, Container, Row } from 'react-bootstrap'
-
+import CardHome from "../cardHome/CardHome";
+import { Container, Row } from "react-bootstrap";
 
 const Wines = ({ wines }) => {
   return (
     <Container>
-      <Row className='g-5'>
-        {wines.map(wine => (
+      <Row className="g-5">
+        {wines.map((wine) => (
           <CardHome
             key={wine.id}
             id={wine.id}
@@ -22,7 +20,7 @@ const Wines = ({ wines }) => {
         ))}
       </Row>
     </Container>
-  )
-}
+  );
+};
 
-export default Wines
+export default Wines;

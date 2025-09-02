@@ -1,38 +1,46 @@
-export interface FilterConfig{
+export type FilterType = "checkbox" | "range" | "rating";
+
+export interface FilterConfig {
   id: string;
-  type: 'checkbox' | 'range' | 'rating';
+  type: FilterType;
   title: string;
   content: React.ReactNode;
   isCollapsed?: boolean;
-  options?: CheckBoxOption[] | RangeOption | RatingOption[]
-} 
+  options?: CheckBoxOption[] | RangeOption | RatingOption[];
+}
 
 export interface CheckBoxOption {
-    id: string;
-    label: string;
-    value: string;
-    checked?: boolean;
+  id: string;
+  label: string;
+  value: string;
+  checked?: boolean;
 }
 
 export interface RangeOption {
-    min: number;
-    max: number;
-    step?: number;
-    currentMin?: number;
-    currentMax?: number;
-    unit?: number;
+  min: number;
+  max: number;
+  step?: number;
+  currentMin?: number;
+  currentMax?: number;
+  unit?: string;
 }
 
 export interface RatingOption {
-    value: string;
-    label: string;
-    rating: number;
+  value: number;
+  label: string;
+  rating?: number;
 }
 
+export type FilterState = Record<string, string[] | { min: number ; max: number} | number | null>
+
 export interface GenericSideBarFilterProps {
-    filters: FilterConfig[];
-    title: string;
-    maxVisibleFilters?: number;
-    onFilterChange?: (filterId: string, value: any) => void;
-    className?: string;
+  filters: FilterConfig[];
+  title: string;
+  maxVisibleFilters?: number;
+  value?: FilterState;
+  defaultValue?: FilterState;
+  onChange?: (next: FilterState) => void;
+  onFilterChange?: (filterId: string, value: any) => void;
+  rangeDebounceMs?: number;
+  className?: string;
 }

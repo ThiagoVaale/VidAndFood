@@ -1,130 +1,114 @@
-import { useState } from "react";
-import { RangeOption } from "../types/FilterTypes";
-import { getTrackBackground, Range } from "react-range";
-import { FilterDisclousure } from "../FilterDisclousure";
+  import { useState } from "react";
+  import { RangeOption } from "../types/FilterTypes";
+  import { getTrackBackground, Range } from "react-range";
+  
 
-interface RangeFilterProps {
-  options: RangeOption;
-  filterId: string;
-  onFilterChange?: (
-    filterId: string,
+  interface RangeFilterProps {
+    options: RangeOption;
+    filterId: string;
     value: { min: number; max: number }
-  ) => void;
-}
+    onChange: (value: { min: number; max: number}) => void;
+    onFinalChange?: (value: { min: number; max: number}) => void;
+  }
 
-const RangerFilter: React.FC<RangeFilterProps> = ({
-  options,
-  filterId,
-  onFilterChange,
-}) => {
-  const [minValue, setMinValue] = useState(options.currentMin || options.min);
-  const [maxValue, setMaxValue] = useState(options.currentMax || options.max);
+  const RangerFilter: React.FC<RangeFilterProps> = ({
+    options,
+    value,
+    onChange,
+    onFinalChange
+  }) => {
+    const values = [value.min, value.max];
 
-  const values = [minValue, maxValue];
+    const handleRangeChange = (values: number[]) => {
+      const [min, max] = values;
+      onChange({ min, max })
+    };
 
-  const handleRangeChange = (newValues: number[]) => {
-    const [newMin, newMax] = newValues;
-
-    setMinValue(newMin);
-    setMaxValue(newMax);
-    onFilterChange?.(filterId, { min: newMin, max: newMax });
-  };
-
-  const formatPrice = (value: number) => {
-    if (value >= options.max) {
-      return `$${value.toLocaleString()}+`;
+    const handleFinalRange = (values: number[]) => {
+      if(!onFinalChange) {
+        return;
+      }
+      const [min, max] = values
+      onFinalChange({ min, max })
     }
-    return `$${value.toLocaleString()}`;
-  };
 
-  return (
-  <div>
-    <div className="mb-3 d-flex justify-content-between align-items-center">
-      <span className="fw-medium text-dark" style={{ fontSize: '0.9rem' }}>
-        {formatPrice(minValue)} - {formatPrice(maxValue)}
-      </span>
-      <span className="text-muted" style={{ fontSize: '0.75rem' }}>
-        (ARS)
-      </span>
-    </div>
+    const formatPrice = (num: number) => {
+      const fomatValuePrice = num.toLocaleString();
+      return num >= options.max ? `$${fomatValuePrice}+` : `$${fomatValuePrice}`;
+    };
 
-    <div className="px-2 mb-3">
-      <Range
-        step={options.step || 100}
-        min={options.min}
-        max={options.max}
-        values={values}
-        onChange={handleRangeChange}
-        renderTrack={({ props, children }) => (
-          <div
-            onMouseDown={props.onMouseDown}
-            onTouchStart={props.onTouchStart}
-            style={{ 
-              ...props.style, 
-              height: '36px', 
-              display: 'flex', 
-              width: '100%' 
-            }}
-          >
+    return (
+    <div>
+      <div className="mb-3 d-flex justify-content-between align-items-center">
+        <span className="text-dark" style={{ fontSize: '0.9rem' }}> 
+          {formatPrice(value.min)} - {formatPrice(value.max)}
+        </span>
+        <span className="text-muted" style={{ fontSize: '0.8rem', fontWeight: '500' }}>
+          ({ options.unit ?? "ARS" })
+        </span>
+      </div>
+
+      <div className="px-1 mb-4">
+        <Range
+          step={options.step || 100}
+          min={options.min}
+          max={options.max}
+          values={values}
+          onChange={handleRangeChange}
+          onFinalChange={handleFinalRange}
+          renderTrack={({ props, children }) => (
             <div
-              ref={props.ref}
-              style={{
-                height: "6px",
-                width: "100%",
-                borderRadius: "3px",
-                background: getTrackBackground({
-                  values,
-                  colors: ["#E9ECEF", "#DC3545", "#E9ECEF"],
-                  min: options.min,
-                  max: options.max,
-                }),
-                alignSelf: "center",
+              onMouseDown={props.onMouseDown}
+              onTouchStart={props.onTouchStart}
+              style={{ 
+                ...props.style, 
+                height: '36px', 
+                display: 'flex', 
+                width: '100%' 
               }}
             >
-              {children}
+              <div
+                ref={props.ref}
+                style={{
+                  height: "4px",
+                  width: "100%",
+                  borderRadius: "2px",
+                  background: `linear-gradient(90deg,
+                    #E9ECEF ${( (values[0]-options.min)/(options.max-options.min) )*100}%,
+                    #A52A2A  ${( (values[0]-options.min)/(options.max-options.min) )*100}% ${( (values[1]-options.min)/(options.max-options.min) )*100}%,
+                    #E9ECEF ${( (values[1]-options.min)/(options.max-options.min) )*100}%)`,
+                  alignSelf: "center",
+                }}
+              >
+                {children}
+              </div>
             </div>
-          </div>
-        )}
-        renderThumb={({ props, isDragged }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: "20px",
-              width: "20px",
-              borderRadius: "50%",
-              backgroundColor: "#FFF",
-              border: "2px solid #6C757D",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              cursor: "pointer",
-              transform: isDragged ? "scale(1.1)" : "scale(1)",
-              transition: "transform 0.1s ease",
-            }}
-          />
-        )}
-      />
+          )}
+          renderThumb={({ props, isDragged }) => (
+            <div
+              {...props}
+              style={{
+                ...props.style,
+                height: "18px",
+                width: "18px",
+                borderRadius: "50%",
+                backgroundColor: "#FFF",
+                border: "2px solid #9ca3af",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                cursor: "pointer",
+                transform: isDragged ? "scale(1.05)" : "scale(1)",
+                transition: "transform .1s ease",
+                outline: "none"
+              }}
+            />
+          )}
+        />
+      </div>
     </div>
+  );
+  };
 
-    <div className="d-flex align-items-center gap-2">
-      <input
-        type="checkbox"
-        id="discount-checkbox"
-        className="form-check-input"
-        style={{ transform: 'scale(0.9)' }}
-      />
-      <label 
-        htmlFor="discount-checkbox" 
-        className="form-check-label mb-0 text-muted"
-        style={{ fontSize: '0.85rem' }}
-      >
-        Solo mostrar vinos con descuento
-      </label>
-    </div>
-  </div>
-);
-};
-
-export default RangerFilter;
+  export default RangerFilter;
