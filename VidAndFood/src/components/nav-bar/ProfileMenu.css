@@ -1,0 +1,28 @@
+/* Fuente base */
+body {
+  font-family: 'Poppins', sans-serif; /* o Inter, Work Sans, etc. */
+}
+.menu-link {
+  font-family: 'Playfair Display', serif;
+  color: #8B3944; /* rojo vino */
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profile-dropdown {
+  min-width: 220px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 0.5rem 0;
+}
+
+.profile-dropdown .dropdown-item {
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+}
+
+.premium-btn {
+  font-size: 0.8rem;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+}
