@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import GenericSidebarFilter from "./components/common/generic-sideBar-filter";
 import { useMemo, useState } from "react";
 import applyFilters from "./utils/ApplyFilters";
+import CustomNavbar from "./components/nav-bar/CustomNavbar";
 
 const wineFilters = [
   {
@@ -73,13 +74,16 @@ function App() {
 
   return (
     <>
+      <CustomNavbar />
       <div
         style={{
           display: "flex",
           minHeight: "100vh",
           backgroundColor: "#fdf9f2ff",
+          paddingTop: "6rem",
         }}
       >
+        
         <div
           className="sidebar-container"
           style={{

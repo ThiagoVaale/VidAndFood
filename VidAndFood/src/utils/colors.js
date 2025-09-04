@@ -1,6 +1,7 @@
 const COLORS = {
   green: '#284907',
   red: '#8B3944',
+  board: '#a52a2a',
   white: '#FFFFFF',
   lightBackground: '#fdf9f2ff', 
   darkRed: '#4A0D15', 

@@ -13,14 +13,17 @@ const CustomNavbar = () => {
         
     ];
 
-    return <Navbar
-
+    return( 
+        <>
+        
+    <Navbar
+        expand="lg"
         className="shadow-sm fixed-top"
         bg="light"
         style={{ transition: 'background-color 0.3s ease' }}
-        
     >
-        <Container fluid >
+        <Container fluid style={{padding: "15px"}}>
+            {/* Logo */}
             <Navbar.Brand href="#" className="fs-3 fw-bold mx-3" style={{ fontFamily: 'playfair', color: COLORS.darkGreen }}>
                 Vid & Food
             </Navbar.Brand>
@@ -52,6 +55,7 @@ const CustomNavbar = () => {
             </Navbar.Collapse>
         </Container>
     </Navbar>
-};
+    </>
+)};
 
 export default CustomNavbar;

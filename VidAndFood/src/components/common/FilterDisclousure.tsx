@@ -42,7 +42,8 @@ const WineFilterDisclosure: React.FC<DisclousureProps> = ({
           background: 'transparent',
           border: 'none',
           textAlign: 'left',
-          minHeight: '80px'
+          minHeight: '80px',
+          fontFamily: 'playfair'
         }}
       >
         <div style={{ 
@@ -53,7 +54,8 @@ const WineFilterDisclosure: React.FC<DisclousureProps> = ({
           minWidth: 0,
           justifyContent: 'center',
           minHeight: '48px',
-          background: 'transparent'
+          background: 'transparent',
+          fontFamily: 'playfair'
         }}>
           <h3 style={{ 
             fontWeight: '600',
@@ -61,7 +63,8 @@ const WineFilterDisclosure: React.FC<DisclousureProps> = ({
             fontSize: '18px',
             lineHeight: '1.3',
             margin: '0 0 6px 0',
-            background: 'transparent'
+            background: 'transparent',
+            fontFamily: 'playfair'
           }}>
             {title}
           </h3>
@@ -76,7 +79,8 @@ const WineFilterDisclosure: React.FC<DisclousureProps> = ({
               whiteSpace: 'nowrap',
               width: '100%',
               marginTop: '4px',
-              background: 'transparent'
+              background: 'transparent',
+              fontFamily: 'playfair'
             }}
               title={previewContent}
             >
@@ -94,7 +98,8 @@ const WineFilterDisclosure: React.FC<DisclousureProps> = ({
             flexShrink: 0,
             marginLeft: '16px',
             marginTop: '4px',
-            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            fontFamily: 'playfair'
           }}
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -116,7 +121,8 @@ const WineFilterDisclosure: React.FC<DisclousureProps> = ({
           paddingTop: '8px',
           borderTop: '1px solid #f3f4f6',
           marginTop: '8px',
-          background: 'transparent'
+          background: 'transparent',
+          fontFamily: 'playfair'
         }}>
           <div style={{ marginTop: '12px', background: 'transparent' }}>
             {children}
