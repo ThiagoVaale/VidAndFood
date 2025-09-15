@@ -1,5 +1,5 @@
-import CardHome from "../cardHome/CardHome";
 import { Container, Row } from "react-bootstrap";
+import CardHome from "../ui/cardHome/CardHome";
 
 const Wines = ({ wines }) => {
   return (

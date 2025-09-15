@@ -1,8 +1,7 @@
 import { Card, Col, Row } from "react-bootstrap";
 import { Star, StarFill, ChatDots } from "react-bootstrap-icons";
-
 import "./cardHome.css";
-import StarRating from "../common/StarsRating";
+import StarRating from "../../common/StarsRating";
 
 const CardHome = ({
   img,

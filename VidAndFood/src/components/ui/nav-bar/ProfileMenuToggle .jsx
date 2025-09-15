@@ -1,6 +1,6 @@
 
 import { Button } from "react-bootstrap";
-import COLORS from "../../utils/colors";
+import COLORS from "../../../utils/colors";
 import { forwardRef } from "react";
 
 const ProfileMenuToggle = forwardRef(({ onClick, open }, ref)  => {

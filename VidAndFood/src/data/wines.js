@@ -1,12 +1,12 @@
-import DonNicanorMalbec from '../images/DonNicanorRecortada.png'
-import SalenteinReserveChardonnay from '../images/SalenteinReserveChardonnay.png'
-import LuigiBoscaCabernetSauvignon from '../images/LuigiBoscaCaberneSauvignon.png'
-import ElEnemigoBonarda from '../images/ElEnemigoBonarda.png'
-import TrapicheIscaySyrah from '../images/TrapichIscaySyrahViognier.png'
-import ZuccardiQTempranillo from '../images/ZuccardiQTempranillo.png'
-import Andeluma1300Torrontés from '../images/Andeluna1300Torrontés.png'
-import ColoméAlturaMáximaMalbec from '../images/ColoméAlturaMáximaMalbec.png'
-import CadusSignatureBlend from '../images/CadusSignaturBlend.png'
+import DonNicanorMalbec from '../../public/assets/images/DonNicanorRecortada.png'
+import SalenteinReserveChardonnay from '../../public/assets/images/SalenteinReserveChardonnay.png'
+import LuigiBoscaCabernetSauvignon from '../../public/assets/images/LuigiBoscaCaberneSauvignon.png'
+import ElEnemigoBonarda from '../../public/assets/images/ElEnemigoBonarda.png'
+import TrapicheIscaySyrah from '../../public/assets/images/TrapichIscaySyrahViognier.png'
+import ZuccardiQTempranillo from '../../public/assets/images/ZuccardiQTempranillo.png'
+import Andeluma1300Torrontés from '../../public/assets/images/Andeluna1300Torrontés.png'
+import ColoméAlturaMáximaMalbec from '../../public/assets/images/../images/ColoméAlturaMáximaMalbec.png'
+import CadusSignatureBlend from '../../public/assets/images/CadusSignaturBlend.png'
 
 export const wines = [
     {
