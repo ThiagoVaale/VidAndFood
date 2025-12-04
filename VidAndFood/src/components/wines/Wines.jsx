@@ -20,7 +20,7 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
             nombre={wine.wineryName}
             region={wine.regionName}
             anio_cosecha={wine.vintageYear}
-            bodega={wine.bodega}
+            bodega={wine.wineryName}
             rating={wine.averageScore}
             precio={wine.price}
             variedad_uva={wine.grapeNames}
