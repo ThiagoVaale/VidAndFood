@@ -1,5 +1,4 @@
 import ProfileMenu from "./ProfileMenu";
-import COLORS from "../../../utils/colors";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import "./CustomNavBar.css";

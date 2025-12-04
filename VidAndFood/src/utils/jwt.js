@@ -1,5 +1,10 @@
 export function parseJwt(token) {
   try {
+    if (typeof token !== "string") {
+      console.error("parseJwt: token no es un string válido:", token);
+      return null;
+    }
+
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(

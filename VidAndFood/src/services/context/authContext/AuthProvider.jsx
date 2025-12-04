@@ -43,7 +43,10 @@ const AuthContextProvider = ({ children }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const onLogin = (tokenValue) => {
+ const onLogin = (tokenOrUser, existingToken) => {
+  if (typeof tokenOrUser === "string") {
+    const tokenValue = tokenOrUser;
+
     setToken(tokenValue);
 
     const claims = parseJwt(tokenValue);
@@ -51,7 +54,23 @@ const AuthContextProvider = ({ children }) => {
 
     setUser(userData);
     setIsAuthModalOpen(false);
-  };
+    return;
+  }
+
+  if (tokenOrUser && typeof tokenOrUser === "object") {
+    const updatedUser = tokenOrUser;
+
+    if (existingToken) {
+      setToken(existingToken);
+    }
+
+    setUser(updatedUser);
+    setIsAuthModalOpen(false);
+    return;
+  }
+
+  console.error("onLogin recibió un valor inválido:", tokenOrUser);
+};
 
   const onLogout = () => {
     setUser(null);
