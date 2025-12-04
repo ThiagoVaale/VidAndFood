@@ -12,7 +12,6 @@ import AuthModal from "./components/ui/auth-modal/AuthModal";
 import GlobalLoadingContext from "./services/context/globalLoadingContext/GlobalLoadingContext";
 import MyWinesPage from "./components/ui/my-wines/MyWinesPage";
 import WishListContext from "./services/context/wishListContext/WishListContext";
-import ProfilePage from "./components/ui/profile/ProfilePage";
 import SettingPage from "./components/ui/setting/SettingPage";
 import PrincipalPage from "./components/principalPage/PrincipalPage";
 import WineContext from "./services/context/winesContext/WinesContext";
@@ -161,7 +160,6 @@ function App() {
         <Route path="/wines/:wineId" element={<WineDetailPage />} />
         <Route path="/my-wines" element={<MyWinesPage />} />
         <Route path="/history" element={<HistoryPage/>}/>
-        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/setting" element={<SettingPage />} />
       </Routes>
     </>
