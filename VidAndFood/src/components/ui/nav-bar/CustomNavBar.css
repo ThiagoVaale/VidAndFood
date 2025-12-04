@@ -16,9 +16,10 @@
 .custom-nav-items {
   display: flex;
   align-items: center;
-  gap: 4rem; 
-  margin-left: 15rem;
+  gap: 4rem;
 }
+
+
 
 .nav-link-main {
   font-family: "playfair";
@@ -63,3 +64,15 @@
   margin-left: 2rem;
   font-family: "playfair";
 }
+.navbar-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.items-container {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Centra los items */
+}
+

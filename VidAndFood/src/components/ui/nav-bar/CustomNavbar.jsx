@@ -7,21 +7,30 @@ const CustomNavbar = () => {
   const pages = [
     { name: "Home", href: "/home" },
     { name: "Wines", href: "/wines" },
-    { name: "Sommelier AI", href: "/sommelier-ai"},
+    { name: "Sommelier AI", href: "/sommelier-ai" },
   ];
 
   return (
-    
-    <Navbar expand="lg" className="shadow-sm fixed-top custom-navbar" bg="light">
-      <Container fluid>
+    <Navbar
+      expand="lg"
+      bg="light"
+      className="shadow-sm fixed-top custom-navbar"
+    >
+      <Container fluid className="d-flex align-items-center justify-content-between">
+        
+        {/* Logo */}
         <Navbar.Brand as={NavLink} to="/home" className="brand-title">
           Vid & Food
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="custom-nav-items">
+        {/* Items + Login distribuidos correctamente */}
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="d-flex align-items-center justify-content-between w-100"
+        >
+          <Nav className="custom-nav-items d-flex align-items-center">
             {pages.map((page) => (
               <Nav.Link
                 key={page.name}
@@ -37,13 +46,14 @@ const CustomNavbar = () => {
             ))}
           </Nav>
 
-          <div className="profile-container ms-auto">
+          <div className="profile-container ms-lg-4">
             <ProfileMenu />
           </div>
         </Navbar.Collapse>
+
       </Container>
     </Navbar>
   );
 };
 
-export default CustomNavbar;
+export default CustomNavbar;
