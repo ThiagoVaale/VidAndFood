@@ -1,10 +1,22 @@
 import Wines from "./components/wines/Wines";
-import { wines } from "./data/wines";
 import "bootstrap/dist/css/bootstrap.min.css";
 import GenericSidebarFilter from "./components/common/generic-sideBar-filter";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import applyFilters from "./utils/ApplyFilters";
-import CustomNavBar from './components/ui/nav-bar/CustomNavbar'
+import CustomNavBar from "./components/ui/nav-bar/CustomNavbar";
+import "./index.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import "./components/principalPage/principalPage.css";
+import WineDetailPage from "./components/ui/wine-detail/WineDetailPage";
+import AuthModal from "./components/ui/auth-modal/AuthModal";
+import GlobalLoadingContext from "./services/context/globalLoadingContext/GlobalLoadingContext";
+import MyWinesPage from "./components/ui/my-wines/MyWinesPage";
+import WishListContext from "./services/context/wishListContext/WishListContext";
+import ProfilePage from "./components/ui/profile/ProfilePage";
+import SettingPage from "./components/ui/setting/SettingPage";
+import PrincipalPage from "./components/principalPage/PrincipalPage";
+import WineContext from "./services/context/winesContext/WinesContext";
+import HistoryPage from "./components/ui/history/HistoryPage";
 
 const wineFilters = [
   {
@@ -65,52 +77,56 @@ const wineFilters = [
       { id: "neuquen", value: "neuquen", label: "Neuquén", count: 5 },
     ],
   },
+
+  {
+    id: "grape",
+    type: "checkbox",
+    title: "Grapes",
+    isCollapsed: true,
+    options: [
+      { id: "malbec", value: "malbec", label: "Malbec", count: 12 },
+      { id: "chardonnay", value: "chardonnay", label: "Chardonnay", count: 20 },
+      {
+        id: "cabernet_sauvignon",
+        value: "cabernet_sauvignon",
+        label: "Cabernet Sauvignon",
+        count: 10,
+      },
+      { id: "bonarda", value: "bonarda", label: "Bonarda", count: 8 },
+      { id: "torrontés", value: "torrontés", label: "Torrontés", count: 6 },
+    ],
+  },
 ];
 
-function App() {
+function HomePage() {
+  return (
+    <>
+      <CustomNavBar />
+      <PrincipalPage />
+    </>
+  );
+}
+
+function WinesPage() {
+  const { wines } = useContext(WineContext);
+  const { isFavorite, toggleFavorite } = useContext(WishListContext);
+
   const [filters, setFilters] = useState({});
 
-  const filteredWines = useMemo(() => applyFilters(wines, filters), [filters]);
+   const filteredWines = useMemo(
+    () => applyFilters(wines, filters), [wines, filters]
+  );
 
   return (
     <>
       <CustomNavBar />
-      <div
-        style={{
-          display: "flex",
-          minHeight: "100vh",
-          backgroundColor: "#fdf9f2ff",
-          paddingTop: "6rem",
-        }}
-      >
-        
-        <div
-          className="sidebar-container"
-          style={{
-            width: "400px",
-            minWidth: "400px",
-            flex: "0 0 400px",
-            height: "100vh",
-            position: "sticky",
-            top: 0,
-            background: "transparent",
-          }}
-        >
-          <div
-            className="sidebar-content"
-            style={{
-              background: "transparent",
-              backgroundColor: "transparent",
-            }}
-          >
-            <GenericSidebarFilter
-              filters={wineFilters}
-              value={filters}
-              onChange={setFilters}
-              rangeDebounceMs={120}
-            />
-          </div>
-        </div>
+      <div className="main-style">
+        <GenericSidebarFilter
+          filters={wineFilters}
+          value={filters}
+          onChange={setFilters}
+          rangeDebounceMs={120}
+        />
 
         <main
           style={{
@@ -120,10 +136,34 @@ function App() {
           }}
         >
           <div className="p-4 pt-5">
-            <Wines wines={filteredWines} />
+            <Wines
+              wines={filteredWines}
+              isHorizontal={true}
+              isFavorite={isFavorite}
+              toggleFavorite={toggleFavorite}
+              showWishListAction={true}
+            />
           </div>
         </main>
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <AuthModal />
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/wines" element={<WinesPage />} />
+        <Route path="/wines/:wineId" element={<WineDetailPage />} />
+        <Route path="/my-wines" element={<MyWinesPage />} />
+        <Route path="/history" element={<HistoryPage/>}/>
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/setting" element={<SettingPage />} />
+      </Routes>
     </>
   );
 }

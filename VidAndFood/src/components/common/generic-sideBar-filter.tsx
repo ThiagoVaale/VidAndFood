@@ -45,17 +45,17 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   const hiddenFilterCount = shouldLimitFilters
     ? filters.length - (maxVisibleFilters || 0)
     : 0;
-    
+
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const emit = (next: FilterState, opts?: { isRange?: boolean }) => {
-    if (!isControlled){
+    if (!isControlled) {
       setInternal(next);
     }
     if (opts?.isRange && rangeDebounceMs > 0) {
-      if (debounceRef.current){
+      if (debounceRef.current) {
         clearTimeout(debounceRef.current);
-      } 
+      }
       debounceRef.current = setTimeout(() => onChange?.(next), rangeDebounceMs);
     } else {
       onChange?.(next);
@@ -101,10 +101,10 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
       const labels = ids
         .map((id) => options.find((o) => o.id === id)?.label)
         .filter(Boolean) as string[];
-      if (labels.length === 1){
+      if (labels.length === 1) {
         return labels[0]!;
-      } 
-      if (labels.length <= 3){
+      }
+      if (labels.length <= 3) {
         return labels.join(", ");
       }
       return `${labels.slice(0, 2).join(", ")} +${labels.length - 2}`;
@@ -113,28 +113,29 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   };
 
   const handleClickShowFilters = () => {
-    setShowAllFilters(!showAllFilters)
-  }
+    setShowAllFilters(!showAllFilters);
+  };
 
   const handleChangeCheckBox = React.useCallback(
     (id: string) => (ids: CheckboxValue) => update<"checkbox">(id, ids),
     [update]
-  )
+  );
 
   const handleChangeRange = React.useCallback(
-    (id: string) => (value: RangeValue) => update<"range">(id, value, {isRange: true}),
+    (id: string) => (value: RangeValue) =>
+      update<"range">(id, value, { isRange: true }),
     [update]
-  )
+  );
 
   const handleFinalChangeRange = React.useCallback(
     (id: string) => (value: RangeValue) => update<"range">(id, value),
     [update]
-  )
+  );
 
   const handleRatingChange = React.useCallback(
     (id: string) => (value: RatingValue) => update<"rating">(id, value),
     [update]
-  )
+  );
 
   const renderFilterContent = (filter: FilterConfig) => {
     const current = filterValues[filter.id];
@@ -152,18 +153,17 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
 
       case "range": {
         const opt = filter.options;
-        const value: RangeValue = 
-        (current as RangeValue) ?? {
+        const value: RangeValue = (current as RangeValue) ?? {
           min: opt.currentMin ?? opt.min,
-          max: opt.currentMax ?? opt.max
-        }
+          max: opt.currentMax ?? opt.max,
+        };
         return (
           <RangerFilter
             options={opt}
             filterId={filter.id}
             value={value}
             onChange={handleChangeRange(filter.id)}
-            onFinalChange={(handleFinalChangeRange(filter.id))}
+            onFinalChange={handleFinalChangeRange(filter.id)}
           />
         );
       }
@@ -184,32 +184,38 @@ const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   };
 
   return (
-    <div className="filter-container">
-      <div className="filter-content">
-        {visibleFilters.map((filter, index) => (
-          <WineFilterDisclosure
-            key={filter.id}
-            title={filter.title}
-            isCollapsed={filter.isCollapsed}
-            previewContent={getPreviewContent(filter)}
-            isLast={index === visibleFilters.length - 1 && !shouldLimitFilters}
-          >
-            {renderFilterContent(filter)}
-          </WineFilterDisclosure>
-        ))}
+    <div className="sidebar-container">
+      <div className="sidebar-content">
+        <div className="filter-container">
+          <div className="filter-content">
+            {visibleFilters.map((filter, index) => (
+              <WineFilterDisclosure
+                key={filter.id}
+                title={filter.title}
+                isCollapsed={filter.isCollapsed}
+                previewContent={getPreviewContent(filter)}
+                isLast={
+                  index === visibleFilters.length - 1 && !shouldLimitFilters
+                }
+              >
+                {renderFilterContent(filter)}
+              </WineFilterDisclosure>
+            ))}
 
-        {shouldLimitFilters && (
-          <div className="show-more-container">
-            <button
-              className="show-more-button"
-              onClick={handleClickShowFilters}
-            >
-              {showAllFilters
-                ? "Mostrar menos filtros"
-                : `Mostrar ${hiddenFilterCount} filtros más`}
-            </button>
+            {shouldLimitFilters && (
+              <div className="show-more-container">
+                <button
+                  className="show-more-button"
+                  onClick={handleClickShowFilters}
+                >
+                  {showAllFilters
+                    ? "Mostrar menos filtros"
+                    : `Mostrar ${hiddenFilterCount} filtros más`}
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

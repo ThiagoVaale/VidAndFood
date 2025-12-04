@@ -1,0 +1,43 @@
+.root-style {
+  padding-top: 90px;      
+  background-color: #fdf9f2ff;   
+}
+
+.home-content {
+  max-width: 1200px;
+  margin: 0 auto;          
+}
+
+.home-title {
+  font-family: playfair, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.home-wines-section {
+  margin-top: 32px;
+}
+
+.home-section-title {
+  font-family: playfair, serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #222;
+  text-align: center;
+}
+
+.home-wines-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.08); 
+  margin: 48px 0; 
+  border-radius: 1px;
+}

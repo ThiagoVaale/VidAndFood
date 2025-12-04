@@ -31,6 +31,12 @@ function applyFilters( wines, filters = {} ) {
       const regionSlug = toSlug(wine.region);
       if (!filters.region.includes(regionSlug)) return false;
     }
+
+    if (filters.grape?.length) {
+      const grapeSlug = toSlug(wine.variedad_uva);
+      if (!filters.grape.includes(grapeSlug)) return false;
+    }
+
     return true;
   });
 }

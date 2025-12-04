@@ -1,18 +1,41 @@
-import { useState } from "react";
-import { Link} from "react-router-dom"; // <- usar react-router-dom
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import "./ProfileMenu.css";
 import ProfileMenuToggle from "./ProfileMenuToggle ";
+import AuthContext from "../../../services/context/authContext/AuthContext";
 
 const ProfileMenu = ({ onLogout }) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const {
+    isAuthenticated,
+    openAuthModal,
+    onLogout: ctxLogout
+  } = useContext(AuthContext);
+
+
+  console.log({ isAuthenticated })
+  
+  const handleClickProfile = () => {
+    if (!isAuthenticated) {
+      openAuthModal("login");
+      return;
+    }
+    setOpen(true);
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
     setOpen(false);
     try {
-      if (onLogout) await onLogout();
+      if (onLogout) {
+        await onLogout();
+      } else {
+        await ctxLogout();
+      }
     } finally {
       navigate("/", { replace: true });
     }
@@ -20,14 +43,15 @@ const ProfileMenu = ({ onLogout }) => {
 
   return (
     <Dropdown align="end" show={open} onToggle={(next) => setOpen(next)}>
-      <Dropdown.Toggle as={ProfileMenuToggle} open={open} />
+      <Dropdown.Toggle
+        onClick={handleClickProfile}
+        as={ProfileMenuToggle}
+        open={open}
+      />
 
       <Dropdown.Menu className="profile-dropdown">
-        {/* Parte superior: Cellar + Premium */}
-        <div className="d-flex justify-content-between align-items-center px-3 py-2">
-          <Link to="/cellar" className="menu-link" onClick={() => setOpen(false)}>
-            Cellar
-          </Link>
+        <div className="premium-header px-3 py-2">
+          <span className="premium-question">¿Quieres ser premium?</span>
           <Button
             variant="outline-dark"
             size="sm"
@@ -43,14 +67,16 @@ const ProfileMenu = ({ onLogout }) => {
 
         <Dropdown.Divider />
 
-        {/* Opciones */}
-        <Dropdown.Item as={Link} to="/wines" onClick={() => setOpen(false)}>
+        <Dropdown.Item as={Link} to="/my-wines" onClick={() => setOpen(false)}>
           My Wines
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => navigate("/history")}>
+          History
         </Dropdown.Item>
         <Dropdown.Item as={Link} to="/profile" onClick={() => setOpen(false)}>
           Profile
         </Dropdown.Item>
-        <Dropdown.Item as={Link} to="/settings" onClick={() => setOpen(false)}>
+        <Dropdown.Item as={Link} to="/setting" onClick={() => setOpen(false)}>
           Settings
         </Dropdown.Item>
 

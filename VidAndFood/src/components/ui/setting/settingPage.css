@@ -1,0 +1,32 @@
+.header-setting{
+    border-bottom: 1px solid #eee0c9;
+    padding-bottom: 0.75rem;
+}
+
+.settings-page-wrapper {
+  background-color: #fdf9f2ff;
+  min-height: 100vh;
+  padding-top: 6rem;
+}
+
+.settings-card {
+  max-width: 820px;
+  background: white;
+  border-radius: 12px;
+}
+
+.settings-title {
+  font-family: playfair;
+  font-size: 2rem;
+}
+
+.settings-subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.section-title {
+  font-family: playfair;
+  font-size: 1.2rem;
+}
