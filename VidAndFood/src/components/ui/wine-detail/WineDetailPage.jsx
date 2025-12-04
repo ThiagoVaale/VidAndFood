@@ -18,6 +18,7 @@ import {
   addWineToHistory,
   deleteWineFromHistory,
 } from "../../../services/historyUserService";
+import AuthContext from "../../../services/context/authContext/AuthContext";
 
 const WineDetailPage = () => {
   const { wineId } = useParams();
@@ -26,9 +27,20 @@ const WineDetailPage = () => {
   const { isFavorite, toggleFavorite } = useContext(WishListContext);
   const { showResponse } = useContext(ResponseContext);
   const { isInHistory, toggleHistoryLocal } = useContext(HistoryContext);
+  const { user, isAuthenticated, openAuthModal } = useContext(AuthContext);
 
   const [wine, setWine] = useState(null);
 
+  const role = user?.role || null;
+
+  const canUseHistory =
+    !!isAuthenticated &&
+    (role === "User" || role === "Sommelier" || role === "Admin");
+
+  const canUseFavorites =
+    !!isAuthenticated && (role === "Sommelier" || role === "Admin");
+    
+    
   useEffect(() => {
     const loadWine = async () => {
       try {
@@ -63,6 +75,20 @@ const WineDetailPage = () => {
   const inHistory = isInHistory(wine.id);
 
   const handleToggleFavorite = async () => {
+     if (!isAuthenticated) {
+      openAuthModal("login");
+      return;
+    }
+
+    if (!canUseFavorites) {
+      showResponse({
+        variant: "error",
+        title: "Acción no permitida",
+        message: "Solo Sommeliers pueden gestionar la lista de deseos.",
+      });
+      return;
+    }
+
     const wasFavorite = favorite;
 
     try {
@@ -94,6 +120,20 @@ const WineDetailPage = () => {
   };
 
   const handleToggleHistory = async () => {
+    if (!isAuthenticated) {
+      openAuthModal("login");
+      return;
+    }
+
+    if(!canUseHistory){
+      showResponse({
+        variant: "error",
+        title: "Accion no permitida",
+        message: "Solo los Sommeliers pueden gestionar el historial"
+      })
+      return;
+    }
+
     const wasInHistory = inHistory;
 
     try {
@@ -165,43 +205,35 @@ const WineDetailPage = () => {
               </div>
 
               <div className="wine-detail-actions">
-                <button
-                  type="button"
-                  className="wine-detail-action-link"
-                  onClick={handleToggleHistory}
-                >
-                  <ClockHistory
-                    className="wine-detail-action-icon"
-                    style={{ color: inHistory ? "#a52a2a" : undefined }}
-                  />
-                  {inHistory ? "En tu historial" : "Añadir al historial"}
-                </button>
+                 {canUseHistory && (
+                  <button
+                    type="button"
+                    className="wine-detail-action-link"
+                    onClick={handleToggleHistory}
+                  >
+                    <ClockHistory
+                      className="wine-detail-action-icon"
+                      style={{ color: inHistory ? "#a52a2a" : undefined }}
+                    />
+                    {inHistory ? "En tu historial" : "Añadir al historial"}
+                  </button>
+                )}
 
-                <button
-                  type="button"
-                  className="wine-detail-action-link"
-                  onClick={handleToggleFavorite}
-                >
-                  <Bookmark
-                    className="wine-detail-action-icon"
-                    style={{ color: favorite ? "#a52a2a" : undefined }}
-                  />
-                  {favorite
-                    ? "En tu lista de deseos"
-                    : "Añadir a la lista de deseos"}
-                </button>
-
-                <button
-                  type="button"
-                  className="wine-detail-action-link"
-                  onClick={() => {
-                    console.log("Añadir a la bodega (premium)", wine.id);
-                  }}
-                >
-                  <Collection className="wine-detail-action-icon" />
-                  Añadir a la bodega
-                  <span className="wine-detail-badge">Premium</span>
-                </button>
+                {canUseFavorites && (
+                  <button
+                    type="button"
+                    className="wine-detail-action-link"
+                    onClick={handleToggleFavorite}
+                  >
+                    <Bookmark
+                      className="wine-detail-action-icon"
+                      style={{ color: favorite ? "#a52a2a" : undefined }}
+                    />
+                    {favorite
+                      ? "En tu lista de deseos"
+                      : "Añadir a la lista de deseos"}
+                  </button>
+                )}
               </div>
             </div>
 

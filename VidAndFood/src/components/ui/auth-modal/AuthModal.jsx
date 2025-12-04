@@ -1,15 +1,18 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import COLORS from "../../../utils/colors";
 import "./AuthModal.css";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
+import { useNavigate } from "react-router-dom";
+import { mapClaimsToUser, parseJwt } from "../../../utils/jwt";
 
 const AuthModal = () => {
   const {
     isAuthModalOpen,
     authModalMode,
     closeAuthModal,
+    openAuthModal,
     switchMode,
     loginRequest,
     registerRequest,
@@ -32,7 +35,24 @@ const AuthModal = () => {
 
   const title = authModalMode === "login" ? "Iniciar sesión" : "Crear cuenta";
 
+  const navigate = useNavigate();
+
   const { showResponse } = useContext(ResponseContext);
+
+  useEffect(() => {
+    const handleOpenFromSession = () => {
+      if (authModalMode !== "login") {
+        switchMode();
+      }
+      openAuthModal("login");
+    };
+
+    window.addEventListener("open-auth-modal", handleOpenFromSession);
+
+    return () => {
+      window.removeEventListener("open-auth-modal", handleOpenFromSession);
+    };
+  }, [openAuthModal, authModalMode, switchMode]);
 
   const handleChangeLogin = (e) => {
     const { name, value } = e.target;
@@ -50,8 +70,15 @@ const AuthModal = () => {
 
     try {
       if (isLogin) {
-        await loginRequest(formLogin);
+        const { token } = await loginRequest(formLogin);
         setFormLogin({ email: "", password: "" });
+
+        const claims = parseJwt(token);
+        const mappedUser = mapClaimsToUser(claims);
+
+        if (mappedUser?.role === "Admin") {
+          navigate("/sys-admin", { replace: true }); 
+        }
         showResponse({
           variant: "success",
           title: "Inicio de sesión correcto!",

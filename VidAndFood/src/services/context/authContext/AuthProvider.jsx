@@ -2,54 +2,94 @@ import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import GlobalLoaderOverlay from "../../../components/ui/spinner/GlobalLoaderOverlay";
 import * as authService from "../../authServices";
+import { mapClaimsToUser, parseJwt } from "../../../utils/jwt";
 
-const tokenValue = localStorage.getItem("vf-token");
+const TOKEN_KEY = "vf-token";
+const USER_KEY = "vf-user";
 
 const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(tokenValue);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem(USER_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return null;
+      }
+    }
 
+    const savedToken = localStorage.getItem(TOKEN_KEY);
+    if (savedToken) {
+      const claims = parseJwt(savedToken);
+      return mapClaimsToUser(claims);
+    }
+
+    return null;
+  });
+  const [token, setToken] = useState(
+    () => localStorage.getItem(TOKEN_KEY) || null
+  );
+
+  const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState("login");
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("vf-user");
-    const savedToken = localStorage.getItem("vf-token");
-
-    setTimeout(() => {
-      if (savedUser && savedToken) {
-        try{
-          setUser(JSON.parse(savedUser));
-          setToken(savedToken);
-        } catch {
-          localStorage.removeItem("vf-user")
-          localStorage.removeItem("vf-token")
-        }
-      }
-      setLoading(false);
-    }, 1000);
-  }, []);
-
   const isAuthenticated = !!token;
 
-  const onLogin = (userData, tokenValue) => {
-    setUser(userData);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+ const onLogin = (tokenOrUser, existingToken) => {
+  if (typeof tokenOrUser === "string") {
+    const tokenValue = tokenOrUser;
+
     setToken(tokenValue);
-  };
+
+    const claims = parseJwt(tokenValue);
+    const userData = mapClaimsToUser(claims);
+
+    setUser(userData);
+    setIsAuthModalOpen(false);
+    return;
+  }
+
+  if (tokenOrUser && typeof tokenOrUser === "object") {
+    const updatedUser = tokenOrUser;
+
+    if (existingToken) {
+      setToken(existingToken);
+    }
+
+    setUser(updatedUser);
+    setIsAuthModalOpen(false);
+    return;
+  }
+
+  console.error("onLogin recibió un valor inválido:", tokenOrUser);
+};
 
   const onLogout = () => {
     setUser(null);
     setToken(null);
+    setIsAuthModalOpen(false);
+    setAuthModalMode("login");
   };
 
   useEffect(() => {
-    if(user && token){
-      localStorage.setItem("vf-user", JSON.stringify(user));
-      localStorage.setItem("vf-token", token);
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
     } else {
-      localStorage.removeItem("vf-user");
-      localStorage.removeItem("vf-token");
+      localStorage.removeItem(TOKEN_KEY);
+    }
+
+    if (user) {
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(USER_KEY);
     }
   }, [user, token]);
 
@@ -61,15 +101,13 @@ const AuthContextProvider = ({ children }) => {
       throw new Error("No se recibió token desde el backend");
     }
 
-    const userData = { email }
+    onLogin(tokenValue);
 
-    onLogin(userData, tokenValue);
-
-    return { user: userData, token: tokenValue };
+    return { token: tokenValue };
   };
 
   const registerRequest = async ({ email, password, fullName }) => {
-    const registerUser = await authService.registerRequest({ email, password, fullName })
+    await authService.registerRequest({ email, password, fullName })
     
     const loginData = await authService.loginRequest({ email, password });
     const tokenValue = loginData.token;
@@ -77,18 +115,10 @@ const AuthContextProvider = ({ children }) => {
     if (!tokenValue) {
       throw new Error("No se recibió token desde el backend");
     }
-    
-    const userData = {
-      id: registerUser.id,
-      email: registerUser.email,
-      name: registerUser.fullName,
-      role: registerUser.role,
-      isActive: registerUser.isActive,
-    };
+  
+    onLogin(tokenValue);
 
-    onLogin(userData, tokenValue);
-
-    return { user: userData , token: tokenValue };
+    return { token: tokenValue };
   };
 
   const openAuthModal = (mode = "login") => {
