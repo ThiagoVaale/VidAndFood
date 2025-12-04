@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Container, Row, Col, Form, Button, InputGroup, Card } from "react-bootstrap"
 import "./somellier.css";
 import { getWineRecommendations, validateWineRecommendations } from "../../../services/somellierAiService";
-
+import CustomNavBar from "../nav-bar/CustomNavbar";
 
 
 const SommelierAI = () => {
@@ -80,6 +80,8 @@ const SommelierAI = () => {
     };
 
     return (
+        <>
+        <CustomNavBar/>
         <Container className="py-5 mt-5">
             <Row className="justify-content-center">
                 <Col md={10} lg={8}>
@@ -159,6 +161,7 @@ const SommelierAI = () => {
                 </Col>
             </Row>
         </Container>
+        </>
     );
 };
 
