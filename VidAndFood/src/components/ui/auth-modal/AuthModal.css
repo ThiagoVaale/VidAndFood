@@ -1,0 +1,126 @@
+.auth-modal-dialog {
+  max-width: 900px;
+  width: 1100px
+}
+
+.auth-modal-content {
+  border-radius: 20px;
+  overflow: hidden;
+  border: none;
+  background-color: #fff;
+  position: relative;
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  padding: 1px;
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.auth-modal-body {
+  display: flex;
+  min-height: 420px;
+}
+
+.auth-modal-left {
+  flex: 1;
+  background: url("/assets/images/foto-login.png") center/cover no-repeat;
+}
+
+.auth-modal-right {
+  flex: 1;
+  padding: 40px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.auth-modal-header-text {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+}
+
+.auth-modal-title-main {
+  color: #a52a2a; 
+  font-weight: 600;
+}
+
+.auth-modal-title-secondary {
+  font-weight: 600;
+}
+
+.auth-modal-title-separator {
+  margin: 0 6px;
+}
+
+.auth-modal-form label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.auth-modal-form input {
+  border-radius: 999px;
+  padding: 10px 16px;
+}
+
+.auth-modal-submit-btn {
+  width: 100%;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #fdf9f2ff;
+  background-color: #1A3305;
+  border-color: #1A3305;
+}
+
+.auth-modal-submit-btn:hover {
+  background-color: #0c5f30;
+  border-color: #0c5f30;
+}
+
+.auth-modal-error {
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: #ffe6e6;
+  color: #a52a2a;
+  font-size: 0.85rem;
+}
+
+.auth-modal-footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+
+.auth-modal-link {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: #a52a2a;
+  font-weight: 600;
+}
+
+.auth-modal-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .auth-modal-body {
+    flex-direction: column;
+  }
+
+  .auth-modal-left {
+    height: 180px;
+  }
+}

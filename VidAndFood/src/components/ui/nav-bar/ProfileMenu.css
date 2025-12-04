@@ -26,3 +26,10 @@ body {
   border-radius: 20px;
   padding: 0.25rem 0.75rem;
 }
+
+.premium-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* o center si lo querés centrado */
+  gap: 0.35rem;
+}
