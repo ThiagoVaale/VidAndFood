@@ -1,35 +1,89 @@
 import { useContext, useState } from "react";
 import AuthContext from "../../../services/context/authContext/AuthContext";
-import { useNavigate } from "react-router-dom";
 import CustomNavbar from "../nav-bar/CustomNavbar";
 import "./SettingPage.css";
+import ResponseContext from "../../../services/context/responseContext/ResponseContext";
+import { upgradeToSommelier } from "../../../services/roleServices";
 
 const SettingPage = () => {
-  const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, token, onLogin } = useContext(AuthContext);
+  const { showResponse } = useContext(ResponseContext);
 
   const [accountForm, setAccountForm] = useState({
-    username: user?.name || "Guest User",
-    fullname: user?.fullname,
+    fullname: user?.fullName,
     email: user?.email,
-    role: user?.role,
-    city: "Rosario",
-    country: "Argentina",
+    membership: user?.role,
   });
 
   const [saving, setSaving] = useState(false);
 
-  const handleAccountChange = (e) => {
-    const { name, value } = e.target;
-    setAccountForm((prev) => ({ ...prev, [name]: value }));
+  const handleSelectMembership = (membership) => {
+    setAccountForm((prev) => ({ ...prev, membership }));
   };
 
   const handleSaveAll = async (e) => {
     e.preventDefault();
+
+    const currentRole = user.role;
+    const newRole = accountForm.membership;
+
+    if( currentRole === newRole ){
+      showResponse({
+        variant: "error",
+        title: "Error al actualizar subscripción",
+        message: "No realizaste nigun cambio en tu tipo de subcripción."
+      });
+      return;
+    }
+
+    const isUserToSommelier = currentRole === "User" && newRole === "Sommelier";
+    if (!isUserToSommelier) {
+      showResponse({
+        variant: "error",
+        title: "Cambio de rol no disponible",
+        message:
+          "Desde esta pantalla solo podés actualizar tu suscripción de Usuario a Sommelier.",
+      });
+
+      setAccountForm((prev) => ({ ...prev, membership: currentRole }));
+      return;
+    }
+
     setSaving(true);
-    await new Promise((res) => setTimeout(res, 800));
-    setSaving(false);
+
+    try {
+      await upgradeToSommelier();
+
+      const updatedUser = { ...user, role: "Sommelier" };
+      onLogin(updatedUser, token);
+
+      showResponse({
+        variant: "success",
+        title: "Suscripción actualizada",
+        message:
+          "Ahora sos Sommelier en Vid&Food. Disfrutá de los beneficios de tu nueva suscripción.",
+      });
+    } catch (err) {
+      showResponse({
+        variant: "error",
+        title: "No se pudo actualizar tu suscripción",
+        message:
+          err.message ||
+          "Ocurrió un error al actualizar tu tipo de membresía.",
+      });
+
+      setAccountForm((prev) => ({ ...prev, membership: currentRole }));
+    } finally {
+      setSaving(false);
+    }
   };
+
+  const membershipPlans =
+    user?.role === "Admin"
+      ? ["User", "Sommelier", "Admin"]
+      : ["User", "Sommelier"];
+
+  const currentRole = user?.role;
 
   return (
     <>
@@ -37,26 +91,15 @@ const SettingPage = () => {
 
       <div className="settings-page-wrapper">
         <div className="container py-4">
-
           <header className="header-setting mb-4">
             <h1 className="settings-title">Settings</h1>
             <p className="settings-subtitle">
-              Gestiona la información de tu cuenta y tus preferencias.
+              Visualiza tu informacion de usuario y actualiza ru Subcripción.
             </p>
           </header>
 
           <div className="settings-card shadow-sm p-4 mx-auto">
-            <form onSubmit={handleSaveAll}>
-              <h5 className="section-title">Cuenta</h5>
-
-              <label className="form-label mt-3">Usuario</label>
-              <input
-                type="text"
-                className="form-control"
-                value={accountForm.username}
-                onChange={handleAccountChange}
-              />
-
+            <form>
               <label className="form-label mt-3">Correo electrónico</label>
               <input
                 type="email"
@@ -76,58 +119,51 @@ const SettingPage = () => {
                 disabled
               />
 
-              <label className="form-label mt-3">Subcripción</label>
-              <input
-                type="email"
-                className="form-control"
-                value={accountForm.role}
-                disabled
-              />
+              <label className="form-label mt-4">Subcripción</label>
+              <div className="membership-group mx-2">
+                {membershipPlans.map((plan) => {
+                  const isSelected = accountForm.membership === plan; 
+                  const isCurrent = currentRole === plan; 
 
-              <div className="row mt-3">
-                <div className="col-md-6">
-                  <label className="form-label">Ciudad</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={accountForm.city}
-                    onChange={handleAccountChange}
-                  />
-                </div>
+                  let tagText = "";
+                  if (isCurrent) {
+                    tagText = "(actual)";
+                  } else if (
+                    currentRole === "User" &&
+                    plan === "Sommelier"
+                  ) {
+                    tagText = "(actualizar)";
+                  }
 
-                <div className="col-md-6">
-                  <label className="form-label">País</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={accountForm.country}
-                    onChange={handleAccountChange}
-                  />
-                </div>
+                  return (
+                    <button
+                      key={plan}
+                      type="button"
+                      className={
+                        "btn btn-sm membership-pill" +
+                        (isSelected ? " active" : "")
+                      }
+                      onClick={() => handleSelectMembership(plan)}
+                    >
+                      <span>{plan}</span>
+                      {tagText && (
+                        <span className="membership-tag"> {tagText}</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
 
-              <hr className="mt-4" />
-
-              <div className="d-flex justify-content-between mt-3">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => navigate("/profile")}
-                >
-                  Ver perfil
-                </button>
-
-                <button
-                  type="submit"
-                  className="btn btn-dark"
-                  disabled={saving}
-                >
-                  {saving ? "Guardando..." : "Guardar cambios"}
-                </button>
+              <div className="text-muted small mb-3">
+                El tipo de membresía define beneficios como historial ampliado,
+                bodega y recomendaciones avanzadas.
               </div>
+
+              <button type="submit" className="btn btn-dark button-save" disabled={saving} onClick={handleSaveAll}>
+                {saving ? "Guardando..." : "Guardar cambios"}
+              </button>
             </form>
           </div>
-
         </div>
       </div>
     </>

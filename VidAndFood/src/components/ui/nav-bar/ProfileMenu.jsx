@@ -11,14 +11,16 @@ const ProfileMenu = ({ onLogout }) => {
   const navigate = useNavigate();
 
   const {
+    user,
     isAuthenticated,
     openAuthModal,
-    onLogout: ctxLogout
+    onLogout: ctxLogout,
   } = useContext(AuthContext);
 
+  const isUser = user?.role === "User";
+  const isUserSommelier = user?.role === "Sommelier";
+  const isUserAdmin = user?.role === "Admin";
 
-  console.log({ isAuthenticated })
-  
   const handleClickProfile = () => {
     if (!isAuthenticated) {
       openAuthModal("login");
@@ -37,7 +39,7 @@ const ProfileMenu = ({ onLogout }) => {
         await ctxLogout();
       }
     } finally {
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     }
   };
 
@@ -50,46 +52,118 @@ const ProfileMenu = ({ onLogout }) => {
       />
 
       <Dropdown.Menu className="profile-dropdown">
-        <div className="premium-header px-3 py-2">
-          <span className="premium-question">¿Quieres ser premium?</span>
-          <Button
-            variant="outline-dark"
-            size="sm"
-            className="premium-btn"
-            onClick={() => {
-              setOpen(false);
-              navigate("/premium");
-            }}
-          >
-            Premium
-          </Button>
-        </div>
+        {/* ---------- ADMIN ---------- */}
+        {isUserAdmin && (
+          <>
+            <Dropdown.Item
+              as={Link}
+              to="/sys-admin"
+              onClick={() => setOpen(false)}
+            >
+              Sys Admin Panel
+            </Dropdown.Item>
 
-        <Dropdown.Divider />
+            <Dropdown.Divider />
 
-        <Dropdown.Item as={Link} to="/my-wines" onClick={() => setOpen(false)}>
-          My Wines
-        </Dropdown.Item>
-        <Dropdown.Item onClick={() => navigate("/history")}>
-          History
-        </Dropdown.Item>
-        <Dropdown.Item as={Link} to="/profile" onClick={() => setOpen(false)}>
-          Profile
-        </Dropdown.Item>
-        <Dropdown.Item as={Link} to="/setting" onClick={() => setOpen(false)}>
-          Settings
-        </Dropdown.Item>
+            <Dropdown.Item
+              as="button"
+              className="text-danger"
+              onClick={handleLogout}
+              style={{ fontWeight: "lighter" }}
+            >
+              Log out
+            </Dropdown.Item>
+          </>
+        )}
 
-        <Dropdown.Divider />
+        {/* ---------- SOMMELIER ---------- */}
+        {isUserSommelier && !isUserAdmin && (
+          <>
+            <div className="premium-header px-3 py-2">
+              <span className="premium-question">Bienvenido Sommmelier!</span>
+            </div>
+            
+            <Dropdown.Divider />
 
-        <Dropdown.Item
-          as="button"
-          className="text-danger"
-          onClick={handleLogout}
-          style={{ fontWeight: "lighter" }}
-        >
-          Log out
-        </Dropdown.Item>
+            <Dropdown.Item
+              as={Link}
+              to="/my-wines"
+              onClick={() => setOpen(false)}
+            >
+              My Wines
+            </Dropdown.Item>
+
+            <Dropdown.Item onClick={() => navigate("/history")}>
+              History
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as={Link}
+              to="/setting"
+              onClick={() => setOpen(false)}
+            >
+              Settings
+            </Dropdown.Item>
+
+            <Dropdown.Divider />
+
+            <Dropdown.Item
+              as="button"
+              className="text-danger"
+              onClick={handleLogout}
+              style={{ fontWeight: "lighter" }}
+            >
+              Log out
+            </Dropdown.Item>
+          </>
+        )}
+
+        {/* ---------- USER ---------- */}
+        {isUser && !isUserSommelier && !isUserAdmin && (
+          <>
+            {/* Cartel premium */}
+            <div className="premium-header px-3 py-2">
+              <span className="premium-question">¿Quieres ser Sommelier?</span>
+
+              <Button
+                variant="outline-dark"
+                size="sm"
+                className="premium-btn"
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/setting");
+                }}
+              >
+                Sommelier
+              </Button>
+            </div>
+
+            <Dropdown.Divider />
+
+            <Dropdown.Item onClick={() => navigate("/history")}>
+              History
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as={Link}
+              to="/setting"
+              onClick={() => setOpen(false)}
+            >
+              Settings
+            </Dropdown.Item>
+
+            <Dropdown.Divider />
+
+            <Dropdown.Item
+              as="button"
+              className="text-danger"
+              onClick={handleLogout}
+              style={{ fontWeight: "lighter" }}
+            >
+              Log out
+            </Dropdown.Item>
+          </>
+        )}
       </Dropdown.Menu>
     </Dropdown>
   );
