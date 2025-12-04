@@ -13,6 +13,7 @@ import SessionWatcher from "./components/auth/SessionWatcher";
 import RoleRoute from "./routes/roleRoute/RoleRoute";
 import HomePage from "./components/ui/home/homePage/HomePage";
 import WinesPage from "./components/winesPage/WinesPage";
+import SommelierAI from "./components/ui/somellierAi/somellier-ai";
 
 function App() {
   return (
@@ -35,6 +36,15 @@ function App() {
           }
         />
 
+        <Route
+          path="/sommelier-ai"
+          element={
+            <RoleRoute allowedRoles={["Sommelier", "Admin"]}>
+              <SommelierAI />
+            </RoleRoute>
+          }
+        />
+        
         <Route
           path="/history"
           element={
