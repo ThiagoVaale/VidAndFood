@@ -6,19 +6,19 @@ import "./ProfileMenu.css";
 import ProfileMenuToggle from "./ProfileMenuToggle ";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 
-const ProfileMenu = ({ onLogout }) => {
+const   ProfileMenu = ({ onLogout }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const {
+    user,
     isAuthenticated,
     openAuthModal,
     onLogout: ctxLogout
   } = useContext(AuthContext);
 
+  const isUserSommelier = user?.role === "Sommelier";
 
-  console.log({ isAuthenticated })
-  
   const handleClickProfile = () => {
     if (!isAuthenticated) {
       openAuthModal("login");
@@ -37,7 +37,7 @@ const ProfileMenu = ({ onLogout }) => {
         await ctxLogout();
       }
     } finally {
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     }
   };
 
@@ -51,18 +51,26 @@ const ProfileMenu = ({ onLogout }) => {
 
       <Dropdown.Menu className="profile-dropdown">
         <div className="premium-header px-3 py-2">
-          <span className="premium-question">¿Quieres ser premium?</span>
-          <Button
+          <span className="premium-question">
+             {isUserSommelier ? 
+             "Bienvenido Sommmelier!" : "¿Quieres ser Sommelier?"}
+          </span>
+          {isUserSommelier ? null :
+          (
+            <Button
             variant="outline-dark"
             size="sm"
             className="premium-btn"
             onClick={() => {
               setOpen(false);
-              navigate("/premium");
+              navigate("/setting");
             }}
           >
-            Premium
+            Sommelier
           </Button>
+          )
+          }
+          
         </div>
 
         <Dropdown.Divider />
@@ -72,9 +80,6 @@ const ProfileMenu = ({ onLogout }) => {
         </Dropdown.Item>
         <Dropdown.Item onClick={() => navigate("/history")}>
           History
-        </Dropdown.Item>
-        <Dropdown.Item as={Link} to="/profile" onClick={() => setOpen(false)}>
-          Profile
         </Dropdown.Item>
         <Dropdown.Item as={Link} to="/setting" onClick={() => setOpen(false)}>
           Settings

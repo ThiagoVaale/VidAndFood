@@ -17,6 +17,9 @@ import SettingPage from "./components/ui/setting/SettingPage";
 import PrincipalPage from "./components/principalPage/PrincipalPage";
 import WineContext from "./services/context/winesContext/WinesContext";
 import HistoryPage from "./components/ui/history/HistoryPage";
+import AdminRoute from "./router/AdminRoute";
+import SysAdminPage from "./components/ui/sys-admin/SysAdminPage";
+import SessionWatcher from "./components/auth/SessionWatcher";
 
 const wineFilters = [
   {
@@ -154,6 +157,7 @@ function App() {
   return (
     <>
       <AuthModal />
+      <SessionWatcher/>
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<HomePage />} />
@@ -163,6 +167,14 @@ function App() {
         <Route path="/history" element={<HistoryPage/>}/>
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/setting" element={<SettingPage />} />
+        <Route
+          path="/sys-admin"
+          element={
+            <AdminRoute>
+              <SysAdminPage/>
+            </AdminRoute>
+          }
+        /> 
       </Routes>
     </>
   );
