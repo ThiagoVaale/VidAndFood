@@ -12,20 +12,47 @@ const GlobalToast = () => {
     useContext(ResponseContext);
 
   return (
-    <ToastContainer position="top-center" className="p-3" style={{ zIndex: 9999 }}>
+    <ToastContainer
+      position="bottom-end"
+      className="p-3"
+      style={{ zIndex: 9999 }}
+    >
       <Toast
         show={isOpen}
         onClose={closeResponse}
-        bg={variant === "error" ? "danger" : variant === "success" ? "success" : null}
-        autohide={false} 
+        autohide={false}
+        style={{
+          backgroundColor: "#f5f5f5",   // fondo sobrio
+          border: "1px solid #ddd",
+          minWidth: "320px",
+        }}
       >
         <Toast.Header
-          closeButton={false}
-          style={{ backgroundColor: variantColors[variant], color: "white" }}
+          closeButton={true}
+          style={{
+            backgroundColor: "transparent",
+            borderBottom: "1px solid #e2e2e2"
+          }}
         >
-          <strong className="me-auto">{title}</strong>
+          {/* Indicador de color */}
+          <div
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              backgroundColor: variantColors[variant],
+              marginRight: "10px"
+            }}
+          />
+
+          <strong className="me-auto" style={{ fontSize: "0.95rem" }}>
+            {title}
+          </strong>
         </Toast.Header>
-        <Toast.Body style={{ fontSize: "0.9rem" }}>{message}</Toast.Body>
+
+        <Toast.Body style={{ fontSize: "0.9rem", color: "#333" }}>
+          {message}
+        </Toast.Body>
       </Toast>
     </ToastContainer>
   );

@@ -8,7 +8,7 @@ import WineContext from "../../services/context/winesContext/WinesContext";
 
 const PrincipalPage = () => {
   const { wines } = useContext(WineContext);
-
+  console.log(wines)
   return (
     <div className="root-style">
       <main
