@@ -16,6 +16,7 @@ import SettingPage from "./components/ui/setting/SettingPage";
 import PrincipalPage from "./components/principalPage/PrincipalPage";
 import WineContext from "./services/context/winesContext/WinesContext";
 import HistoryPage from "./components/ui/history/HistoryPage";
+import SommelierAI from "./components/ui/somellierAi/somellier-ai";
 
 const wineFilters = [
   {
@@ -161,6 +162,7 @@ function App() {
         <Route path="/my-wines" element={<MyWinesPage />} />
         <Route path="/history" element={<HistoryPage/>}/>
         <Route path="/setting" element={<SettingPage />} />
+        <Route path="/sommelier-ai" element={<SommelierAI />} />
       </Routes>
     </>
   );

@@ -1,0 +1,75 @@
+.chat-container {
+  height: 70vh;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+}
+
+/* Scrollbar personalizada */
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  position: relative;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.message-user {
+  background-color: #6f42c1; /* Un color violeta/uva acorde al tema vinos */
+  color: white;
+  margin-left: auto; /* Alinea a la derecha */
+  border-bottom-right-radius: 2px;
+}
+
+.message-ai {
+  background-color: #ffffff;
+  color: #333;
+  margin-right: auto; /* Alinea a la izquierda */
+  border-bottom-left-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  border: 1px solid #e9ecef;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #6f42c1;
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out both;
+  margin: 0 2px;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.wine-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.wine-item {
+  background: #fdfdfd;
+  border-left: 3px solid #6f42c1;
+  padding: 8px;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+}

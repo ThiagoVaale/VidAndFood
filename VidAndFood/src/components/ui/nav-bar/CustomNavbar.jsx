@@ -1,5 +1,4 @@
 import ProfileMenu from "./ProfileMenu";
-import COLORS from "../../../utils/colors";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import "./CustomNavBar.css";
@@ -8,10 +7,11 @@ const CustomNavbar = () => {
   const pages = [
     { name: "Home", href: "/home" },
     { name: "Wines", href: "/wines" },
-    { name: "Sommelier AI", href: "/sommelier-ai" },
+    { name: "Sommelier AI", href: "/sommelier-ai"},
   ];
 
   return (
+    
     <Navbar expand="lg" className="shadow-sm fixed-top custom-navbar" bg="light">
       <Container fluid>
         <Navbar.Brand as={NavLink} to="/home" className="brand-title">

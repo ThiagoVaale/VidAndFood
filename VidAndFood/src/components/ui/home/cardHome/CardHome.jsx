@@ -15,6 +15,7 @@ const CardHome = ({
   variedad_uva,
   isHorizontal,
   onClick,
+  
 }) => {
   console.log("RATING", rating)
   return (
@@ -32,7 +33,7 @@ const CardHome = ({
                   src={img}
                   alt={nombre}
                   style={{
-                    width: "120px",
+                    width: "100%",
                     height: "160px",
                     objectFit: "cover",
                     borderRadius: "8px",
@@ -125,30 +126,91 @@ const CardHome = ({
           </Card>
         </Col>
       ) : (
-        <Col xs={6} sm={4} md={3} lg={2} className="mb-4 d-flex">
+        // --- CARTA VERTICAL CORREGIDA PARA TUS FOTOS ---
+        <Col xs={12} sm={6} md={4} lg={3} className="mb-5 d-flex">
           <Card
-            className="wine-card-vertical shadow-sm border-0 flex-fill"
+            className="flex-fill border-0"
             onClick={onClick}
-            style={{ cursor: onClick ? "pointer" : "default" }}
+            style={{ 
+                cursor: onClick ? "pointer" : "default",
+                backgroundColor: "transparent"
+            }}
           >
-            <Card.Img src={img} alt={nombre} className="wine-img-vertical" />
+            {/* CAMBIO CLAVE:
+               1. Quitamos el bg-light (gris).
+               2. Usamos 'rounded-4' para bordes más modernos.
+               3. shadow-sm muy suave para que la foto destaque.
+            */}
+            <div 
+                className="ratio ratio-4x3 overflow-hidden position-relative mb-3 shadow-sm rounded-4"
+            >
+              <Card.Img
+                src={img}
+                alt={nombre}
+                // CAMBIO CLAVE: object-fit-cover llena la caja sin deformar
+                // w-100 h-100 asegura que ocupe todo el espacio
+                className="w-100 h-100 object-fit-cover"
+                style={{ 
+                    transition: "transform 0.5s ease", // Efecto zoom suave al pasar el mouse (opcional)
+                }} 
+                // Pequeño truco: Si quieres un efecto zoom al hover, agrega una clase CSS para hover
+              />
+            </div>
 
-            <Card.Body className="wine-body d-flex flex-column justify-content-between">
+            {/* INFO - ESTILO MINIMALISTA IDENTICO A LA REFERENCIA */}
+            <Card.Body className="p-0 d-flex flex-column">
               <div>
-                <h6 className="wine-title mb-1">{nombre}</h6>
-                <p className="wine-subtitle mb-2">
-                  {bodega}, {anio_cosecha}
+                <h6 
+                    className="mb-1 text-truncate" 
+                    title={nombre}
+                    style={{ 
+                        fontWeight: "700", 
+                        color: "#1a1a1a", // Negro casi puro
+                        fontSize: "1.05rem",
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                    }}
+                >
+                    {nombre}{bodega}, {anio_cosecha}
+
+                <p 
+                    className="mb-2 text-truncate"
+                    style={{ 
+                        color: "#9e4758", // El color rojizo de tu referencia
+                        fontSize: "0.9rem",
+                        fontWeight: "500"
+                    }}
+                >
+                  {variedad_uva}
+                  
                 </p>
+                </h6>
+
+                
               </div>
 
-              <div className="wine-meta">
-                <span className="wine-rating-number">{rating.toFixed(1)}</span>
-                <StarRating
-                  rating={rating}
-                  size="0.8rem" 
-                  color="#a52a2a"
-                  maxStars={5}
-                />
+              {/* RATING Y PRECIO */}
+              <div className="d-flex align-items-center justify-content-between mt-1">
+                <div className="d-flex align-items-center">
+                    <span 
+                        className="me-1" 
+                        style={{ fontWeight: "bold", fontSize: "0.9rem", color: "#333" }}
+                    >
+                        {rating.toFixed(1)}
+                    </span>
+                    {/* Solo 1 estrella para mantenerlo limpio como la referencia */}
+                    <StarRating
+                        rating={rating}
+                        size="14px"
+                        color="#a52a2a"
+                        maxStars={1} 
+                    />
+                </div>
+                
+                {precio && (
+                    <span style={{ fontSize: "0.95rem", fontWeight: "600", color: "#333" }}>
+                        ${precio.toLocaleString()}
+                    </span>
+                )}
               </div>
             </Card.Body>
           </Card>
