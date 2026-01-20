@@ -2,9 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import CustomNavBar from "../../ui/nav-bar/CustomNavbar";
 import StarRating from "../../common/StarsRating";
 import "./WineDetailPage.css";
-import { Bookmark, ClockHistory, Collection } from "react-bootstrap-icons";
+import { Bookmark } from "react-bootstrap-icons";
 import Footer from "../footer/Footer";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import WishListContext from "../../../services/context/wishListContext/WishListContext";
 import WineReview from "../wineReview/WineReview";
 import {
@@ -16,7 +16,6 @@ import ResponseContext from "../../../services/context/responseContext/ResponseC
 import HistoryContext from "../../../services/context/historyContext/HistoryContext";
 import {
   addWineToHistory,
-  deleteWineFromHistory,
 } from "../../../services/historyUserService";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 
@@ -30,6 +29,12 @@ const WineDetailPage = () => {
   const { user, isAuthenticated, openAuthModal } = useContext(AuthContext);
 
   const [wine, setWine] = useState(null);
+
+  const historyTimeoutRef = useRef(null);
+  const historyFiredForWineRef = useRef(null);
+  const isInHistoryRef = useRef(isInHistory);
+  const toggleHistoryLocalRef = useRef(toggleHistoryLocal);
+  const showResponseRef = useRef(showResponse);
 
   const role = user?.role || null;
 
@@ -57,6 +62,54 @@ const WineDetailPage = () => {
     loadWine();
   }, [wineId]);
 
+  useEffect(() => {
+    if(!canUseHistory){
+      return;
+    }
+
+    if(historyFiredForWineRef.current === String(wineId)){
+      return;
+    }
+
+    if(historyTimeoutRef.current) {
+      clearTimeout(historyTimeoutRef.current);
+      historyTimeoutRef.current = null;
+    }
+
+    historyTimeoutRef.current = setTimeout(async () => {
+      historyFiredForWineRef.current = String(wineId);
+
+      try {
+        await addWineToHistory(wineId);
+
+        const alredyInHistory = isInHistoryRef.current(wineId);
+        if(!alredyInHistory){
+          toggleHistoryLocalRef.current(wineId);
+        }
+
+        showResponseRef.current({
+          variant: "success",
+          title: "Agregado en tu historial.",
+          message: "Guardamos este vino en tu historial automaticamente.",
+        });
+      } catch(err){
+        showResponseRef.current({
+          variant: "error",
+          title: "No se pudo agregar al historial",
+          message: err.message || "Intente nuevamente más tarde.",
+        });
+      }
+    }, 5000);
+
+    return () => {
+      if(historyTimeoutRef.current) {
+        clearTimeout(historyTimeoutRef.current);
+        historyTimeoutRef.current = null;
+      }
+    };
+
+  }, [wineId, canUseHistory])
+
   if (!wine) {
     return (
       <>
@@ -72,7 +125,7 @@ const WineDetailPage = () => {
   }
 
   const favorite = isFavorite(wine.id);
-  const inHistory = isInHistory(wine.id);
+  // const inHistory = isInHistory(wine.id);
 
   const handleToggleFavorite = async () => {
      if (!isAuthenticated) {
@@ -114,49 +167,6 @@ const WineDetailPage = () => {
       showResponse({
         variant: "error",
         message: err.message || "No se pudo actualizar el estado de favoritos",
-        title: "Intente de nuevo",
-      });
-    }
-  };
-
-  const handleToggleHistory = async () => {
-    if (!isAuthenticated) {
-      openAuthModal("login");
-      return;
-    }
-
-    if(!canUseHistory){
-      showResponse({
-        variant: "error",
-        title: "Accion no permitida",
-        message: "Solo los Sommeliers pueden gestionar el historial"
-      })
-      return;
-    }
-
-    const wasInHistory = inHistory;
-
-    try {
-      if (wasInHistory) {
-        await deleteWineFromHistory(wine.id);
-      } else {
-        await addWineToHistory(wine.id);
-      }
-
-      toggleHistoryLocal(wine.id);
-
-      showResponse({
-        variant: "success",
-        message: wasInHistory
-          ? "Vino eliminado del historial"
-          : "Vino añadido al historial",
-        title: "Con Vid&Food todo es posible",
-      });
-    } catch (err) {
-      console.error("Error al actualizar historial:", err.message);
-      showResponse({
-        variant: "error",
-        message: err.message || "No se pudo actualizar el historial",
         title: "Intente de nuevo",
       });
     }
@@ -205,20 +215,7 @@ const WineDetailPage = () => {
               </div>
 
               <div className="wine-detail-actions">
-                 {canUseHistory && (
-                  <button
-                    type="button"
-                    className="wine-detail-action-link"
-                    onClick={handleToggleHistory}
-                  >
-                    <ClockHistory
-                      className="wine-detail-action-icon"
-                      style={{ color: inHistory ? "#a52a2a" : undefined }}
-                    />
-                    {inHistory ? "En tu historial" : "Añadir al historial"}
-                  </button>
-                )}
-
+               
                 {canUseFavorites && (
                   <button
                     type="button"

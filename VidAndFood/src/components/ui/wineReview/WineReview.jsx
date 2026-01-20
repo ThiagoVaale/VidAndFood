@@ -73,7 +73,7 @@ const WineReview = ({ nombre, anio_cosecha, bodega, region }) => {
 
     const reviewToAdd = {
       id: reviews.length + 1,
-      username: currentUser,
+      username: currentUser.fullName,
       rating: newReview.rating,
       comment: newReview.comment,
       createdAt: new Date().toISOString(),
