@@ -43,7 +43,7 @@ const Footer = () => {
         </div>
 
         <div className="footer-legal">
-          © Vid&Food 2025 — Todos los derechos reservados.
+          © Vid&Food 2026  —  Todos los derechos reservados.
         </div>
       </div>
     </section>

@@ -14,16 +14,12 @@ import RoleRoute from "./routes/roleRoute/RoleRoute";
 import HomePage from "./components/ui/home/homePage/HomePage";
 import WinesPage from "./components/winesPage/WinesPage";
 import SommelierAI from "./components/ui/somellierAi/somellier-ai";
-import { useContext } from "react";
-import GlobalLoadingContext from "./services/context/globalLoadingContext/GlobalLoadingContext";
-import GlobalLoaderOverlay from "./components/ui/spinner/GlobalLoaderOverlay";
+import RouteGlobalLoader from "./components/ui/spinner/RouteGlobalLoader";
 
 function App() {
-  const { loading, message } = useContext(GlobalLoadingContext);
-
   return (
     <>
-      <GlobalLoaderOverlay loading={loading} message={message} />
+      <RouteGlobalLoader delayMs={650}/>
 
       <AuthModal />
       <SessionWatcher />

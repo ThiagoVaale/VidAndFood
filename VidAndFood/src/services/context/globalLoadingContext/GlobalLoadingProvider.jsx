@@ -4,12 +4,13 @@ import GlobalLoadingContext from "./GlobalLoadingContext";
 
 const GlobalLoadingProvider = ({ children }) => {
   const [globalLoading, setGlobalLoading] = useState(false);
+  const [globalMessage, setGlobalMessage] = useState("Cargando...");
 
   return (
-    <GlobalLoadingContext.Provider value={{ globalLoading, setGlobalLoading }}>
-      {globalLoading && (
-        <GlobalLoaderOverlay loading={true} message={"Cargando..."} />
-      )}
+    <GlobalLoadingContext.Provider
+      value={{ globalLoading, setGlobalLoading, globalMessage, setGlobalMessage }}
+    >
+      <GlobalLoaderOverlay loading={globalLoading} message={globalMessage} />
       {children}
     </GlobalLoadingContext.Provider>
   );

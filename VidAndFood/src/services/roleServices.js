@@ -12,19 +12,41 @@ async function handleResponse(response) {
   return data;
 }
 
-export async function upgradeToSommelier() {
+export async function upgradeToSommelier(userId, newRole) {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  console.log("USERID Y NEWROLE DESDE SERVICE: ", userId, newRole)
+
+  if (!token) {
+    throw new Error("Usuario no autenticado");
+  }
+
+  const res = await fetch(`${API_BASE_URL}/User/change-role`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ "userUuid": userId, "newRole": newRole }),
+  });
+
+  return handleResponse(res);
+}
+
+export async function downgradeToUser(userId, newRole) {
   const token = localStorage.getItem(TOKEN_KEY);
 
   if (!token) {
     throw new Error("Usuario no autenticado");
   }
 
-  const res = await fetch(`${API_BASE_URL}/User/upgrade-to-sommelier`, {
+  const res = await fetch(`${API_BASE_URL}/User/change-role`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
     },
+    body: JSON.stringify({ "userUuid": userId, "newRole": newRole })
   });
 
   return handleResponse(res);

@@ -3,12 +3,32 @@ import "./principalPage.css";
 import NewsletterBanner from "../banners/NewsletterBanner";
 import MatchBanner from "../banners/MatchBanner";
 import Footer from "../ui/footer/Footer";
-import { useContext } from "react";
-import WineContext from "../../services/context/winesContext/WinesContext";
+import { useContext, useEffect, useState } from "react";
+import { fetchWinesFeatured } from "../../services/wineService";
+import ResponseContext from "../../services/context/responseContext/ResponseContext";
 
 const PrincipalPage = () => {
-  const { wines } = useContext(WineContext);
-  console.log(wines)
+  const { showResponse } = useContext(ResponseContext);
+
+  const [winesFeatured, setWinesFeatured] = useState([])
+  
+  useEffect(() => {
+    const loadWinesFeatured = async () => {
+      try {
+        const wines = await fetchWinesFeatured();
+        setWinesFeatured(wines);
+      } catch(err){
+        showResponse({
+          variant: "error",
+          title: "Error al cargar los vinos destacados",
+          message: err.message
+        });
+      }
+    }
+
+    loadWinesFeatured();
+  }, [])
+
   return (
     <div className="root-style">
       <main
@@ -22,7 +42,7 @@ const PrincipalPage = () => {
           <section className="home-wines-section mt-5">
             <h2 className="home-section-title">Explora vinos destacados</h2>
             <div className="home-wines-grid">
-              <Wines wines={wines} isHorizontal={false}/>
+              <Wines wines={winesFeatured} isHorizontal={false}/>
             </div>
           </section>
 

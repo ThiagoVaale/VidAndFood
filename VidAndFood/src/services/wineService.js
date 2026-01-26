@@ -19,6 +19,20 @@ export async function fetchAllWines() {
   return handleResponse(res);
 }
 
+export async function fetchWinesFeatured() {
+  const res = await fetch(`${API_BASE_URL}/Wine/wine-of-month`, {
+    method: "GET"
+  });
+  return handleResponse(res);
+}
+
+export async function fetchWineById(wineId) {
+  const res = await fetch(`${API_BASE_URL}/Wine/${wineId}`, {
+    method: "GET",
+  });
+  return handleResponse(res);
+}
+
 export async function toggleFavoriteWine(wineId) {
   if (!wineId) {
     throw new Error("wineId es requerido para marcar favorito");
@@ -73,6 +87,58 @@ export async function deleteFavoriteWine(wineId) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return handleResponse(response);
+}
+
+export async function rateWine(wineId, rating, comment) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/${wineId}/rate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ 
+      "score": rating,
+      "review": comment
+     }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function rateChange(wineId, rating, comment) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/${wineId}/rate-change`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ 
+      "score": rating,
+      "review": comment
+     }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function deleteReview(wineId) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/${wineId}/rate-delete` , {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
     },
   });
 

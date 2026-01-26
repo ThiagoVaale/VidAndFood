@@ -6,26 +6,33 @@ import "./myWinesPage.css";
 import WishListContext from "../../../services/context/wishListContext/WishListContext";
 import WineContext from "../../../services/context/winesContext/WinesContext";
 import { fetchFavoriteWines } from "../../../services/wineService";
+import GlobalLoadingContext from "../../../services/context/globalLoadingContext/GlobalLoadingContext";
 
 const MyWinesPage = () => {
   const navigate = useNavigate();
 
   const { isFavorite, handleToggleFavorite } = useContext(WishListContext);
+  const { setGlobalLoading, setGlobalMessage } = useContext(GlobalLoadingContext);
 
   const [favoriteWines, setFavoriteWines] = useState([]);
 
   useEffect(() => {
     const loadFavorites = async () => {
       try {
+        setGlobalMessage("Cargando tus vinos favoritos...");
+        setGlobalLoading(true);
+
         const data = await fetchFavoriteWines();
         setFavoriteWines(data);
       } catch (err) {
         console.error("Error al cargar vinos favoritos:", err);
         setFavoriteWines([]);
+      } finally {
+        setGlobalLoading(false);
+      }
     };
-  }
     loadFavorites();
-  }, []);
+  }, [setGlobalLoading, setGlobalMessage]);
 
   const hasFavorites = favoriteWines.length > 0;
 

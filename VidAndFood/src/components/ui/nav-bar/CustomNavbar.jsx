@@ -18,14 +18,12 @@ const CustomNavbar = () => {
     >
       <Container fluid className="d-flex align-items-center justify-content-between">
         
-        {/* Logo */}
         <Navbar.Brand as={NavLink} to="/home" className="brand-title">
           Vid & Food
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-        {/* Items + Login distribuidos correctamente */}
         <Navbar.Collapse
           id="basic-navbar-nav"
           className="d-flex align-items-center justify-content-between w-100"
@@ -56,4 +54,4 @@ const CustomNavbar = () => {
   );
 };
 
-export default CustomNavbar;
+export default CustomNavbar;

@@ -192,6 +192,7 @@
 .review-date {
   font-size: 13px;
   color: #9CA3AF;
+  margin-top: 15px;
 }
 
 
@@ -237,6 +238,174 @@
 .auth-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+.review-header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-actions-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  font-size: 18px;
+  color: #888;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.review-actions-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  color: #111;
+}
+
+.review-actions-btn:active {
+  transform: scale(0.95);
+}
+
+.review-actions-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.review-actions-menu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 8px); /* hacia la derecha */
+  min-width: 140px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+  padding: 6px;
+  z-index: 50;
+}
+
+.review-actions-item {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 10px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+.review-actions-item:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.review-actions-item.danger {
+  color: #b42318;
+}
+
+.review-actions-item.danger:hover {
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.review-edit-box {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.edit-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.edit-cancel-btn,
+.edit-save-btn {
+  border: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.edit-cancel-btn {
+  background: transparent;
+  border: 1px solid #4A0D15;
+}
+
+.edit-save-btn {
+  background: #a52a2a;
+  color: #fff;
+}
+
+.edit-save-btn:hover {
+  background-color: #4A0D15;
+  transition: 0.5s;
+}
+
+edit-cancel-btn:hover{
+  border: 1px solid #4A0D15;
+  transition: 0.5s;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+.modal-card {
+  width: min(420px, 92vw);
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.modal-title {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+}
+
+.modal-text {
+  margin: 0 0 14px 0;
+  color: #444;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-cancel-btn,
+.modal-danger-btn {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal-cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.modal-danger-btn {
+  background: #b42318;
+  color: #fff;
 }
 
 

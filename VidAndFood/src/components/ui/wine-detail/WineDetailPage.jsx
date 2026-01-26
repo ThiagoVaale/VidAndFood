@@ -9,15 +9,14 @@ import WishListContext from "../../../services/context/wishListContext/WishListC
 import WineReview from "../wineReview/WineReview";
 import {
   deleteFavoriteWine,
-  fetchAllWines,
+  fetchWineById,
   toggleFavoriteWine,
 } from "../../../services/wineService";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
 import HistoryContext from "../../../services/context/historyContext/HistoryContext";
-import {
-  addWineToHistory,
-} from "../../../services/historyUserService";
+import { addWineToHistory } from "../../../services/historyUserService";
 import AuthContext from "../../../services/context/authContext/AuthContext";
+import WineContext from "../../../services/context/winesContext/WinesContext";
 
 const WineDetailPage = () => {
   const { wineId } = useParams();
@@ -27,6 +26,7 @@ const WineDetailPage = () => {
   const { showResponse } = useContext(ResponseContext);
   const { isInHistory, toggleHistoryLocal } = useContext(HistoryContext);
   const { user, isAuthenticated, openAuthModal } = useContext(AuthContext);
+  const { wines } = useContext(WineContext);
 
   const [wine, setWine] = useState(null);
 
@@ -38,40 +38,48 @@ const WineDetailPage = () => {
 
   const role = user?.role || null;
 
+  const historyKey = (id) => `vf_history_fired_${String(id)}`;
+
   const canUseHistory =
     !!isAuthenticated &&
     (role === "User" || role === "Sommelier" || role === "Admin");
 
   const canUseFavorites =
     !!isAuthenticated && (role === "Sommelier" || role === "Admin");
-    
-    
+
   useEffect(() => {
-    const loadWine = async () => {
+    const loadWineWithReview = async () => {
       try {
-        const allWines = await fetchAllWines();
-
-        const foundWine = allWines.find((w) => String(w.id) === String(wineId));
-
-        setWine(foundWine || null);
+        const wineReview = await fetchWineById(wineId);
+        console.log("VINO POR ID DESDE BACK: ", wineReview);
+        setWine(wineReview || null);
       } catch (err) {
         console.error("Error al cargar el vino:", err);
       }
     };
+    loadWineWithReview();
+  }, [wineId, wines]);
 
-    loadWine();
-  }, [wineId]);
+  const reloadWine = async () => {
+    const wineReview = await fetchWineById(wineId);
+    setWine(wineReview || null);
+  };
 
   useEffect(() => {
-    if(!canUseHistory){
+    if (!canUseHistory) {
       return;
     }
 
-    if(historyFiredForWineRef.current === String(wineId)){
+    const key = historyKey(wineId);
+
+    if (localStorage.getItem(key) === "1") return;
+
+    if (isInHistoryRef.current(wineId)) {
+      localStorage.setItem(key, "1");
       return;
     }
 
-    if(historyTimeoutRef.current) {
+    if (historyTimeoutRef.current) {
       clearTimeout(historyTimeoutRef.current);
       historyTimeoutRef.current = null;
     }
@@ -82,8 +90,11 @@ const WineDetailPage = () => {
       try {
         await addWineToHistory(wineId);
 
+        historyFiredForWineRef.current = String(wineId);
+        localStorage.setItem(key, "1");
+
         const alredyInHistory = isInHistoryRef.current(wineId);
-        if(!alredyInHistory){
+        if (!alredyInHistory) {
           toggleHistoryLocalRef.current(wineId);
         }
 
@@ -92,7 +103,7 @@ const WineDetailPage = () => {
           title: "Agregado en tu historial.",
           message: "Guardamos este vino en tu historial automaticamente.",
         });
-      } catch(err){
+      } catch (err) {
         showResponseRef.current({
           variant: "error",
           title: "No se pudo agregar al historial",
@@ -102,13 +113,12 @@ const WineDetailPage = () => {
     }, 5000);
 
     return () => {
-      if(historyTimeoutRef.current) {
+      if (historyTimeoutRef.current) {
         clearTimeout(historyTimeoutRef.current);
         historyTimeoutRef.current = null;
       }
     };
-
-  }, [wineId, canUseHistory])
+  }, [wineId, canUseHistory]);
 
   if (!wine) {
     return (
@@ -124,11 +134,14 @@ const WineDetailPage = () => {
     );
   }
 
+  const grapeNames = wine?.wine?.grapes?.length
+    ? wine.wine.grapes.map((g) => g.name).join(", ")
+    : "Sin especificar";
+
   const favorite = isFavorite(wine.id);
-  // const inHistory = isInHistory(wine.id);
 
   const handleToggleFavorite = async () => {
-     if (!isAuthenticated) {
+    if (!isAuthenticated) {
       openAuthModal("login");
       return;
     }
@@ -181,32 +194,34 @@ const WineDetailPage = () => {
           <section className="wine-detail-header">
             <div className="wine-detail-image-col">
               <img
-                src={wine.imageUrl}
-                alt={wine.name}
+                src={wine.wine.imageUrl}
+                alt={"Foto del vino"}
                 className="wine-detail-image"
               />
             </div>
 
             <div className="wine-detail-info-col">
-              <h1 className="wine-detail-title">{wine.wineryName}</h1>
-              <h2 className="wine-detail-subtitle">{wine.name}</h2>
+              <h1 className="wine-detail-title">{wine.wine.wineryName}</h1>
+              <h2 className="wine-detail-subtitle">{wine.wine.name}</h2>
 
               {wine.vintageYear && (
-                <p className="wine-detail-year">{wine.vintageYear}</p>
+                <p className="wine-detail-year">{wine.wine.vintageYear}</p>
               )}
 
               <div className="wine-detail-meta-links">
-                {wine.regionName && <span>{wine.regionName}</span>}
-                {wine.grapeNames && <span>• {wine.grapeNames}</span>}
+                {wine.wine.regionName && <span>{wine.wine.regionName}</span>}
+                {grapeNames !== "Sin especificar" && (
+                  <span>• {grapeNames}</span>
+                )}
               </div>
 
               <div className="wine-detail-rating">
                 <div className="wine-detail-rating-left">
                   <div className="wine-detail-rating-score">
-                    {wine.averageScore?.toFixed(1) ?? "–"}
+                    {wine.wine.averageScore?.toFixed(1) ?? "–"}
                   </div>
                   <StarRating
-                    rating={wine.averageScore}
+                    rating={wine.wine.averageScore}
                     size="1.1rem"
                     color="#a52a2a"
                     maxStars={5}
@@ -215,7 +230,6 @@ const WineDetailPage = () => {
               </div>
 
               <div className="wine-detail-actions">
-               
                 {canUseFavorites && (
                   <button
                     type="button"
@@ -237,8 +251,8 @@ const WineDetailPage = () => {
             <aside className="wine-detail-price-card">
               <div className="wine-detail-price-label">Precio</div>
               <div className="wine-detail-price-amount">
-                {wine.price
-                  ? `$ ${wine.price.toLocaleString()}`
+                {wine.wine.price
+                  ? `$ ${wine.wine.price.toLocaleString()}`
                   : "No disponible"}
               </div>
               <p className="wine-detail-price-note">
@@ -253,20 +267,27 @@ const WineDetailPage = () => {
             <div className="wine-detail-data-table">
               <div className="wine-detail-row">
                 <div className="wine-detail-row-label">Bodega</div>
-                <div className="wine-detail-row-value">{wine.wineryName}</div>
+                <div className="wine-detail-row-value">
+                  {wine.wine.wineryName}
+                </div>
               </div>
 
               <div className="wine-detail-row">
                 <div className="wine-detail-row-label">Uvas</div>
-                <div className="wine-detail-row-value">
-                  {wine.grapeNames || "Sin especificar"}
+                <div className="wine-detail-row-value wine-detail-grapes">
+                  {wine.wine.grapes.map((g, index) => (
+                    <span key={g.id} className="wine-grape-tag">
+                      {g.name}
+                      {index < wine.wine.grapes.length - 1 && " · "}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <div className="wine-detail-row">
                 <div className="wine-detail-row-label">Región</div>
                 <div className="wine-detail-row-value">
-                  {wine.regionName || "Sin especificar"}
+                  {wine.wine.regionName || "Sin especificar"}
                 </div>
               </div>
 
@@ -294,11 +315,15 @@ const WineDetailPage = () => {
       </div>
 
       <WineReview
-        nombre={wine.name}
-        bodega={wine.wineryName}
-        anio_cosecha={wine.vintageYear}
-        region={wine.regionName}
+        nombre={wine.wine.name}
+        bodega={wine.wine.wineryName}
+        anio_cosecha={wine.wine.vintageYear}
+        region={wine.wine.regionName}
+        wineReview={wine.reviews}
+        wineId={wineId}
+        onReviewCreated={reloadWine}
       />
+
       <Footer />
     </>
   );

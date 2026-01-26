@@ -52,7 +52,6 @@ const ProfileMenu = ({ onLogout }) => {
       />
 
       <Dropdown.Menu className="profile-dropdown">
-        {/* ---------- ADMIN ---------- */}
         {isUserAdmin && (
           <>
             <Dropdown.Item
@@ -76,7 +75,6 @@ const ProfileMenu = ({ onLogout }) => {
           </>
         )}
 
-        {/* ---------- SOMMELIER ---------- */}
         {isUserSommelier && !isUserAdmin && (
           <>
             <div className="premium-header px-3 py-2">
@@ -118,10 +116,8 @@ const ProfileMenu = ({ onLogout }) => {
           </>
         )}
 
-        {/* ---------- USER ---------- */}
         {isUser && !isUserSommelier && !isUserAdmin && (
           <>
-            {/* Cartel premium */}
             <div className="premium-header px-3 py-2">
               <span className="premium-question">¿Quieres ser Sommelier?</span>
 

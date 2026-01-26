@@ -2,32 +2,31 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { fetchAllWines } from "../../wineService"; 
 import ResponseContext from "../responseContext/ResponseContext";
 import WineContext from "./WinesContext";
+import GlobalLoadingContext from "../globalLoadingContext/GlobalLoadingContext";
 
 const WineProvider = ({ children }) => {
   const [wines, setWines] = useState([]);
-  const [isLoadingWines, setIsLoadingWines] = useState(false);
-  const [error, setError] = useState("")
   const { showResponse } = useContext(ResponseContext);
 
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+  
   const loadWines = useCallback(async () => {
     try {
-      setIsLoadingWines(true);
-      setError("")
+      const [data] = await Promise.all([
+        fetchAllWines(),
+        delay(500),
+      ]); 
 
-      const data = await fetchAllWines(); 
       setWines(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error al cargar vinos:", err);
-      setError("Error al cargar los vinos")
       showResponse({
         title: "Error",
-        message: error,
+        message: "Error al cargar vinos:",
         variant: "error",
       });
-    } finally {
-      setIsLoadingWines(false);
     }
-  }, [showResponse, error]);
+  }, [showResponse]);
 
   useEffect(() => {
     loadWines();
@@ -42,7 +41,6 @@ const WineProvider = ({ children }) => {
     <WineContext.Provider
       value={{
         wines,
-        isLoadingWines,
         reloadWines: loadWines,
         getWineById,
       }}

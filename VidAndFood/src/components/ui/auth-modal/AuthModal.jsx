@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import COLORS from "../../../utils/colors";
 import "./AuthModal.css";
@@ -33,6 +33,10 @@ const AuthModal = () => {
 
   const [submitting, setSubmitting] = useState(false);
 
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const fullNameRef = useRef(null);
+
   const title = authModalMode === "login" ? "Iniciar sesión" : "Crear cuenta";
 
   const navigate = useNavigate();
@@ -64,12 +68,64 @@ const AuthModal = () => {
     setFormRegister((prev) => ({ ...prev, [name]: value }));
   };
 
+  const markInvalid = (ref) => {
+    if(!ref.current) return;
+
+    ref.current.classList.add("input-error");
+    ref.current.focus();
+  }
+
+  const clearInvalid = (ref) => {
+    if(!ref.current) return;
+
+    ref.current.classList.remove("input-error");
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
+    clearInvalid(emailRef);
+    clearInvalid(passwordRef);
+    clearInvalid(fullNameRef);
+
     try {
       if (isLogin) {
+        if(!emailRef.current.value.trim() && !passwordRef.current.value.trim()){
+          markInvalid(emailRef);
+          markInvalid(passwordRef);
+
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "Email y contraseña no pueden estar vacios"
+          });
+          setSubmitting(false);
+          return;
+        }
+
+        if(!emailRef.current.value.trim()){
+          markInvalid(emailRef);
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "El email no puede estar vacío"
+          });
+          setSubmitting(false);
+          return;
+        }
+
+        if(!passwordRef.current.value.trim()){
+          markInvalid(passwordRef);
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "La contaseña no puede estar vacío"
+          });
+          setSubmitting(false);
+          return;
+        }
+
         const { token } = await loginRequest(formLogin);
         setFormLogin({ email: "", password: "" });
 
@@ -85,8 +141,56 @@ const AuthModal = () => {
           message: "Bienvendio a Vid&Food!",
         });
       } else {
+        if(!emailRef.current.value.trim() && !passwordRef.current.value.trim() && !fullNameRef.current.value.trim()){
+          markInvalid(emailRef);
+          markInvalid(passwordRef);
+          markInvalid(fullNameRef);
+
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "Email, contraseña y nombre y apellido no pueden estar vacios"
+          });
+          setSubmitting(false);
+          return;
+        }
+
+         if(!emailRef.current.value.trim()){
+          markInvalid(emailRef);
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "El email no puede estar vacío"
+          });
+          setSubmitting(false);
+          return;
+        }
+
+        if(!passwordRef.current.value.trim()){
+          markInvalid(passwordRef);
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "La contaseña no puede estar vacío"
+          });
+          setSubmitting(false);
+          return;
+        }
+
+        if(!fullNameRef.current.value.trim()){
+          markInvalid(fullNameRef);
+          showResponse({
+            variant: "error",
+            title: "Campos incompletos",
+            message: "El nombre completo no puede estar vacio"
+          });
+          setSubmitting(false);
+          return;
+        }
+
         await registerRequest(formRegister);
         setFormRegister({ email: "", password: "", fullName: "" });
+
         showResponse({
           variant: "success",
           title: "Cuenta creada con exito!",
@@ -113,6 +217,10 @@ const AuthModal = () => {
   };
 
   const handleSwitchMode = () => {
+    clearInvalid(emailRef);
+    clearInvalid(passwordRef);
+    clearInvalid(fullNameRef);
+    
     if (submitting) return;
     switchMode();
   };
@@ -142,7 +250,7 @@ const AuthModal = () => {
           </div>
 
           {authModalMode === "login" ? (
-            <Form onSubmit={handleSubmit} className="auth-modal-form">
+            <Form noValidate onSubmit={handleSubmit} className="auth-modal-form">
               <Form.Group className="mb-3" controlId="authEmail">
                 <Form.Label>Correo electrónico</Form.Label>
                 <Form.Control
@@ -151,7 +259,7 @@ const AuthModal = () => {
                   placeholder="Escribe tu dirección de correo electrónico"
                   value={formLogin.email}
                   onChange={handleChangeLogin}
-                  required
+                  ref={emailRef}
                 />
               </Form.Group>
 
@@ -163,7 +271,7 @@ const AuthModal = () => {
                   placeholder="Ingresa tu contraseña"
                   value={formLogin.password}
                   onChange={handleChangeLogin}
-                  required
+                  ref={passwordRef}
                 />
               </Form.Group>
 
@@ -199,7 +307,7 @@ const AuthModal = () => {
                   placeholder="Escribe tu dirección de correo electrónico"
                   value={formRegister.email}
                   onChange={handleChangeRegister}
-                  required
+                  ref={emailRef}
                 />
               </Form.Group>
 
@@ -211,7 +319,7 @@ const AuthModal = () => {
                   placeholder="Ingresa tu contraseña"
                   value={formRegister.password}
                   onChange={handleChangeRegister}
-                  required
+                  ref={passwordRef}
                 />
               </Form.Group>
 
@@ -223,7 +331,7 @@ const AuthModal = () => {
                   placeholder="Ingrese su nombre y apellido. ej: Nombre Apellido"
                   value={formRegister.fullName}
                   onChange={handleChangeRegister}
-                  required
+                  ref={fullNameRef}
                 />
               </Form.Group>
 

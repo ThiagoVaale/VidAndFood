@@ -55,7 +55,7 @@ export default function applyFilters(wines, filters = {}) {
       if (Array.isArray(wine.grapeNames)) {
         wineGrapes = wine.grapeNames;
       } else if (typeof wine.grapeNames === "string") {
-        wineGrapes = wine.grapeNames.split(","); // ej: "Malbec, Cabernet Sauvignon"
+        wineGrapes = wine.grapeNames.split(","); 
       }
 
       const grapeSlugs = wineGrapes.map((g) => slugify(g));

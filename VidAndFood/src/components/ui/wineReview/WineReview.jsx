@@ -1,46 +1,55 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./wineReview.css";
 import { Star } from "react-bootstrap-icons";
+import ResponseContext from "../../../services/context/responseContext/ResponseContext";
+import {
+  deleteReview,
+  rateChange,
+  rateWine,
+} from "../../../services/wineService";
 
-const WineReview = ({ nombre, anio_cosecha, bodega, region }) => {
+const WineReview = ({
+  nombre,
+  anio_cosecha,
+  bodega,
+  region,
+  wineReview,
+  wineId,
+  onReviewCreated,
+}) => {
   const navigate = useNavigate();
 
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      username: "vinocatador",
-      rating: 5.0,
-      comment:
-        "Excelente año, 2007 fue muy reconocido para esta bodega. Un vino difícil de conseguir, pues ya solo debe haber entre los coleccionistas.",
-      createdAt: "2024-01-15T10:30:00",
-    },
-    {
-      id: 2,
-      username: "sommelier_pro",
-      rating: 4.5,
-      comment:
-        "Muy buen vino, con notas frutales y un final prolongado. Perfecto para acompañar carnes rojas.",
-      createdAt: "2024-02-20T15:45:00",
-    },
-    {
-      id: 3,
-      username: "wine_lover",
-      rating: 4.0,
-      comment:
-        "Buena relación calidad-precio. Recomendado para dejar reposar antes de servir.",
-      createdAt: "2024-03-10T18:20:00",
-    },
-  ]);
+  const reviews = (wineReview ?? []).map((r) => ({
+    id: r.id,
+    username: r.userName,
+    rating: r.score,
+    comment: r.review,
+    createdAt: r.createdAt,
+  }));
+
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const [newReview, setNewReview] = useState({
     rating: 5,
     comment: "",
   });
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [openMenuForId, setOpenMenuForId] = useState(null);
+
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editForm, setEditForm] = useState({ rating: 5, comment: "" });
+  const [isEditingSaving, setIsEditingSaving] = useState(false);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const menuRef = useRef(null);
 
   const { user, isAuthenticated, openAuthModal } = useContext(AuthContext);
-  const currentUser = isAuthenticated ? user.name : null;
+  const { showResponse } = useContext(ResponseContext);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -65,22 +74,164 @@ const WineReview = ({ nombre, anio_cosecha, bodega, region }) => {
     setNewReview({ ...newReview, comment: e.target.value });
   };
 
-  const handleSubmitReview = () => {
-    if (!newReview.comment.trim()) {
-      alert("Por favor escribe un comentario");
+  const handleSubmitReview = async () => {
+    console.log("HOLA HOLA");
+    try {
+      if (!newReview.comment.trim()) {
+        showResponse({
+          variant: "error",
+          title: "Comentario vacío",
+          message: "El comentario no puede estar vacío.",
+        });
+        return;
+      }
+      setIsPublishing(true);
+
+      await Promise.all([
+        rateWine(wineId, newReview.rating, newReview.comment),
+        sleep(1200),
+      ]);
+      await onReviewCreated?.();
+      setNewReview({ rating: 5, comment: "" });
+
+      showResponse({
+        variant: "success",
+        title: "Reseña publicada",
+        message: "Tu reseña ha sido publicada con éxito.",
+      });
+    } catch (error) {
+      showResponse({
+        variant: "error",
+        title: "Error al publicar reseña",
+        message: error.message || "Hubo un problema al publicar tu reseña.",
+      });
+      return;
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setOpenMenuForId(null);
+    };
+
+    const onMouseDown = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenuForId(null);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onMouseDown);
+    };
+  }, []);
+
+  const handleClickMenuReview = (e, review) => {
+    e.stopPropagation();
+    setOpenMenuForId((prev) => (prev === review.id ? null : review.id));
+  };
+
+  const handleEditMenuReview = (review) => {
+    setOpenMenuForId(null);
+    setEditingReviewId(review.id);
+    setEditForm({ rating: review.rating, comment: review.comment });
+  };
+
+  const handleDeleteMenuReview = (review) => {
+    setOpenMenuForId(null);
+    setReviewToDelete(review);
+    setDeleteModalOpen(true);
+  };
+
+  const handleEditRatingChange = (rating) => {
+    setEditForm((prev) => ({ ...prev, rating }));
+  };
+
+  const handleEditCommentChange = (e) => {
+    setEditForm((prev) => ({ ...prev, comment: e.target.value }));
+  };
+
+  const handleCancelEdit = () => {
+    setEditingReviewId(null);
+    setEditForm({ rating: 5, comment: "" });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+    setReviewToDelete(null);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editForm.comment.trim()) {
+      showResponse({
+        variant: "error",
+        title: "Comentario vacío",
+        message: "El comentario no puede estar vacío.",
+      });
       return;
     }
 
-    const reviewToAdd = {
-      id: reviews.length + 1,
-      username: currentUser.fullName,
-      rating: newReview.rating,
-      comment: newReview.comment,
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      setIsEditingSaving(true);
 
-    setReviews([reviewToAdd, ...reviews]);
-    setNewReview({ rating: 5, comment: "" });
+      await Promise.all([
+        rateChange(wineId, editForm.rating, editForm.comment),
+        sleep(900),
+      ]);
+
+      await onReviewCreated?.();
+
+      showResponse({
+        variant: "success",
+        title: "Reseña actualizada",
+        message: "Tu reseña ha sido actualizada con éxito.",
+      });
+
+      handleCancelEdit();
+    } catch (err) {
+      showResponse({
+        variant: "error",
+        title: "Error al actualizar reseña",
+        message: err.message || "Hubo un problema al actualizar tu reseña.",
+      });
+    } finally {
+      setIsEditingSaving(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      setIsDeleting(true);
+
+      await Promise.all([deleteReview(wineId), sleep(900)]);
+
+      await onReviewCreated?.();
+
+      showResponse({
+        variant: "success",
+        title: "Reseña eliminada",
+        message: "Tu reseña fue eliminada",
+      });
+
+      if (reviewToDelete?.id === editingReviewId) {
+        handleCancelEdit();
+      }
+
+      handleCloseDeleteModal();
+    } catch (err) {
+      showResponse({
+        variant: "error",
+        title: "Error al eliminar la reseña",
+        message: err.messag || "No se pudo eliminar la reseña",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -138,7 +289,7 @@ const WineReview = ({ nombre, anio_cosecha, bodega, region }) => {
             </div>
 
             <button onClick={handleSubmitReview} className="submit-button">
-              Publicar Reseña
+              {isPublishing ? "Publicando reseña..." : "Publicar reseña"}
             </button>
           </div>
         </div>
@@ -157,31 +308,165 @@ const WineReview = ({ nombre, anio_cosecha, bodega, region }) => {
 
       <div className="reviews-list">
         <h2 className="reviews-title">Reseñas ({reviews.length})</h2>
-        {reviews.map((review) => (
-          <article key={review.id} className="review-card">
-            <header className="review-header">
-              <div className="review-rating">
-                <Star
-                  size={20}
-                  fill="#F59E0B"
-                  stroke="#F59E0B"
-                  className="star-icon"
-                />
-                <span className="score">{review.rating.toFixed(1)}</span>
-              </div>
-              <span className="username">@{review.username}</span>
-            </header>
+        {reviews.map((review) => {
+          const isMine =
+            isAuthenticated &&
+            user.fullName &&
+            review.username === user.fullName;
 
-            <p className="review-text">{review.comment}</p>
+          return (
+            <article key={review.id} className="review-card">
+              <header className="review-header">
+                <div className="review-rating">
+                  <Star
+                    size={20}
+                    fill="#F59E0B"
+                    stroke="#F59E0B"
+                    className="star-icon"
+                  />
+                  <span className="score">{review.rating.toFixed(1)}</span>
+                </div>
 
-            <footer className="review-footer">
-              <time className="review-date" dateTime={review.createdAt}>
-                {formatDate(review.createdAt)}
-              </time>
-            </footer>
-          </article>
-        ))}
+                <div className="review-header-right">
+                  <span className="username">@{review.username}</span>
+
+                  {isMine && (
+                    <div
+                      className="review-actions-wrap"
+                      ref={openMenuForId === review.id ? menuRef : null}
+                    >
+                      <button
+                        type="button"
+                        className="review-actions-btn"
+                        onClick={(e) => handleClickMenuReview(e, review)}
+                        aria-label="Acciones de reseña"
+                      >
+                        ⋮
+                      </button>
+
+                      {openMenuForId === review.id && (
+                        <div className="review-actions-menu" role="menu">
+                          <button
+                            type="button"
+                            className="review-actions-item"
+                            onClick={() => handleEditMenuReview(review)}
+                            role="menuitem"
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            type="button"
+                            className="review-actions-item danger"
+                            onClick={() => handleDeleteMenuReview(review)}
+                            role="menuitem"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </header>
+
+              {editingReviewId === review.id ? (
+                <div className="review-edit-box">
+                  <div className="edit-rating">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        className={`star-button ${editForm.rating >= star ? "active" : ""}`}
+                        onClick={() => handleEditRatingChange(star)}
+                        disabled={isEditingSaving}
+                      >
+                        <Star
+                          size={22}
+                          fill={editForm.rating >= star ? "#F59E0B" : "none"}
+                          stroke={
+                            editForm.rating >= star ? "#F59E0B" : "#D1D5DB"
+                          }
+                        />
+                      </button>
+                    ))}
+                    <span className="rating-value">
+                      {editForm.rating.toFixed(1)}
+                    </span>
+                  </div>
+
+                  <textarea
+                    className="form-textarea"
+                    rows="3"
+                    value={editForm.comment}
+                    onChange={handleEditCommentChange}
+                    disabled={isEditingSaving}
+                  />
+
+                  <div className="edit-actions">
+                    <button
+                      type="button"
+                      className="edit-cancel-btn"
+                      onClick={handleCancelEdit}
+                      disabled={isEditingSaving}
+                    >
+                      Cancelar
+                    </button>
+
+                    <button
+                      type="button"
+                      className="edit-save-btn"
+                      onClick={handleSaveEdit}
+                      disabled={isEditingSaving}
+                    >
+                      {isEditingSaving ? "Guardando..." : "Guardar"}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="review-text">{review.comment}</p>
+              )}
+
+              <footer className="review-footer">
+                <time className="review-date" dateTime={review.createdAt}>
+                  {formatDate(review.createdAt)}
+                </time>
+              </footer>
+            </article>
+          );
+        })}
       </div>
+
+      {deleteModalOpen && (
+        <div className="modal-backdrop" onClick={handleCloseDeleteModal}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h3 className="modal-title">¿Eliminar reseña?</h3>
+            <p className="modal-text">
+              Esta acción no se puede deshacer. ¿Estás seguro?
+            </p>
+
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="modal-cancel-btn"
+                onClick={handleCloseDeleteModal}
+                disabled={isDeleting}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                className="modal-danger-btn"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

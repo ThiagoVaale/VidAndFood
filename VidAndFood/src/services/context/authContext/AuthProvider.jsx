@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
-import GlobalLoaderOverlay from "../../../components/ui/spinner/GlobalLoaderOverlay";
 import * as authService from "../../authServices";
 import { mapClaimsToUser, parseJwt } from "../../../utils/jwt";
 
@@ -153,11 +152,7 @@ const AuthContextProvider = ({ children }) => {
         registerRequest,
       }}
     >
-      {loading ? (
-        <GlobalLoaderOverlay loading={loading} message={"Aguarde un momento"} />
-      ) : (
-        children
-      )}
+      {children}
     </AuthContext.Provider>
   );
 };

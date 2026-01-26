@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import App from "./App.jsx";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -8,9 +7,10 @@ import WishlistProvider from "./services/context/wishListContext/WishListProvide
 import ResponseContextProvider from "./services/context/responseContext/ResponseProvider.jsx";
 import WineProvider from "./services/context/winesContext/WineProvider.jsx";
 import HistoryProvider from "./services/context/historyContext/HistoryProvider.jsx";
+import { ChakraProvider } from "@chakra-ui/react";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <ChakraProvider>
     <BrowserRouter>
       <ResponseContextProvider>
         <GlobalLoadingProvider>
@@ -26,5 +26,5 @@ createRoot(document.getElementById("root")).render(
         </GlobalLoadingProvider>
       </ResponseContextProvider>
     </BrowserRouter>
-  </StrictMode>
+  </ChakraProvider>,
 );

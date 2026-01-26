@@ -8,6 +8,7 @@ import { fetchHistoryWines } from "../../../services/historyUserService";
 
 const HistoryPage = () => {
   const navigate = useNavigate();
+
   const { isInHistory, toggleHistoryLocal } = useContext(HistoryContext);
 
   const [historyWines, setHistoryWines] = useState([]);

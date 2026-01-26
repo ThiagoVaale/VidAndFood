@@ -142,6 +142,22 @@
   color: #444;
 }
 
+.wine-detail-grapes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wine-grape-tag {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  white-space: nowrap;
+}
+
 .wine-detail-text {
   max-width: 520px;
   font-size: 0.95rem;
