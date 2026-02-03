@@ -5,6 +5,9 @@ import applyFilters from "../../utils/ApplyFilters";
 import CustomNavbar from "../ui/nav-bar/CustomNavbar";
 import GenericSidebarFilter from "../../components/common/generic-sideBar-filter";
 import Wines from "../wines/Wines";
+import WineSearch from "../ui/wineSearch/WineSearch";
+import { useNavigate } from "react-router-dom";
+import "./winesPage.css";
 
 const slugify = (str) => {
   if (!str) return "";
@@ -74,16 +77,22 @@ const BASE_WINE_FILTERS = [
 ];
 
 const WinesPage = () => {
-  const { wines } = useContext(WineContext);
+  const { wines, loadWines, winesLoaded, isLoadingWines } = useContext(WineContext);
   const { isFavorite, toggleFavorite } = useContext(WishListContext);
 
   const [filters, setFilters] = useState({});
   const [filtersConfig, setFiltersConfig] = useState(BASE_WINE_FILTERS);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (!winesLoaded && !isLoadingWines) {
+      loadWines();
+    }
+
     if (!Array.isArray(wines) || wines.length === 0) return;
 
-    const winerySet = new Map(); 
+    const winerySet = new Map();
     const regionSet = new Map();
     const grapeSet = new Map();
 
@@ -126,7 +135,7 @@ const WinesPage = () => {
         value,
         label: data.label,
         count: data.count,
-      })
+      }),
     );
 
     const regionOptions = Array.from(regionSet.entries()).map(
@@ -135,7 +144,7 @@ const WinesPage = () => {
         value,
         label: data.label,
         count: data.count,
-      })
+      }),
     );
 
     const grapeOptions = Array.from(grapeSet.entries()).map(
@@ -144,7 +153,7 @@ const WinesPage = () => {
         value,
         label: data.label,
         count: data.count,
-      })
+      }),
     );
 
     setFiltersConfig((prev) =>
@@ -159,18 +168,23 @@ const WinesPage = () => {
           return { ...f, options: grapeOptions };
         }
         return f;
-      })
+      }),
     );
-  }, [wines]);
+  }, [winesLoaded, isLoadingWines, loadWines, wines]);
 
   const filteredWines = useMemo(
     () => applyFilters(wines, filters),
-    [wines, filters]
+    [wines, filters],
   );
+
+  const handleSelectWine = (wine) => {
+    navigate(`/wines/${wine.id}`);
+  };
 
   return (
     <>
       <CustomNavbar />
+
       <div className="main-style">
         <GenericSidebarFilter
           filters={filtersConfig}
@@ -186,6 +200,11 @@ const WinesPage = () => {
             minHeight: "100vh",
           }}
         >
+
+          <div className="wine-search-bar">
+            <WineSearch wines={wines} onSelectWine={handleSelectWine} />
+          </div>
+
           <div className="p-4 pt-5">
             <Wines
               wines={filteredWines}

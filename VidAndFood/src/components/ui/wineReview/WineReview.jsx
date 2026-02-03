@@ -26,9 +26,10 @@ const WineReview = ({
     username: r.userName,
     rating: r.score,
     comment: r.review,
+    isSommelier: r.isSommelierReview,
     createdAt: r.createdAt,
   }));
-
+  
   const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const [newReview, setNewReview] = useState({
@@ -80,8 +81,8 @@ const WineReview = ({
       if (!newReview.comment.trim()) {
         showResponse({
           variant: "error",
-          title: "Comentario vacío",
-          message: "El comentario no puede estar vacío.",
+          title: "Empty comment",
+          message: "The comment cannot be empty.",
         });
         return;
       }
@@ -96,14 +97,14 @@ const WineReview = ({
 
       showResponse({
         variant: "success",
-        title: "Reseña publicada",
-        message: "Tu reseña ha sido publicada con éxito.",
+        title: "Review published",
+        message: "Your review has been successfully published.",
       });
     } catch (error) {
       showResponse({
         variant: "error",
-        title: "Error al publicar reseña",
-        message: error.message || "Hubo un problema al publicar tu reseña.",
+        title: "Error posting review",
+        message: error.message || "There was a problem posting your review.",
       });
       return;
     } finally {
@@ -170,8 +171,8 @@ const WineReview = ({
     if (!editForm.comment.trim()) {
       showResponse({
         variant: "error",
-        title: "Comentario vacío",
-        message: "El comentario no puede estar vacío.",
+        title: "Empty comment",
+        message: "The comment cannot be empty.",
       });
       return;
     }
@@ -188,16 +189,16 @@ const WineReview = ({
 
       showResponse({
         variant: "success",
-        title: "Reseña actualizada",
-        message: "Tu reseña ha sido actualizada con éxito.",
+        title: "Updated review",
+        message: "Your review has been successfully updated.",
       });
 
       handleCancelEdit();
     } catch (err) {
       showResponse({
         variant: "error",
-        title: "Error al actualizar reseña",
-        message: err.message || "Hubo un problema al actualizar tu reseña.",
+        title: "Error updating review",
+        message: err.message || "There was a problem updating your review.",
       });
     } finally {
       setIsEditingSaving(false);
@@ -214,8 +215,8 @@ const WineReview = ({
 
       showResponse({
         variant: "success",
-        title: "Reseña eliminada",
-        message: "Tu reseña fue eliminada",
+        title: "Review deleted",
+        message: "Your review was removed",
       });
 
       if (reviewToDelete?.id === editingReviewId) {
@@ -226,8 +227,8 @@ const WineReview = ({
     } catch (err) {
       showResponse({
         variant: "error",
-        title: "Error al eliminar la reseña",
-        message: err.messag || "No se pudo eliminar la reseña",
+        title: "Error deleting review",
+        message: err.messag || "The review could not be deleted",
       });
     } finally {
       setIsDeleting(false);
@@ -247,10 +248,10 @@ const WineReview = ({
 
       {isAuthenticated && (
         <div className="review-form-container">
-          <h2 className="form-title">Escribe tu reseña</h2>
+          <h2 className="form-title">Write your review</h2>
           <div className="review-form">
             <div className="form-group">
-              <label className="form-label">Calificación:</label>
+              <label className="form-label">Rating:</label>
               <div className="rating-selector">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -276,20 +277,20 @@ const WineReview = ({
 
             <div className="form-group">
               <label className="form-label" htmlFor="comment">
-                Comentario:
+                Comment:
               </label>
               <textarea
                 id="comment"
                 className="form-textarea"
                 rows="4"
-                placeholder="Comparte tu experiencia con este vino..."
+                placeholder="Share your experience with this wine..."
                 value={newReview.comment}
                 onChange={handleCommentChange}
               />
             </div>
 
             <button onClick={handleSubmitReview} className="submit-button">
-              {isPublishing ? "Publicando reseña..." : "Publicar reseña"}
+              {isPublishing ? "Posting review..." : "Post review"}
             </button>
           </div>
         </div>
@@ -298,17 +299,21 @@ const WineReview = ({
       {!isAuthenticated && (
         <div className="auth-cta">
           <p className="auth-cta-text">
-            <b>¿Querés compartir tu experiencia con este vino?</b>
+            <b>¿Do you want to share your experience with this wine?</b>
           </p>
           <button onClick={handleIsAuthenticated} className="auth-button">
-            Iniciar sesión para reseñar
+            Log in to review
           </button>
         </div>
       )}
 
       <div className="reviews-list">
-        <h2 className="reviews-title">Reseñas ({reviews.length})</h2>
+        <h2 className="reviews-title">Reviews ({reviews.length})</h2>
         {reviews.map((review) => {
+
+          console.log("REVIEWS: ", reviews);
+          console.log("REVIEW: ", review);
+          
           const isMine =
             isAuthenticated &&
             user.fullName &&
@@ -328,7 +333,10 @@ const WineReview = ({
                 </div>
 
                 <div className="review-header-right">
-                  <span className="username">@{review.username}</span>
+                  <span className="username">
+                    @{review.username}
+                    {review.isSommelier && <span className="sommelier-badge"> · Sommelier</span>}
+                  </span>
 
                   {isMine && (
                     <div

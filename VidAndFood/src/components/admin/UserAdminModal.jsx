@@ -3,8 +3,8 @@ import { Modal, Button, Form, Alert, Badge } from "react-bootstrap";
 
 import { registerRequest } from "../../services/authServices";
 import {
-  downgradeToUser,
-  upgradeToSommelier,
+  downgradeAdminToUser,
+  upgradeAdminToSommelier,
 } from "../../services/roleServices";
 import ResponseContext from "../../services/context/responseContext/ResponseContext";
 
@@ -93,14 +93,14 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
       }
 
       if (isSommelier) {
-        await downgradeToUser(user.id, 1);
+        await downgradeAdminToUser(user.id, 1);
         showResponse({
           title: "Rol actualizado",
           variant: "success",
           message: "Ahora es User",
         });
       } else {
-        await upgradeToSommelier(user.id, 2);
+        await upgradeAdminToSommelier(user.id, 2);
         showResponse({
           title: "Rol actualizado",
           variant: "success",

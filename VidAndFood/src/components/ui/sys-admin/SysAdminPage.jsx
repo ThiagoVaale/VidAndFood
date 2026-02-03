@@ -5,26 +5,30 @@ import CustomNavbar from "../nav-bar/CustomNavbar.jsx";
 import AuthContext from "../../../services/context/authContext/AuthContext.jsx";
 import AdminTable from "../../admin/AdminTable.jsx";
 import {
-  deleteGrapeAdmin,
   deleteUserAdmin,
   fecthAllUsers,
 } from "../../../services/adminUserServices.js";
-import { fetchAllWineries } from "../../../services/wineyServices.js";
-import { fetchAllGrapes } from "../../../services/grapeServices.js";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext.jsx";
 import UserAdminModal from "../../admin/UserAdminModal.jsx";
-import GrapeAdminModal from "../../admin/GrapeAdminModal.jsx";
 import ConfirmModal from "../../admin/ConfirmModal.jsx";
+import WineContext from "../../../services/context/winesContext/WinesContext.jsx";
+
+import "./sysAdminPage.css";
+import WineAdminModal from "../../admin/WineAdminModal.jsx";
+import { deleteReview, fetchDeleteWineAdmin } from "../../../services/wineService.js";
 
 const SysAdminPage = () => {
   const { token } = useContext(AuthContext);
   const { showResponse } = useContext(ResponseContext);
+  const { wines, isLoadingWines, winesError, reloadWines, loadWines } = useContext(WineContext);
 
   const [showUserModal, setShowUserModal] = useState(false);
   const [userModalMode, setUserModalMode] = useState("create");
+  const [activeTab, setActiveTab] = useState("users");
 
-  const [showGrapeModal, setShowGrapeModal] = useState(false);
-  const [grapeModalMode, setGrapeModalMode] = useState("create");
+  const [showWineModal, setShowWineModal] = useState(false);
+  const [wineModalMode, setWineModalMode] = useState("create");
+  const [wineTarget, setWineTarget] = useState(null);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -34,20 +38,15 @@ const SysAdminPage = () => {
 
   const [userTarget, setUserTarget] = useState(null);
   const [users, setUsers] = useState([]);
-  const [wineries, setWineries] = useState([]);
-  const [grapes, setGrapes] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedGrape, setSelectedGrape] = useState(null);
+  const [selectedWine, setSelectedWine] = useState(null);
 
   const [loadingUsers, setLoadingUsers] = useState(false);
-  const [loadingWineries, setLoadingWineries] = useState(false);
-  const [loadingGrapes, setLoadingGrapes] = useState(false);
 
   const [errorUsers, setErrorUsers] = useState(null);
-  const [errorWineries, setErrorWineries] = useState(null);
-  const [errorGrapes, setErrorGrapes] = useState(null);
 
-  const selectedIsAdmin = String(selectedUser?.role ?? "").toLowerCase() === "admin";
+  const selectedIsAdmin =
+    String(selectedUser?.role ?? "").toLowerCase() === "admin";
 
   useEffect(() => {
     if (!token) return;
@@ -57,7 +56,6 @@ const SysAdminPage = () => {
         setLoadingUsers(true);
         setErrorUsers(null);
         const data = await fecthAllUsers();
-
         setUsers(data);
       } catch (error) {
         console.error(error);
@@ -67,54 +65,32 @@ const SysAdminPage = () => {
       }
     };
 
-    const loadWineries = async () => {
-      try {
-        setLoadingWineries(true);
-        setErrorWineries(null);
-        const data = await fetchAllWineries();
-        const mapped = data.map((name, index) => ({
-          id: index,
-          name,
-        }));
-        setWineries(mapped);
-      } catch (error) {
-        console.error(error);
-        setErrorWineries(error.message || "No se pudieron cargar las bodegas.");
-      } finally {
-        setLoadingWineries(false);
-      }
-    };
-
-    const loadGrapes = async () => {
-      try {
-        setLoadingGrapes(true);
-        setErrorGrapes(null);
-        const data = await fetchAllGrapes();
-        console.log("UVAS DEL BACK: ", data);
-        setGrapes(data);
-      } catch (error) {
-        console.error(error);
-        setErrorGrapes(error.message || "No se pudieron cargar las uvas.");
-      } finally {
-        setLoadingGrapes(false);
-      }
-    };
-
     loadUsers();
-    loadWineries();
-    loadGrapes();
   }, [token]);
+
+  useEffect(() => {
+    if (!token) return;
+    if (activeTab !== "wines") return;
+
+    loadWines();
+  }, [token, activeTab, loadWines]);
+  
+  useEffect(() => {
+    setSelectedUser(null);
+    setSelectedWine(null);
+  }, [activeTab]);
 
   const openUserModal = (mode) => {
     setUserModalMode(mode);
     setUserTarget(selectedUser);
     setShowUserModal(true);
   };
-  
-  const openGrapeModal = (mode) => {
-    setGrapeModalMode(mode);
-    setShowGrapeModal(true);
-  };
+
+  const openWineModal = (mode) => {
+    setWineModalMode(mode);
+    setWineTarget(mode === "edit" ? selectedWine : null);
+    setShowWineModal(true);
+  }
 
   const reloadUsers = async () => {
     const data = await fecthAllUsers();
@@ -122,32 +98,26 @@ const SysAdminPage = () => {
     setSelectedUser(null);
   };
 
-  const reloadGrapes = async () => {
-    const data = await fetchAllGrapes();
-    setGrapes(data);
-    setSelectedGrape(null);
-  };
-
   const openUserDeleteConfirm = () => {
     if (!selectedUser) return;
-    setConfirmTitle("Eliminar usuario");
+    setConfirmTitle("Delete user");
     setConfirmBody(
-      `¿Seguro que querés eliminar a ${selectedUser.fullName} (${selectedUser.email})?`,
+      `¿Are you sure you want to delete ${selectedUser.fullName} (${selectedUser.email})?`,
     );
     setConfirmAction(() => async () => {
       try {
         setConfirmLoading(true);
         await deleteUserAdmin(selectedUser.id);
         showResponse({
-          title: "Usuario eliminado",
+          title: "User deleted",
           variant: "success",
-          message: `El usuario ${selectedUser.fullName} ha sido eliminado correctamente.`,
+          message: `The user ${selectedUser.fullName} It has been deleted successfully.`,
         });
         await reloadUsers();
         setShowConfirm(false);
       } catch (e) {
         showResponse({
-          title: "El usuario no pudo ser eliminado",
+          title: "The user could not be deleted",
           variant: "error",
           message: `${e.message}`,
         });
@@ -158,24 +128,56 @@ const SysAdminPage = () => {
     setShowConfirm(true);
   };
 
-  const openGrapeDeleteConfirm = () => {
-    if (!selectedGrape) return;
-    setConfirmTitle("Eliminar uva");
-    setConfirmBody(`¿Seguro que querés eliminar "${selectedGrape.name}"?`);
+  const openWineDeleteConfirm = () => {
+    if (!selectedWine) return;
+    setConfirmTitle("Remove wine");
+    setConfirmBody(
+      `¿Are you sure you want to delete the wine? ${selectedWine.name}?`,
+    );
     setConfirmAction(() => async () => {
       try {
         setConfirmLoading(true);
-        await deleteGrapeAdmin(selectedGrape.id);
+        await fetchDeleteWineAdmin(selectedWine.id);
         showResponse({
-          title: "Uva eliminado",
+          title: "Wine removed",
           variant: "success",
-          message: `La uva ${selectedGrape.name} ha sido eliminado correctamente.`,
+          message: `The wine ${selectedWine.name} has been successfully deleted.`,
         });
-        await reloadGrapes();
+        await loadWines();
         setShowConfirm(false);
       } catch (e) {
         showResponse({
-          title: "La uva no pudo ser eliminada",
+          title: "The wine could not be removed",
+          variant: "error",
+          message: `${e.message}`,
+        });
+      } finally {
+        setConfirmLoading(false);
+      }
+    });
+    setShowConfirm(true);
+  };
+
+  const openReviewDeleteConfirm = () => {
+    if (!selectedWine) return;
+    setConfirmTitle("Remove review");
+    setConfirmBody(
+      `¿Are you sure you want to delete this wine review? ${selectedWine.name}?`,
+    );
+    setConfirmAction(() => async () => {
+      try {
+        setConfirmLoading(true);
+        await deleteReview(selectedWine.id);
+        showResponse({
+          title: "Review removed",
+          variant: "success",
+          message: `The review for wine ${selectedWine.name} has been successfully deleted.`,
+        });
+        await loadWines();
+        setShowConfirm(false);
+      } catch (e) {
+        showResponse({
+          title: "The review could not be removed",
           variant: "error",
           message: `${e.message}`,
         });
@@ -187,23 +189,28 @@ const SysAdminPage = () => {
   };
 
   const userColumns = [
-    { header: "Nombre y Apellido", accessor: (u) => u.fullName || "-" },
+    { header: "First and Last Name", accessor: (u) => u.fullName || "-" },
     { header: "Email", accessor: (u) => u.email || "-" },
     { header: "Rol", accessor: (u) => u.role || "-" },
   ];
 
-  const wineryColumns = [
+  const winesColums = [
+    { header: "Name", accessor: (w) => w.name },
+    { header: "Winery", accessor: (w) => w.wineryName },
+    { header: "Price", accessor: (w) => w.price },
+    { header: "Harvest year", accessor: (w) => w.vintageYear },
     {
-      header: "Bodegas disponibles",
-      accessor: (w) => w.name,
+      header: "Average score",
+      accessor: (w) => w.averageScore.toFixed(1),
     },
+    { header: "Uvas", accessor: (w) => w.grapeNames },
   ];
 
-  const grapeColumns = [
-    {
-      header: "Uvas disponibles",
-      accessor: (g) => g.name,
-    },
+  const ratingsColums = [
+    { header: "WineName", accessor: (w) => w.name },
+    { header: "UserName", accessor: (w) => w.reviews.userName },
+    { header: "Score", accessor: (w) => w.reviews.score },
+    { header: "Review", accessor: (w) => w.reviews.review }
   ];
 
   return (
@@ -230,120 +237,160 @@ const SysAdminPage = () => {
               SysAdmin – Panel de administración
             </h1>
             <p className="text-muted">
-              Gestión de usuarios, bodegas y uvas del sistema Vid&Food.
+              Management of users, wines, and ratings in the Vid&Food system.
             </p>
           </header>
 
-          <Row>
-            <Col lg={12} className="mb-3">
-              <AdminTable
-                title="Usuarios"
-                columns={userColumns}
-                data={users}
-                loading={loadingUsers}
-                error={errorUsers}
-                pageSize={10}
-                rowKey={(u) => u.id}
-                selectedId={selectedUser?.id ?? null}
-                onRowSelect={(u) => {
-                  setSelectedUser(u);
-                  if (String(u.role).toLowerCase() === "admin") {
-                    showResponse({
-                      title: "Usuario protegido",
-                      variant: "info",
-                      message:
-                        "Los usuarios Admin no pueden modificarse ni eliminarse.",
-                    });
+          <div className="admin-tabs">
+            <button
+              type="button"
+              className={`admin-tab ${activeTab === "users" ? "active" : ""}`}
+              onClick={() => setActiveTab("users")}
+            >
+              Users
+            </button>
+
+            <button
+              type="button"
+              className={`admin-tab ${activeTab === "wines" ? "active" : ""}`}
+              onClick={() => setActiveTab("wines")}
+            >
+              Wines
+            </button>
+
+            <button
+              type="button"
+              className={`admin-tab ${activeTab === "ratings" ? "active" : ""}`}
+              onClick={() => setActiveTab("ratings")}
+            >
+              Ratings
+            </button>
+          </div>
+
+          {activeTab === "users" && (
+            <Row>
+              <Col lg={12} className="mb-3">
+                <AdminTable
+                  title="Users"
+                  columns={userColumns}
+                  data={users}
+                  loading={loadingUsers}
+                  error={errorUsers}
+                  pageSize={10}
+                  rowKey={(u) => u.id}
+                  selectedId={selectedUser?.id ?? null}
+                  onRowSelect={(u) => {
+                    setSelectedUser(u);
+                    if (String(u.role).toLowerCase() === "admin") {
+                      showResponse({
+                        title: "Protected user",
+                        variant: "info",
+                        message:
+                          "Admin users cannot be modified or deleted.",
+                      });
+                    }
+                  }}
+                  headerActions={
+                    <>
+                      <Button
+                        variant="success"
+                        size="sm"
+                        onClick={() => openUserModal("create")}
+                      >
+                        + Add
+                      </Button>
+
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        disabled={!selectedUser || selectedIsAdmin}
+                        onClick={() => openUserModal("role")}
+                      >
+                        Change role
+                      </Button>
+
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        disabled={!selectedUser || selectedIsAdmin}
+                        onClick={() => openUserDeleteConfirm()}
+                      >
+                        Delete
+                      </Button>
+                    </>
                   }
-                }}
-                headerActions={
-                  <>
-                    <Button
-                      variant="success"
-                      size="sm"
-                      onClick={() => openUserModal("create")}
-                    >
-                      + Alta
-                    </Button>
+                />
+              </Col>
+            </Row>
+          )}
 
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={!selectedUser || selectedIsAdmin}
-                      onClick={() => openUserModal("role")}
-                    >
-                      Cambiar rol
-                    </Button>
+          {activeTab === "wines" && (
+            <Row>
+              <Col lg={12} className="mb-3">
+                <AdminTable
+                  title="Wines"
+                  columns={winesColums}
+                  data={wines}
+                  loading={isLoadingWines}
+                  error={winesError}
+                  pageSize={10}
+                  rowKey={(w) => w.id}
+                  selectedId={selectedWine?.id ?? null} 
+                  onRowSelect={(w) => setSelectedWine(w)}
+                  headerActions={
+                    <>
+                      <Button variant="success" size="sm" onClick={() => openWineModal("create")}>
+                        Add
+                      </Button> 
 
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      disabled={!selectedUser || selectedIsAdmin}
-                      onClick={() => openUserDeleteConfirm()}
-                    >
-                      Baja
-                    </Button>
-                  </>
-                }
-              />
-            </Col>
-          </Row>
+                      <Button variant="primary" size="sm" disabled={!selectedWine} onClick={() => openWineModal("edit")}>
+                        Edit
+                      </Button>
 
-          <Row>
-            <Col lg={6} className="mb-3">
-              <AdminTable
-                title="Bodegas"
-                columns={wineryColumns}
-                data={wineries}
-                loading={loadingWineries}
-                error={errorWineries}
-                pageSize={10}
-              />
-            </Col>
+                      <Button variant="danger" size="sm" disabled={!selectedWine} onClick={() => openWineDeleteConfirm()}>
+                        Delete
+                      </Button>
+                    </>
+                  }
+                />
+              </Col>
+            </Row>
+          )}
 
-            <Col lg={6} className="mb-3">
-              <AdminTable
-                title="Uvas"
-                columns={grapeColumns}
-                data={grapes}
-                loading={loadingGrapes}
-                error={errorGrapes}
-                pageSize={10}
-                rowKey={(g) => g.id}
-                selectedId={selectedGrape?.id ?? null}
-                onRowSelect={(g) => setSelectedGrape(g)}
-                headerActions={
-                  <>
-                    <Button
-                      variant="success"
-                      size="sm"
-                      onClick={() => openGrapeModal("create")}
-                    >
-                      + Alta
-                    </Button>
+          {activeTab === "ratings" && (
+            <Row>
+              <Col lg={12} className="mb-3">
+                <AdminTable
+                  title="Ratings"
+                  columns={ratingsColums}
+                  data={wines}
+                  loading={isLoadingWines}
+                  error={winesError}
+                  pageSize={10}
+                  rowKey={(w) => w.id}
+                  selectedId={selectedWine?.id ?? null} 
+                  onRowSelect={(w) => setSelectedWine(w)}
+                  headerActions={
+                    <>
+                      <Button variant="danger" size="sm" disabled={!selectedWine} onClick={() => openReviewDeleteConfirm()}>
+                        Delete
+                      </Button>
+                    </>
+                  }
+                />
+              </Col>
+            </Row>
+          )}
 
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={!selectedGrape}
-                      onClick={() => openGrapeModal("edit")}
-                    >
-                      Editar
-                    </Button>
-
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      disabled={!selectedGrape}
-                      onClick={() => openGrapeDeleteConfirm()}
-                    >
-                      Baja
-                    </Button>
-                  </>
-                }
-              />
-            </Col>
-          </Row>
+          {activeTab === "ratings" && (
+            <div
+              className="text-center text-muted"
+              style={{ padding: "40px 0" }}
+            >
+              <h5 style={{ marginBottom: 8 }}>Ratings</h5>
+              <p>Sección en construcción (ABM de ratings pendiente).</p>
+            </div>
+          )}
         </Container>
 
         <UserAdminModal
@@ -354,12 +401,12 @@ const SysAdminPage = () => {
           onSuccess={reloadUsers}
         />
 
-        <GrapeAdminModal
-          show={showGrapeModal}
-          mode={grapeModalMode}
-          grape={selectedGrape}
-          onClose={() => setShowGrapeModal(false)}
-          onSuccess={reloadGrapes}
+        <WineAdminModal
+          show={showWineModal}
+          mode={wineModalMode}
+          wine={wineTarget} 
+          onClose={() => setShowWineModal(false)}
+          onSuccess={reloadWines}
         />
 
         <ConfirmModal

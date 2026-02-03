@@ -37,7 +37,7 @@ const AuthModal = () => {
   const passwordRef = useRef(null);
   const fullNameRef = useRef(null);
 
-  const title = authModalMode === "login" ? "Iniciar sesión" : "Crear cuenta";
+  const title = authModalMode === "login" ? "Log in" : "Create account";
 
   const navigate = useNavigate();
 
@@ -97,8 +97,8 @@ const AuthModal = () => {
 
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "Email y contraseña no pueden estar vacios"
+            title: "Incomplete fields",
+            message: "Email and password cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -108,8 +108,8 @@ const AuthModal = () => {
           markInvalid(emailRef);
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "El email no puede estar vacío"
+            title: "Incomplete fields",
+            message: "The email cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -119,8 +119,8 @@ const AuthModal = () => {
           markInvalid(passwordRef);
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "La contaseña no puede estar vacío"
+            title: "Incomplete fields",
+            message: "The password cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -137,9 +137,10 @@ const AuthModal = () => {
         }
         showResponse({
           variant: "success",
-          title: "Inicio de sesión correcto!",
-          message: "Bienvendio a Vid&Food!",
+          title: "Login successful!",
+          message: "Welcome to Vid&Food!",
         });
+
       } else {
         if(!emailRef.current.value.trim() && !passwordRef.current.value.trim() && !fullNameRef.current.value.trim()){
           markInvalid(emailRef);
@@ -148,8 +149,8 @@ const AuthModal = () => {
 
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "Email, contraseña y nombre y apellido no pueden estar vacios"
+            title: "Incomplete fields",
+            message: "Email, password, and first and last name cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -159,8 +160,8 @@ const AuthModal = () => {
           markInvalid(emailRef);
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "El email no puede estar vacío"
+            title: "Incomplete fields",
+            message: "The email cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -170,8 +171,8 @@ const AuthModal = () => {
           markInvalid(passwordRef);
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "La contaseña no puede estar vacío"
+            title: "Incomplete fields",
+            message: "The password cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -181,8 +182,8 @@ const AuthModal = () => {
           markInvalid(fullNameRef);
           showResponse({
             variant: "error",
-            title: "Campos incompletos",
-            message: "El nombre completo no puede estar vacio"
+            title: "Incomplete fields",
+            message: "The full name cannot be empty"
           });
           setSubmitting(false);
           return;
@@ -193,17 +194,16 @@ const AuthModal = () => {
 
         showResponse({
           variant: "success",
-          title: "Cuenta creada con exito!",
-          message: "Tu cuenta se creo correctamente. Disfruta de Vid&Food!",
+          title: "Account successfully created!",
+          message: "Your account was created successfully. Enjoy Vid&Food!",
         });
       }
       closeAuthModal();
-    } catch (err) {
-      const msg = err.message || "Ocurrio un error";
+    } catch {
       showResponse({
         variant: "error",
-        title: "Error inesperado.",
-        message: msg,
+        title: "Error logging in",
+        message: "Incorrect email or password" ,
       });
     } finally {
       setSubmitting(false);
@@ -243,7 +243,7 @@ const AuthModal = () => {
         <div className="auth-modal-right">
           <div className="auth-modal-header-text">
             <span className="auth-modal-title-main">
-              Unirse a <span style={{ color: COLORS.darkGreen }}>Vid&Food</span>
+              Join  <span style={{ color: COLORS.darkGreen }}> Vid&Food</span>
             </span>
             <span className="auth-modal-title-separator"> | </span>
             <span className="auth-modal-title-secondary">{title}</span>
@@ -252,11 +252,11 @@ const AuthModal = () => {
           {authModalMode === "login" ? (
             <Form noValidate onSubmit={handleSubmit} className="auth-modal-form">
               <Form.Group className="mb-3" controlId="authEmail">
-                <Form.Label>Correo electrónico</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
-                  placeholder="Escribe tu dirección de correo electrónico"
+                  placeholder="Enter your email address"
                   value={formLogin.email}
                   onChange={handleChangeLogin}
                   ref={emailRef}
@@ -264,11 +264,11 @@ const AuthModal = () => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="authPassword">
-                <Form.Label>Contraseña</Form.Label>
+                <Form.Label>Password</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
-                  placeholder="Ingresa tu contraseña"
+                  placeholder="Enter your password"
                   value={formLogin.password}
                   onChange={handleChangeLogin}
                   ref={passwordRef}
@@ -288,23 +288,23 @@ const AuthModal = () => {
                       className="me-2"
                       role="status"
                     />
-                    Procesando...
+                    Processing...
                   </>
                 ) : isLogin ? (
-                  "Continuar"
+                  "Continue"
                 ) : (
-                  "Crear cuenta"
+                  "Create account"
                 )}
               </Button>
             </Form>
           ) : (
             <Form onSubmit={handleSubmit} className="auth-modal-form">
               <Form.Group className="mb-3" controlId="authEmail">
-                <Form.Label>Correo electrónico</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
-                  placeholder="Escribe tu dirección de correo electrónico"
+                  placeholder="Enter your email address"
                   value={formRegister.email}
                   onChange={handleChangeRegister}
                   ref={emailRef}
@@ -312,11 +312,11 @@ const AuthModal = () => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="authPassword">
-                <Form.Label>Contraseña</Form.Label>
+                <Form.Label>Password</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
-                  placeholder="Ingresa tu contraseña"
+                  placeholder="Enter your password"
                   value={formRegister.password}
                   onChange={handleChangeRegister}
                   ref={passwordRef}
@@ -324,11 +324,11 @@ const AuthModal = () => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="authPassword">
-                <Form.Label>Nombre y apellido</Form.Label>
+                <Form.Label>First and last name</Form.Label>
                 <Form.Control
                   type="text"
                   name="fullName"
-                  placeholder="Ingrese su nombre y apellido. ej: Nombre Apellido"
+                  placeholder="Enter your first and last name. e.g., First Name Last Name"
                   value={formRegister.fullName}
                   onChange={handleChangeRegister}
                   ref={fullNameRef}
@@ -348,12 +348,12 @@ const AuthModal = () => {
                       className="me-2"
                       role="status"
                     />
-                    Procesando...
+                    Processing...
                   </>
                 ) : isLogin ? (
-                  "Continuar"
+                  "Continue"
                 ) : (
-                  "Crear cuenta"
+                  "Create account"
                 )}
               </Button>
             </Form>
@@ -362,13 +362,13 @@ const AuthModal = () => {
           <div className="auth-modal-footer-links">
             {isLogin ? (
               <p>
-                ¿No tienes un perfil?{" "}
+                ¿You don't have a profile?{" "}
                 <button
                   type="button"
                   className="auth-modal-link"
                   onClick={handleSwitchMode}
                 >
-                  Unirse a Vid&Food
+                  Join Vid&Food
                 </button>
               </p>
             ) : (
@@ -379,7 +379,7 @@ const AuthModal = () => {
                   className="auth-modal-link"
                   onClick={handleSwitchMode}
                 >
-                  Iniciar sesión
+                  Log in
                 </button>
               </p>
             )}

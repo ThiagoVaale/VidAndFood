@@ -144,3 +144,67 @@ export async function deleteReview(wineId) {
 
   return handleResponse(response);
 }
+
+export async function fetchAddWineAdmin(wine){
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/admin-create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ 
+      "name": wine.name,
+      "wineryName": wine.wineryName,
+      "regionName": wine.regionName,
+      "vintageYear": wine.vintageYear,
+      "price": wine.price,
+      "description": wine.description,
+      "imageUrl": wine.imageUrl,
+      "grapes": wine.grapes
+     }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function fetchUpdateWineAdmin(wine, wineId){
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/admin-update/${wineId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ 
+      "name": wine.name,
+      "wineryName": wine.wineryName,
+      "regionName": wine.regionName,
+      "vintageYear": wine.vintageYear,
+      "price": wine.price,
+      "description": wine.description,
+      "imageUrl": wine.imageUrl,
+      "grapes": wine.grapes
+     }),
+  });
+
+  return handleResponse(response);
+}
+
+export async function fetchDeleteWineAdmin(wineId) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/admin-delete/${wineId}` , {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  });
+
+  return handleResponse(response);
+}

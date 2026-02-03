@@ -408,6 +408,17 @@ edit-cancel-btn:hover{
   color: #fff;
 }
 
+.sommelier-badge {
+  font-variant: small-caps;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  margin-left: 4px;
+  opacity: 0.9;
+
+  color: #D4AF37;
+}
+
 
 @media (max-width: 640px) {
   .wine-reviews-container {

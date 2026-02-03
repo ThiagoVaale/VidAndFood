@@ -249,31 +249,31 @@ const WineDetailPage = () => {
             </div>
 
             <aside className="wine-detail-price-card">
-              <div className="wine-detail-price-label">Precio</div>
+              <div className="wine-detail-price-label">Price</div>
               <div className="wine-detail-price-amount">
                 {wine.wine.price
                   ? `$ ${wine.wine.price.toLocaleString()}`
                   : "No disponible"}
               </div>
               <p className="wine-detail-price-note">
-                Precio estimado según las tiendas asociadas.
+                Estimated price according to affiliated stores.
               </p>
             </aside>
           </section>
 
           <section className="wine-detail-section">
-            <h3 className="wine-detail-section-title">Datos acerca del vino</h3>
+            <h3 className="wine-detail-section-title">Facts about wine</h3>
 
             <div className="wine-detail-data-table">
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Bodega</div>
+                <div className="wine-detail-row-label">Winery</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.wineryName}
                 </div>
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Uvas</div>
+                <div className="wine-detail-row-label">Grapes</div>
                 <div className="wine-detail-row-value wine-detail-grapes">
                   {wine.wine.grapes.map((g, index) => (
                     <span key={g.id} className="wine-grape-tag">
@@ -285,30 +285,25 @@ const WineDetailPage = () => {
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Región</div>
+                <div className="wine-detail-row-label">Region</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.regionName || "Sin especificar"}
                 </div>
               </div>
 
-              {/* <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Estilo de vino</div>
+               <div className="wine-detail-row">
+                <div className="wine-detail-row-label">Flavor notes</div>
                 <div className="wine-detail-row-value">
-                  {estilo_vino || "–"}
+                  {wine.wine.notesTaste || "Sin especificar"}
                 </div>
-              </div> */}
-
-              <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Alérgenos</div>
-                <div className="wine-detail-row-value">Contiene sulfitos</div>
               </div>
 
-              {/* <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Descripción</div>
+               <div className="wine-detail-row">
+                <div className="wine-detail-row-label">Scent</div>
                 <div className="wine-detail-row-value">
-                  {descripcion || "Sin descripción disponible."}
+                  {wine.wine.aroma || "Sin especificar"}
                 </div>
-              </div> */}
+              </div>
             </div>
           </section>
         </div>

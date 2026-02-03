@@ -57,13 +57,13 @@ const HistoryPage = () => {
                 History
               </h1>
               <p style={{ margin: 0, color: "#666" }}>
-                Vinos que agregaste recientemente a tu historial.
+                Wines you recently added to your history.
               </p>
             </div>
 
             {hasHistory && (
               <div className="mywines-summary">
-                <span>{historyWines.length} vinos</span>
+                <span>{historyWines.length} wines</span>
               </div>
             )}
           </header>
@@ -104,18 +104,17 @@ const HistoryPage = () => {
                   marginBottom: "0.5rem",
                 }}
               >
-                Aún no tienes vinos en tu historial
+                You don't have any wines in your history yet
               </h2>
               <p style={{ color: "#666", maxWidth: 420, textAlign: "center" }}>
-                Ve a la página de detalle de un vino y utiliza la opción “Añadir
-                al historial”.
+                Go to a wine's detail page and it will automatically be added to your history.
               </p>
               <button
                 type="button"
                 className="btn btn-dark mt-3"
                 onClick={() => navigate("/wines")}
               >
-                Explorar vinos
+                Explore wines
               </button>
             </section>
           )}

@@ -1,16 +1,15 @@
-/* Fuente base */
 body {
-  font-family: 'Poppins', sans-serif; /* o Inter, Work Sans, etc. */
+  font-family: 'Poppins', sans-serif; 
 }
 .menu-link {
   font-family: 'Playfair Display', serif;
-  color: #8B3944; /* rojo vino */
+  color: #8B3944; 
   font-weight: 600;
   text-decoration: none;
 }
 
 .profile-dropdown {
-  min-width: 220px;
+  min-width: 240px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   padding: 0.5rem 0;
@@ -30,6 +29,7 @@ body {
 .premium-header {
   display: flex;
   flex-direction: column;
-  align-items: center; /* o center si lo querés centrado */
-  gap: 0.35rem;
+  justify-content: center;
+  align-items: center; 
+  gap: 1rem;
 }

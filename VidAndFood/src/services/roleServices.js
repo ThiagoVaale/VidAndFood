@@ -12,7 +12,7 @@ async function handleResponse(response) {
   return data;
 }
 
-export async function upgradeToSommelier(userId, newRole) {
+export async function upgradeAdminToSommelier(userId, newRole) {
   const token = localStorage.getItem(TOKEN_KEY);
 
   console.log("USERID Y NEWROLE DESDE SERVICE: ", userId, newRole)
@@ -33,7 +33,7 @@ export async function upgradeToSommelier(userId, newRole) {
   return handleResponse(res);
 }
 
-export async function downgradeToUser(userId, newRole) {
+export async function downgradeAdminToUser(userId, newRole) {
   const token = localStorage.getItem(TOKEN_KEY);
 
   if (!token) {
@@ -47,6 +47,42 @@ export async function downgradeToUser(userId, newRole) {
       Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({ "userUuid": userId, "newRole": newRole })
+  });
+
+  return handleResponse(res);
+}
+
+export async function upgradeToSommelier() {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  if (!token) {
+    throw new Error("Usuario no autenticado");
+  }
+
+  const res = await fetch(`${API_BASE_URL}/User/upgrade-to-sommelier`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return handleResponse(res);
+}
+
+export async function downgradeToSommelier() {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  if (!token) {
+    throw new Error("Usuario no autenticado");
+  }
+
+  const res = await fetch(`${API_BASE_URL}/User/downgrade-to-user`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
   });
 
   return handleResponse(res);

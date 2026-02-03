@@ -16,10 +16,9 @@ const MatchBanner = () => {
       </div>
 
       <div className="match-content">
-        <h2>Encuentra tu pareja perfecta</h2>
+        <h2>Find your perfect match</h2>
         <p>
-          Obtén recomendaciones personalizadas de vinos. Inicia sesión para
-          encontrar vinos que se adapten a tu gusto.
+          Get personalized wine recommendations. Log in to find wines that suit your taste.
         </p>
 
         <button
@@ -27,7 +26,7 @@ const MatchBanner = () => {
           className="match-button"
           onClick={() => openAuthModal("login")}
         >
-          Inicia sesión en tu cuenta
+          Log in to your account
         </button>
       </div>
     </section>

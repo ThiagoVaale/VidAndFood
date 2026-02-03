@@ -13,10 +13,9 @@ const NewsletterBanner = () => {
         </div>
 
         <div className="newsletter-text">
-          <h2>Regístrate para recibir las ofertas exclusivas</h2>
+          <h2>Sign up to receive exclusive offers</h2>
           <p>
-            Hoy están disponibles. Quizás mañana no. Los favoritos se agotan
-            pronto.
+            They are available today. Maybe not tomorrow. Favorites run out quickly.
           </p>
         </div>
       </div>
@@ -26,19 +25,17 @@ const NewsletterBanner = () => {
           <input
             type="email"
             className="newsletter-input"
-            placeholder="Escribe tu dirección de correo electrónico*"
+            placeholder="Enter your email address*"
           />
           <button type="button" className="newsletter-button">
-            Inscribirme
+            Sign up
           </button>
         </form>
 
         <label className="newsletter-consent">
           <input type="checkbox" />
           <span>
-            Sí, me gustaría recibir noticias y ofertas de Vid &amp; Food por
-            correo electrónico. Puedo cancelar mi suscripción en cualquier
-            momento.
+            Yes, I would like to receive news and offers from Vid &amp; Food by email. I can unsubscribe at any time.
           </span>
         </label>
       </div>

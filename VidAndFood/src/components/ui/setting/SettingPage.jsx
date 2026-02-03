@@ -9,6 +9,8 @@ const SettingPage = () => {
   const { user, token, onLogin } = useContext(AuthContext);
   const { showResponse } = useContext(ResponseContext);
 
+  console.log("USER desde contexto: ", user)
+
   const [accountForm, setAccountForm] = useState({
     fullname: user?.fullName,
     email: user?.email,
@@ -30,8 +32,8 @@ const SettingPage = () => {
     if( currentRole === newRole ){
       showResponse({
         variant: "error",
-        title: "Error al actualizar subscripción",
-        message: "No realizaste nigun cambio en tu tipo de subcripción."
+        title: "Error updating subscription",
+        message: "You didn't make any changes to your subscription type."
       });
       return;
     }
@@ -40,9 +42,9 @@ const SettingPage = () => {
     if (!isUserToSommelier) {
       showResponse({
         variant: "error",
-        title: "Cambio de rol no disponible",
+        title: "Role change not available",
         message:
-          "Desde esta pantalla solo podés actualizar tu suscripción de Usuario a Sommelier.",
+          "From this screen, you can only upgrade your subscription from User to Sommelier.",
       });
 
       setAccountForm((prev) => ({ ...prev, membership: currentRole }));
@@ -59,17 +61,17 @@ const SettingPage = () => {
 
       showResponse({
         variant: "success",
-        title: "Suscripción actualizada",
+        title: "Subscription updated",
         message:
-          "Ahora sos Sommelier en Vid&Food. Disfrutá de los beneficios de tu nueva suscripción.",
+          "You are now a Sommelier at Vid&Food. Enjoy the benefits of your new subscription.",
       });
     } catch (err) {
       showResponse({
         variant: "error",
-        title: "No se pudo actualizar tu suscripción",
+        title: "Your subscription could not be updated",
         message:
           err.message ||
-          "Ocurrió un error al actualizar tu tipo de membresía.",
+          "An error occurred while updating your membership type.",
       });
 
       setAccountForm((prev) => ({ ...prev, membership: currentRole }));
@@ -94,13 +96,13 @@ const SettingPage = () => {
           <header className="header-setting mb-4">
             <h1 className="settings-title">Settings</h1>
             <p className="settings-subtitle">
-              Visualiza tu informacion de usuario y actualiza ru Subcripción.
+              View your user information and update your subscription.
             </p>
           </header>
 
           <div className="settings-card shadow-sm p-4 mx-auto">
             <form>
-              <label className="form-label mt-3">Correo electrónico</label>
+              <label className="form-label mt-3">Email</label>
               <input
                 type="email"
                 className="form-control"
@@ -108,10 +110,10 @@ const SettingPage = () => {
                 disabled
               />
               <div className="text-muted small mt-1">
-                El email se utiliza para iniciar sesión y comunicaciones.
+                The email is used for logging in and communications.
               </div>
 
-              <label className="form-label mt-3">Nombre y apellido</label>
+              <label className="form-label mt-3">First and last name</label>
               <input
                 type="email"
                 className="form-control"
@@ -119,7 +121,7 @@ const SettingPage = () => {
                 disabled
               />
 
-              <label className="form-label mt-4">Subcripción</label>
+              <label className="form-label mt-4">Subscription</label>
               <div className="membership-group mx-2">
                 {membershipPlans.map((plan) => {
                   const isSelected = accountForm.membership === plan; 
@@ -127,12 +129,12 @@ const SettingPage = () => {
 
                   let tagText = "";
                   if (isCurrent) {
-                    tagText = "(actual)";
+                    tagText = "(current)";
                   } else if (
                     currentRole === "User" &&
                     plan === "Sommelier"
                   ) {
-                    tagText = "(actualizar)";
+                    tagText = "(update)";
                   }
 
                   return (
@@ -155,12 +157,11 @@ const SettingPage = () => {
               </div>
 
               <div className="text-muted small mb-3">
-                El tipo de membresía define beneficios como historial ampliado,
-                bodega y recomendaciones avanzadas.
+                The type of membership defines benefits such as extended history, favorites, creating a wine if it is not available, and advanced recommendations with a chatbot.
               </div>
 
               <button type="submit" className="btn btn-dark button-save" disabled={saving} onClick={handleSaveAll}>
-                {saving ? "Guardando..." : "Guardar cambios"}
+                {saving ? "Saving..." : "Save changes"}
               </button>
             </form>
           </div>

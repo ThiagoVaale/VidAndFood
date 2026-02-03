@@ -118,8 +118,8 @@ const ProfileMenu = ({ onLogout }) => {
 
         {isUser && !isUserSommelier && !isUserAdmin && (
           <>
-            <div className="premium-header px-3 py-2">
-              <span className="premium-question">¿Quieres ser Sommelier?</span>
+            <div className="premium-header px-6 py-3 mx-7">
+              <span className="premium-question">¿Do you want to be a Sommelier?</span>
 
               <Button
                 variant="outline-dark"
