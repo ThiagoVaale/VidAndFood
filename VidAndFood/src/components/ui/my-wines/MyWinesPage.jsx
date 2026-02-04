@@ -61,7 +61,7 @@ const MyWinesPage = () => {
                 My Wines
               </h1>
               <p style={{ margin: 0, color: "#666" }}>
-                Tus vinos guardados en la lista de deseos.
+                Your wines saved in the wishlist.
               </p>
             </div>
 
@@ -101,18 +101,17 @@ const MyWinesPage = () => {
                   marginBottom: "0.5rem",
                 }}
               >
-                Todavía no tienes vinos en tu lista de deseos
+                You don't have any wines on your wishlist yet
               </h2>
               <p style={{ color: "#666", maxWidth: 420, textAlign: "center" }}>
-                Explora nuestra selección de vinos y añade tus favoritos desde
-                la página de detalle.
+                Explore our selection of wines and add your favorites from the detail page.
               </p>
               <button
                 type="button"
                 className="btn btn-dark mt-3"
                 onClick={() => navigate("/wines")}
               >
-                Explorar vinos
+                Explore wines
               </button>
             </section>
           )}

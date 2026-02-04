@@ -8,3 +8,35 @@
   background-color: #1A3305 !important;
   color: white !important;
 }
+
+.admin-table {
+  width: 100%;
+  table-layout: fixed;     
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-table th,
+.admin-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-col-wide {
+  text-align: left;        
+  white-space: normal;    
+  word-break: break-word;
+}
+
+.admin-table-row td {
+  width: auto;
+}
+
+.table-responsive {
+  width: 100%;
+}

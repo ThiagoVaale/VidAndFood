@@ -20,10 +20,10 @@ const ConfirmModal = ({
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={loading}>
-          Cancelar
+          Cancel
         </Button>
         <Button variant={confirmVariant} onClick={onConfirm} disabled={loading}>
-          {loading ? "Procesando..." : confirmText}
+          {loading ? "Processing..." : confirmText}
         </Button>
       </Modal.Footer>
     </Modal>

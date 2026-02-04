@@ -145,6 +145,20 @@ export async function deleteReview(wineId) {
   return handleResponse(response);
 }
 
+export async function deleteReviewAdmin(ratinId){
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) throw new Error("Usuario no autenticado");
+
+  const response = await fetch(`${API_BASE_URL}/Wine/${ratinId}/admin-rate-delete`,{
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  
+  return handleResponse(response);
+}
+
 export async function fetchAddWineAdmin(wine){
   const token = localStorage.getItem(TOKEN_KEY);
   if (!token) throw new Error("Usuario no autenticado");

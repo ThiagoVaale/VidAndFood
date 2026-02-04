@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 import CustomNavbar from "../nav-bar/CustomNavbar.jsx";
@@ -15,12 +15,16 @@ import WineContext from "../../../services/context/winesContext/WinesContext.jsx
 
 import "./sysAdminPage.css";
 import WineAdminModal from "../../admin/WineAdminModal.jsx";
-import { deleteReview, fetchDeleteWineAdmin } from "../../../services/wineService.js";
+import {
+  deleteReviewAdmin,
+  fetchDeleteWineAdmin,
+} from "../../../services/wineService.js";
 
 const SysAdminPage = () => {
   const { token } = useContext(AuthContext);
   const { showResponse } = useContext(ResponseContext);
-  const { wines, isLoadingWines, winesError, reloadWines, loadWines } = useContext(WineContext);
+  const { wines, isLoadingWines, winesError, reloadWines, loadWines } =
+    useContext(WineContext);
 
   const [showUserModal, setShowUserModal] = useState(false);
   const [userModalMode, setUserModalMode] = useState("create");
@@ -40,8 +44,24 @@ const SysAdminPage = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedWine, setSelectedWine] = useState(null);
+  const [selectedRating, setSelectedRating] = useState(null);
 
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const ratingsData = useMemo(() => {
+    return wines.flatMap((w) =>
+      w.reviews.map((r) => ({
+        id: r.id,
+        reviewId: r.id,
+        wineId: w.id,
+        wineName: w.name,
+        userName: r.userName,
+        score: r.score,
+        review: r.review,
+        isSommelierReview: r.isSommelierReview,
+        createdAt: r.createdAt,
+      })),
+    );
+  }, [wines]);
 
   const [errorUsers, setErrorUsers] = useState(null);
 
@@ -74,10 +94,11 @@ const SysAdminPage = () => {
 
     loadWines();
   }, [token, activeTab, loadWines]);
-  
+
   useEffect(() => {
     setSelectedUser(null);
     setSelectedWine(null);
+    setSelectedRating(null);
   }, [activeTab]);
 
   const openUserModal = (mode) => {
@@ -90,7 +111,7 @@ const SysAdminPage = () => {
     setWineModalMode(mode);
     setWineTarget(mode === "edit" ? selectedWine : null);
     setShowWineModal(true);
-  }
+  };
 
   const reloadUsers = async () => {
     const data = await fecthAllUsers();
@@ -130,19 +151,24 @@ const SysAdminPage = () => {
 
   const openWineDeleteConfirm = () => {
     if (!selectedWine) return;
+
     setConfirmTitle("Remove wine");
     setConfirmBody(
-      `¿Are you sure you want to delete the wine? ${selectedWine.name}?`,
+      `¿Are you sure you want to delete the wine? ${selectedWine.name}`,
     );
+
     setConfirmAction(() => async () => {
       try {
         setConfirmLoading(true);
+
         await fetchDeleteWineAdmin(selectedWine.id);
+
         showResponse({
           title: "Wine removed",
           variant: "success",
           message: `The wine ${selectedWine.name} has been successfully deleted.`,
         });
+
         await loadWines();
         setShowConfirm(false);
       } catch (e) {
@@ -159,20 +185,25 @@ const SysAdminPage = () => {
   };
 
   const openReviewDeleteConfirm = () => {
-    if (!selectedWine) return;
+    if (!selectedRating) return;
+
     setConfirmTitle("Remove review");
     setConfirmBody(
-      `¿Are you sure you want to delete this wine review? ${selectedWine.name}?`,
+      `¿Are you sure you want to delete this wine review? (${selectedRating.wineName})?`,
     );
+
     setConfirmAction(() => async () => {
       try {
         setConfirmLoading(true);
-        await deleteReview(selectedWine.id);
+
+        await deleteReviewAdmin(selectedRating.id);
+
         showResponse({
           title: "Review removed",
           variant: "success",
-          message: `The review for wine ${selectedWine.name} has been successfully deleted.`,
+          message: `The review for wine ${selectedRating.wineName} has been successfully deleted.`,
         });
+
         await loadWines();
         setShowConfirm(false);
       } catch (e) {
@@ -189,28 +220,81 @@ const SysAdminPage = () => {
   };
 
   const userColumns = [
-    { header: "First and Last Name", accessor: (u) => u.fullName || "-" },
-    { header: "Email", accessor: (u) => u.email || "-" },
-    { header: "Rol", accessor: (u) => u.role || "-" },
+    {
+      header: "First and Last Name",
+      accessor: (u) => u.fullName || "-",
+      className: "admin-col-wide",
+      style: { width: "38%" },
+    },
+    {
+      header: "Email",
+      accessor: (u) => u.email || "-",
+      className: "admin-col-wide",
+      style: { widht: "44%" },
+    },
+    { header: "Rol", accessor: (u) => u.role || "-", style: { width: "18%" } },
   ];
 
   const winesColums = [
-    { header: "Name", accessor: (w) => w.name },
-    { header: "Winery", accessor: (w) => w.wineryName },
-    { header: "Price", accessor: (w) => w.price },
-    { header: "Harvest year", accessor: (w) => w.vintageYear },
+    {
+      header: "Name",
+      accessor: (w) => w.name || "-",
+      className: "admin-col-wide",
+      style: { width: "30%" },
+    },
+    {
+      header: "Winery",
+      accessor: (w) => w.wineryName || "-",
+      className: "admin-col-wide",
+      style: { width: "20%" },
+    },
+    {
+      header: "Price",
+      accessor: (w) => w.price ?? "-",
+      style: { width: "12%" },
+    },
+    {
+      header: "Harvest year",
+      accessor: (w) => w.vintageYear ?? "-",
+      style: { width: "12%" },
+    },
     {
       header: "Average score",
-      accessor: (w) => w.averageScore.toFixed(1),
+      accessor: (w) =>
+        w.averageScore != null ? w.averageScore.toFixed(1) : "-",
+      style: { width: "12%" },
     },
-    { header: "Uvas", accessor: (w) => w.grapeNames },
+    {
+      header: "Uvas",
+      accessor: (w) => w.grapeNames || "-",
+      className: "admin-col-wide",
+      style: { width: "14%" },
+    },
   ];
 
   const ratingsColums = [
-    { header: "WineName", accessor: (w) => w.name },
-    { header: "UserName", accessor: (w) => w.reviews.userName },
-    { header: "Score", accessor: (w) => w.reviews.score },
-    { header: "Review", accessor: (w) => w.reviews.review }
+    {
+      header: "Wine",
+      accessor: (r) => r.wineName || "-",
+      className: "admin-col-wide",
+      style: { width: "36%" },
+    },
+    {
+      header: "User",
+      accessor: (r) => r.userName || "-",
+      style: { width: "18%" },
+    },
+    {
+      header: "Score",
+      accessor: (r) => r.score ?? "-",
+      style: { width: "10%" },
+    },
+    {
+      header: "Review",
+      accessor: (r) => r.review || "-",
+      className: "admin-col-wide",
+      style: { width: "36%" },
+    },
   ];
 
   return (
@@ -285,8 +369,7 @@ const SysAdminPage = () => {
                       showResponse({
                         title: "Protected user",
                         variant: "info",
-                        message:
-                          "Admin users cannot be modified or deleted.",
+                        message: "Admin users cannot be modified or deleted.",
                       });
                     }
                   }}
@@ -335,19 +418,33 @@ const SysAdminPage = () => {
                   error={winesError}
                   pageSize={10}
                   rowKey={(w) => w.id}
-                  selectedId={selectedWine?.id ?? null} 
+                  selectedId={selectedWine?.id ?? null}
                   onRowSelect={(w) => setSelectedWine(w)}
                   headerActions={
                     <>
-                      <Button variant="success" size="sm" onClick={() => openWineModal("create")}>
+                      <Button
+                        variant="success"
+                        size="sm"
+                        onClick={() => openWineModal("create")}
+                      >
                         Add
-                      </Button> 
+                      </Button>
 
-                      <Button variant="primary" size="sm" disabled={!selectedWine} onClick={() => openWineModal("edit")}>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        disabled={!selectedWine}
+                        onClick={() => openWineModal("edit")}
+                      >
                         Edit
                       </Button>
 
-                      <Button variant="danger" size="sm" disabled={!selectedWine} onClick={() => openWineDeleteConfirm()}>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        disabled={!selectedWine}
+                        onClick={() => openWineDeleteConfirm()}
+                      >
                         Delete
                       </Button>
                     </>
@@ -363,16 +460,21 @@ const SysAdminPage = () => {
                 <AdminTable
                   title="Ratings"
                   columns={ratingsColums}
-                  data={wines}
+                  data={ratingsData}
                   loading={isLoadingWines}
                   error={winesError}
                   pageSize={10}
-                  rowKey={(w) => w.id}
-                  selectedId={selectedWine?.id ?? null} 
-                  onRowSelect={(w) => setSelectedWine(w)}
+                  rowKey={(r) => r.id}
+                  selectedId={selectedRating?.id ?? null}
+                  onRowSelect={(r) => setSelectedRating(r)}
                   headerActions={
                     <>
-                      <Button variant="danger" size="sm" disabled={!selectedWine} onClick={() => openReviewDeleteConfirm()}>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        disabled={!selectedRating}
+                        onClick={() => openReviewDeleteConfirm()}
+                      >
                         Delete
                       </Button>
                     </>
@@ -380,16 +482,6 @@ const SysAdminPage = () => {
                 />
               </Col>
             </Row>
-          )}
-
-          {activeTab === "ratings" && (
-            <div
-              className="text-center text-muted"
-              style={{ padding: "40px 0" }}
-            >
-              <h5 style={{ marginBottom: 8 }}>Ratings</h5>
-              <p>Sección en construcción (ABM de ratings pendiente).</p>
-            </div>
           )}
         </Container>
 
@@ -404,7 +496,7 @@ const SysAdminPage = () => {
         <WineAdminModal
           show={showWineModal}
           mode={wineModalMode}
-          wine={wineTarget} 
+          wine={wineTarget}
           onClose={() => setShowWineModal(false)}
           onSuccess={reloadWines}
         />
@@ -413,7 +505,7 @@ const SysAdminPage = () => {
           show={showConfirm}
           title={confirmTitle}
           body={confirmBody}
-          confirmText="Eliminar"
+          confirmText="Delete"
           confirmVariant="danger"
           loading={confirmLoading}
           onClose={() => setShowConfirm(false)}

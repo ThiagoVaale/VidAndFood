@@ -37,10 +37,14 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
   useEffect(() => {
     if (!show) return;
+
     setSaving(false);
 
     if (isCreate) {
       setAddWine(emptyWine);
+      setSelectedWinery(null);
+      setSelectedGrapes([]);
+      return;
     }
 
     if (isEdit && wine) {
@@ -61,8 +65,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           : null,
       );
 
-      const ids = wine.grapes ?? [];
-      setSelectedGrapes(grapeOptions.filter((o) => ids.includes(o.value)));
+      setSelectedGrapes(viewGrapesWine(wine, grapeOptions));
     } else {
       setAddWine({
         name: "",
@@ -89,14 +92,14 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           fetchAllGrapes(),
         ]);
 
-        console.log(("GRAPES: ", grapes))
+        console.log(("GRAPES: ", grapes));
 
-        const wineriesOptions = (wineries ?? []).map((name) => ({
+        const wineriesOptions = (wineries).map((name) => ({
           value: name,
           label: name,
         }));
 
-        const grapesOptions = (grapes ?? []).map((g) => ({
+        const grapesOptions = (grapes).map((g) => ({
           value: g.id,
           label: g.name,
         }));
@@ -118,7 +121,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
   const payload = {
     ...addWine,
     wineryName: selectedWinery?.value ?? "",
-    grapes: selectedGrapes.map((g) => g.value)
+    grapes: selectedGrapes.map((g) => g.value),
   };
 
   const handleSave = async () => {
@@ -162,10 +165,33 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
     }));
   };
 
+  const viewGrapesWine = (wine, grapeOptions) => {
+    if (!wine || !Array.isArray(grapeOptions) || grapeOptions.length === 0) {
+      return [];
+    }
+
+    // if (Array.isArray(wine.grapes) && wine.grapes.length > 0) {
+    //   const ids = wine.grapes.map(String);
+    //   return grapeOptions.filter((o) => ids.includes(String(o.value)));
+    // }
+
+    if(typeof wine.grapeNames === "string" && wine.grapeNames.trim()){
+      const names = wine.grapeNames
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter(Boolean);
+
+        return grapeOptions.filter((o) => 
+          names.includes(String(o.label).toLowerCase())
+        )
+    }
+    return [];
+  };
+
   return (
     <Modal show={show} onHide={saving ? undefined : onClose} centered>
       <Modal.Header closeButton={!saving}>
-        <Modal.Title>{isEdit ? "Editar vino" : "Agregar vino"}</Modal.Title>
+        <Modal.Title>{isEdit ? "Edit wine" : "Add wine"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -173,7 +199,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={6}>
-                <Form.Label>Nombre</Form.Label>
+                <Form.Label>Name</Form.Label>
                 <Form.Control
                   name="name"
                   value={addWine.name}
@@ -185,7 +211,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Bodega</Form.Label>
+                <Form.Label>Winery</Form.Label>
                 <Select
                   options={wineryOptions}
                   value={selectedWinery}
@@ -201,7 +227,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={6}>
-                <Form.Label>Región</Form.Label>
+                <Form.Label>Region</Form.Label>
                 <Form.Control
                   name="regionName"
                   value={addWine.regionName}
@@ -212,7 +238,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Año de cosecha</Form.Label>
+                <Form.Label>Harvest year</Form.Label>
                 <Form.Control
                   name="vintageYear"
                   type="number"
@@ -228,7 +254,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={6}>
-                <Form.Label>Precio</Form.Label>
+                <Form.Label>Price</Form.Label>
                 <Form.Control
                   name="price"
                   type="number"
@@ -240,7 +266,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Descripción</Form.Label>
+                <Form.Label>Description</Form.Label>
                 <Form.Control
                   name="description"
                   value={addWine.description}
@@ -255,7 +281,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={6}>
-                <Form.Label>Imagen</Form.Label>
+                <Form.Label>Image</Form.Label>
                 <Form.Control
                   name="imageUrl"
                   value={addWine.imageUrl}
@@ -266,7 +292,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Uvas</Form.Label>
+                <Form.Label>Grapes</Form.Label>
                 <Select
                   isMulti
                   options={grapeOptions}
@@ -284,10 +310,10 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={saving}>
-          Cancelar
+          Cancel
         </Button>
         <Button variant="primary" onClick={handleSave} disabled={saving}>
-          {saving ? "Guardando..." : "Guardar"}
+          {saving ? "Saving..." : "Save"}
         </Button>
       </Modal.Footer>
     </Modal>
