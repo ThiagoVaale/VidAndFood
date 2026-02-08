@@ -41,10 +41,10 @@ const BASE_WINE_FILTERS = [
     title: "Wine Types",
     isCollapsed: true,
     options: [
-      { id: "tinto", value: "tinto", label: "Tinto", count: 0 },
-      { id: "blanco", value: "blanco", label: "Blanco", count: 0 },
-      { id: "rosado", value: "rosado", label: "Rosado", count: 0 },
-      { id: "espumante", value: "espumante", label: "Espumante", count: 0 },
+      { id: "tinto", value: "tinto", label: "Red", count: 0 },
+      { id: "blanco", value: "blanco", label: "White", count: 0 },
+      { id: "rosado", value: "rosado", label: "Rose", count: 0 },
+      { id: "espumante", value: "espumante", label: "Sparkling", count: 0 },
     ],
   },
   {
