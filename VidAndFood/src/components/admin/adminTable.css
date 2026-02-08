@@ -1,42 +1,137 @@
-.admin-btn {
-  border: 1px solid #1A3305 !important;
-  color: #1A3305 !important;
-  transition: background-color 0.25s ease, color 0.25s ease;
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.admin-card {
+  border: none !important;
+  border-radius: 20px !important;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important; /* Sombra suave */
+  overflow: hidden;
 }
 
-.admin-btn:hover {
-  background-color: #1A3305 !important;
+.admin-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #1a1a1a;
+}
+
+/* --- TABLA --- */
+.admin-table {
+  margin-bottom: 0;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-table thead th {
+  background-color: #f9f7f2; /* Fondo crema muy suave para cabecera */
+  color: #9e4758; /* Color Vino */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 16px 20px;
+}
+
+.admin-table tbody td {
+  padding: 18px 20px;
+  vertical-align: middle;
+  color: #444;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+}
+
+/* Efecto hover en las filas */
+.admin-table-row:hover td {
+  background-color: #fff9f9; /* Tinte rosado muy sutil al pasar el mouse */
+  color: #1a1a1a;
+}
+
+/* Fila seleccionada */
+.admin-table-row[data-selected="true"] td {
+  background-color: #fceceb !important; /* Color vino muy claro */
+  font-weight: 600;
+}
+
+/* --- BOTONES DE ACCIÓN (Header) --- */
+.admin-action-btn {
+  border-radius: 30px !important;
+  padding: 6px 16px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+/* Botón Principal (Add) */
+.btn-wine-primary {
+  background-color: #9e4758 !important;
+  border: 1px solid #9e4758 !important;
   color: white !important;
 }
 
-.admin-table {
-  width: 100%;
-  table-layout: fixed;     
+.btn-wine-primary:hover {
+  background-color: #7a3642 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(158, 71, 88, 0.3);
 }
 
-.admin-table th,
-.admin-table td {
-  text-align: left;
-  vertical-align: middle;
+/* Botón Secundario (Change Role) */
+.btn-wine-secondary {
+  background-color: transparent !important;
+  border: 1px solid #ccc !important;
+  color: #555 !important;
 }
 
-.admin-table th,
-.admin-table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.btn-wine-secondary:hover {
+  border-color: #9e4758 !important;
+  color: #9e4758 !important;
 }
 
-.admin-col-wide {
-  text-align: left;        
-  white-space: normal;    
-  word-break: break-word;
+/* Botón Peligro (Delete) */
+.btn-wine-danger {
+  background-color: #fff !important;
+  border: 1px solid #ffcccc !important;
+  color: #dc3545 !important;
 }
 
-.admin-table-row td {
-  width: auto;
+.btn-wine-danger:hover {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border-color: #dc3545 !important;
 }
 
-.table-responsive {
-  width: 100%;
+/* --- PAGINACIÓN --- */
+.admin-pagination {
+  padding: 15px 20px;
+  background-color: #fff;
+  border-top: 1px solid #f0f0f0;
+}
+
+.pagination-text {
+  color: #888;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.pagination-btn {
+  border: none !important;
+  background: transparent !important;
+  color: #1a1a1a !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 5px 15px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  color: #9e4758 !important;
+  text-decoration: underline;
+}
+
+.pagination-btn:disabled {
+  color: #ccc !important;
 }

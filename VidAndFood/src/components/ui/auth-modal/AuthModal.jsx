@@ -232,6 +232,8 @@ const AuthModal = () => {
       centered
       dialogClassName="auth-modal-dialog"
       contentClassName="auth-modal-content"
+      // AQUÍ ESTÁ EL CAMBIO IMPORTANTE:
+      backdropClassName="auth-modal-backdrop"
     >
       <button type="button" className="auth-modal-close" onClick={handleHide}>
         ×
@@ -242,10 +244,6 @@ const AuthModal = () => {
 
         <div className="auth-modal-right">
           <div className="auth-modal-header-text">
-            <span className="auth-modal-title-main">
-              Join  <span style={{ color: COLORS.darkGreen }}> Vid&Food</span>
-            </span>
-            <span className="auth-modal-title-separator"> | </span>
             <span className="auth-modal-title-secondary">{title}</span>
           </div>
 

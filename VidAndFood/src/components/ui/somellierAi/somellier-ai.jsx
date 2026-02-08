@@ -1,18 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  InputGroup,
-  Card,
-} from "react-bootstrap";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { Container, Row, Col, Form, Button, InputGroup, Card } from "react-bootstrap";
+import { Send, Magic } from "react-bootstrap-icons"; 
 import "./somellier.css";
-import {
-  getWineRecommendations,
-  validateWineRecommendations,
-} from "../../../services/somellierAiService";
+import { getWineRecommendations, validateWineRecommendations } from "../../../services/somellierAiService";
 import CustomNavBar from "../nav-bar/CustomNavbar";
 
 const SommelierAI = () => {
@@ -20,7 +10,7 @@ const SommelierAI = () => {
     {
       id: 1,
       sender: "ai",
-      text: "Hello! I’m your Virtual Sommelier. Tell me what you’re going to eat today, and I’ll suggest my best options.",
+      text: "¡Hola! Soy tu Sommelier Virtual. Dime qué vas a comer hoy y te sugeriré las mejores opciones de nuestra bodega.",
       wines: null,
     },
   ]);
@@ -32,21 +22,13 @@ const SommelierAI = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(() => { scrollToBottom(); }, [messages]);
 
   const handleSend = async (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
 
-    const userMessage = {
-      id: Date.now(),
-      sender: "user",
-      text: input,
-      wines: null,
-    };
-
+    const userMessage = { id: Date.now(), sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     const currentInput = input;
     setInput("");
@@ -54,121 +36,101 @@ const SommelierAI = () => {
 
     try {
       let recommendations = await getWineRecommendations(currentInput);
-
       recommendations = validateWineRecommendations(recommendations);
-
-      if (recommendations.length === 0) {
-        throw new Error("Valid recommendations could not be obtained");
-      }
 
       const aiMessage = {
         id: Date.now() + 1,
         sender: "ai",
-        text: `Here you go ${recommendations.length} excellent options to accompany "${currentInput}":`,
+        text: `Aquí tienes ${recommendations.length} excelentes opciones para acompañar "${currentInput}":`,
         wines: recommendations,
       };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      console.error(error);
-      const errorMessage = error.message || "Error desconocido";
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          sender: "ai",
-          text: `I'm sorry, I couldn't get the recommendations. ${errorMessage}`,
-        },
-      ]);
+      setMessages((prev) => [...prev, {
+        id: Date.now(),
+        sender: "ai",
+        text: "Lo siento, no pude obtener las recomendaciones. ¿Podrías intentar con otro plato?",
+      }]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <>
+return (
+    <div className="sommelier-fixed-wrapper">
       <CustomNavBar />
-      <Container className="py-5 mt-5">
-        <Row className="justify-content-center">
-          <Col md={10} lg={8}>
-            <Card className="shadow border-0">
-              <Card.Header className="bg-white border-bottom-0 pt-4 pb-0">
-                <h4 className="text-center mb-0" style={{ color: "#6f42c1" }}>
-                  🍷 Sommelier AI
-                </h4>
-                <p className="text-muted text-center small">
-                  Powered by Gemini
-                </p>
-              </Card.Header>
-              <Card.Body>
-                <div className="chat-container mb-3">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`d-flex flex-column ${
-                        msg.sender === "user"
-                          ? "align-items-end"
-                          : "align-items-start"
-                      }`}
-                    >
-                      <div className={`message-bubble message-${msg.sender}`}>
-                        {msg.text}
-                      </div>
+      
+      <main className="ai-content-main">
+        <Container className="h-100 d-flex flex-column justify-content-center">
+          <Row className="justify-content-center flex-grow-1 ai-main-row">
+            <Col md={10} lg={7} className="d-flex flex-column py-4">
+              
+              {/* Encabezado: Ahora con margen superior para no ser tapado */}
+              <div className="ai-header-content text-center mb-3">
+                 <div className="ai-icon-circle">
+                    <Magic size={24} color="#9e4758" />
+                 </div>
+                 <h2 className="ai-main-title">Sommelier IA</h2>
+                 <p className="text-muted small">Personaliza tu experiencia gastronómica</p>
+              </div>
 
-                      {msg.wines && (
-                        <div className="message-bubble message-ai mt-1">
-                          <ul className="wine-list mb-0">
-                            {msg.wines.map((wine) => (
-                              <li key={wine.id} className="wine-item">
-                                <strong>{wine.name}</strong>: {wine.reason}
-                              </li>
-                            ))}
-                          </ul>
+              {/* Card de Chat con altura flexible pero controlada */}
+              <Card className="ai-chat-card border-0 shadow-lg flex-grow-1">
+                <Card.Body className="d-flex flex-column p-0 overflow-hidden">
+                  
+                  <div className="chat-container">
+                    {messages.map((msg) => (
+                      <div key={msg.id} className={`message-row ${msg.sender === "user" ? "user-row" : "ai-row"}`}>
+                        <div className={`message-bubble-premium bubble-${msg.sender}`}>
+                          {msg.text}
+                          {msg.wines && (
+                            <div className="ai-recommendations-grid">
+                              {msg.wines.map((wine) => (
+                                <div key={wine.id} className="ai-wine-card">
+                                  <span className="ai-wine-name">{wine.name}</span>
+                                  <p className="ai-wine-reason">{wine.reason}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ))}
-
-                  {isLoading && (
-                    <div className="message-bubble message-ai">
-                      <div className="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
                       </div>
-                    </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
+                    ))}
+                    {isLoading && (
+                      <div className="message-row ai-row">
+                        <div className="message-bubble-premium bubble-ai typing-box">
+                          <div className="typing-dot"></div>
+                          <div className="typing-dot"></div>
+                          <div className="typing-dot"></div>
+                        </div>
+                      </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                  </div>
 
-                <Form onSubmit={handleSend}>
-                  <InputGroup className="mb-3">
-                    <Form.Control
-                      placeholder="Ej: Asado, Sushi, Pasta con trufas..."
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      disabled={isLoading}
-                      style={{ borderRadius: "20px 0 0 20px" }}
-                    />
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      disabled={isLoading}
-                      style={{
-                        backgroundColor: "#6f42c1",
-                        borderColor: "#6f42c1",
-                        borderRadius: "0 20px 20px 0",
-                      }}
-                    >
-                      {isLoading ? "Consult" : "Send"}
-                    </Button>
-                  </InputGroup>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </>
+                  <div className="input-area-premium">
+                    <Form onSubmit={handleSend}>
+                      <InputGroup className="premium-input-group">
+                        <Form.Control
+                          placeholder="¿Qué vas a cenar hoy?..."
+                          value={input}
+                          onChange={(e) => setInput(e.target.value)}
+                          disabled={isLoading}
+                          className="border-0 shadow-none"
+                        />
+                        <Button type="submit" disabled={isLoading} className="premium-send-btn">
+                          {isLoading ? <div className="spinner-border spinner-border-sm" /> : <Send size={20} />}
+                        </Button>
+                      </InputGroup>
+                    </Form>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </main>
+    </div>
   );
 };
 

@@ -41,7 +41,8 @@ const HistoryPage = () => {
         style={{
           backgroundColor: "#fdf9f2ff",
           minHeight: "100vh",
-          paddingTop: "5rem",
+          paddingTop: "10rem",
+          
         }}
       >
         <div className="container py-4">
@@ -49,7 +50,6 @@ const HistoryPage = () => {
             <div>
               <h1
                 style={{
-                  fontFamily: "playfair",
                   fontSize: "2rem",
                   marginBottom: "0.5rem",
                 }}
@@ -99,7 +99,6 @@ const HistoryPage = () => {
               </div>
               <h2
                 style={{
-                  fontFamily: "playfair",
                   fontSize: "1.6rem",
                   marginBottom: "0.5rem",
                 }}

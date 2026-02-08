@@ -172,10 +172,27 @@ const WinesPage = () => {
     );
   }, [winesLoaded, isLoadingWines, loadWines, wines]);
 
-  const filteredWines = useMemo(
-    () => applyFilters(wines, filters),
-    [wines, filters],
-  );
+  // --- LÓGICA DE FILTRADO Y ORDENAMIENTO ---
+  const filteredWines = useMemo(() => {
+    const { rating, ...otherFilters } = filters;
+
+    // 1. Aplicar filtros generales
+    let result = applyFilters(wines, otherFilters);
+
+    // 2. Lógica de Rating
+    if (typeof rating === "number" && rating > 0) {
+      // Si hay filtro, mostrar solo ese rango específico (4.0 a 4.9)
+      result = result.filter((wine) => {
+        const score = wine.averageScore || 0;
+        return Math.floor(score) === rating;
+      });
+    } else {
+      // Si NO hay filtro de rating, ordenar por puntaje descendente (Mejor a Peor)
+      result = [...result].sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0));
+    }
+
+    return result;
+  }, [wines, filters]);
 
   const handleSelectWine = (wine) => {
     navigate(`/wines/${wine.id}`);
@@ -200,12 +217,11 @@ const WinesPage = () => {
             minHeight: "100vh",
           }}
         >
-
           <div className="wine-search-bar">
             <WineSearch wines={wines} onSelectWine={handleSelectWine} />
           </div>
 
-          <div className="p-4 pt-5">
+          <div className="wine-search-bar">
             <Wines
               wines={filteredWines}
               isHorizontal={true}

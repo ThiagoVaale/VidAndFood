@@ -51,7 +51,7 @@ function App() {
         <Route
           path="/history"
           element={
-            <RoleRoute allowedRoles={["User", "Admin"]}>
+            <RoleRoute allowedRoles={["User", "Admin", "Sommelier"]}>
               <HistoryPage />
             </RoleRoute>
           }

@@ -264,11 +264,17 @@ const SysAdminPage = () => {
         w.averageScore != null ? w.averageScore.toFixed(1) : "-",
       style: { width: "12%" },
     },
-    {
-      header: "Uvas",
-      accessor: (w) => w.grapeNames || "-",
+   {
+      header: "Grapes",
+      // CORRECCIÓN AQUÍ: Verificamos si es un array y lo mapeamos
+      accessor: (w) => {
+        if (Array.isArray(w.grapes) && w.grapes.length > 0) {
+          return w.grapes.map(g => g.name).join(", ");
+        }
+        return w.grapeNames || "-";
+      },
       className: "admin-col-wide",
-      style: { width: "14%" },
+      style: { width: "20%" },
     },
   ];
 
@@ -290,7 +296,7 @@ const SysAdminPage = () => {
       style: { width: "10%" },
     },
     {
-      header: "Review",
+      header: "Comment",
       accessor: (r) => r.review || "-",
       className: "admin-col-wide",
       style: { width: "36%" },
@@ -318,7 +324,7 @@ const SysAdminPage = () => {
                 marginTop: "2rem",
               }}
             >
-              SysAdmin – Panel de administración
+              SysAdmin – Administration Panel
             </h1>
             <p className="text-muted">
               Management of users, wines, and ratings in the Vid&Food system.
@@ -378,6 +384,7 @@ const SysAdminPage = () => {
                       <Button
                         variant="success"
                         size="sm"
+                        className="className="admin-action-btn btn-wine-primary
                         onClick={() => openUserModal("create")}
                       >
                         + Add

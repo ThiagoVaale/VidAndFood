@@ -1,75 +1,150 @@
+.sommelier-page-wrapper {
+  background-color: #fdf9f2ff; /* Tu fondo crema */
+  min-height: 100vh;
+}
+
+/* Cabecera */
+.ai-icon-circle {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.ai-main-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 800;
+  font-size: 2.2rem;
+  color: #1a1a1a;
+}
+
+/* La Card del Chat */
+.ai-chat-card {
+  background: #ffffff;
+  border-radius: 35px !important;
+  overflow: hidden;
+}
+
 .chat-container {
-  height: 70vh;
+  height: 550px;
   overflow-y: auto;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  padding: 20px;
-  border: 1px solid #dee2e6;
-}
-
-/* Scrollbar personalizada */
-.chat-container::-webkit-scrollbar {
-  width: 6px;
-}
-.chat-container::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 4px;
-}
-
-.message-bubble {
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 15px;
-  margin-bottom: 10px;
-  position: relative;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
-.message-user {
-  background-color: #6f42c1; /* Un color violeta/uva acorde al tema vinos */
-  color: white;
-  margin-left: auto; /* Alinea a la derecha */
-  border-bottom-right-radius: 2px;
-}
-
-.message-ai {
+  padding: 30px;
   background-color: #ffffff;
-  color: #333;
-  margin-right: auto; /* Alinea a la izquierda */
-  border-bottom-left-radius: 2px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  border: 1px solid #e9ecef;
 }
 
-.typing-indicator span {
-  display: inline-block;
+/* Filas y Burbujas */
+.message-row {
+  display: flex;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.user-row { justify-content: flex-end; }
+.ai-row { justify-content: flex-start; }
+
+.message-bubble-premium {
+  max-width: 85%;
+  padding: 14px 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.bubble-user {
+  background-color: #9e4758; /* Tu color vino */
+  color: white;
+  border-radius: 24px 24px 4px 24px;
+}
+
+.bubble-ai {
+  background-color: #f5f5f7; /* Gris Apple */
+  color: #1d1d1f;
+  border-radius: 24px 24px 24px 4px;
+}
+
+/* Recomendaciones de Vinos dentro del Chat */
+.ai-recommendations-grid {
+  margin-top: 15px;
+  display: grid;
+  gap: 10px;
+}
+
+.ai-wine-card {
+  background: white;
+  padding: 12px;
+  border-radius: 15px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.ai-wine-name {
+  display: block;
+  font-weight: 700;
+  color: #9e4758;
+  margin-bottom: 4px;
+}
+
+.ai-wine-reason {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Input Area */
+.input-area-premium {
+  padding: 20px 30px 30px;
+  background: white;
+}
+
+.premium-input-group {
+  background: #f5f5f7;
+  border-radius: 30px;
+  padding: 8px 10px 8px 20px;
+}
+
+.premium-input-group input {
+  background: transparent !important;
+  font-size: 1rem;
+}
+
+.premium-send-btn {
+  background-color: #9e4758 !important;
+  border: none !important;
+  width: 45px;
+  height: 45px;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.premium-send-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Typing Indicator */
+.typing-box {
+  display: flex;
+  gap: 5px;
+  width: fit-content;
+}
+
+.typing-dot {
   width: 6px;
   height: 6px;
-  background-color: #6f42c1;
+  background: #9e4758;
   border-radius: 50%;
-  animation: typing 1.4s infinite ease-in-out both;
-  margin: 0 2px;
+  animation: bounce 1.4s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
-@keyframes typing {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
-}
-
-.wine-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-}
-
-.wine-item {
-  background: #fdfdfd;
-  border-left: 3px solid #6f42c1;
-  padding: 8px;
-  margin-bottom: 5px;
-  font-size: 0.9em;
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
 }

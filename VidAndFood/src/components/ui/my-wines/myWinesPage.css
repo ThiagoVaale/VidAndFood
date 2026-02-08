@@ -5,12 +5,12 @@
   gap: 1.5rem;
   border-bottom: 1px solid #eee0c9;
   padding-bottom: 0.75rem;
+  padding-top: 5rem;
 }
 
 .mywines-summary {
   font-size: 0.9rem;
   color: #777;
-  font-family: "playfair", serif;
 }
 
 .mywines-list {

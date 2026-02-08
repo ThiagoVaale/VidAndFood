@@ -8,6 +8,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px 20px 60px;
+  padding-top: 5rem;
 }
 
 .wine-detail-header {
@@ -38,13 +39,13 @@
 }
 
 .wine-detail-title {
-  font-family: "Playfair Display", serif;
-  font-size: 1.4rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #555;
   margin: 0;
 }
 
 .wine-detail-subtitle {
-  font-family: "Playfair Display", serif;
   font-size: 2.1rem;
   font-weight: 700;
   margin: 4px 0 8px;
@@ -67,6 +68,7 @@
 /* Rating */
 .wine-detail-rating {
   margin-top: 8px;
+  padding-bottom: 12px;
 }
 
 .wine-detail-rating-left {
@@ -87,11 +89,6 @@
 
 .wine-detail-price-card {
   flex: 0 0 280px;
-  background-color: #ffffff;
-  border-radius: 18px;
-  padding: 20px 24px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-  align-self: center;       
 }
 
 .wine-detail-price-label {
@@ -103,7 +100,7 @@
 .wine-detail-price-amount {
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .wine-detail-price-note {
@@ -117,7 +114,6 @@
 }
 
 .wine-detail-section-title {
-  font-family: "Playfair Display", serif;
   font-size: 1.4rem;
   margin-bottom: 16px;
 }
@@ -179,7 +175,6 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-family: "Playfair Display", serif;
   font-size: 1rem;
   color: #333;
   border-radius: 6px;

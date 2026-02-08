@@ -1,3 +1,4 @@
+import React from "react";
 import { Star, StarFill, StarHalf } from "react-bootstrap-icons";
 
 interface StarRatingProps {
@@ -8,23 +9,59 @@ interface StarRatingProps {
   showValue?: boolean;
   layout?: "vertical" | "horizontal";
   mode?: "default" | "filter"; 
+  // Nueva prop para comunicar el cambio al padre
+  onRatingChange?: (newRating: number) => void;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({
   rating,
   maxStars = 5,
   color = "#a52a2a",
-  size = "1rem",
+  size = "1.2rem", // Un poco más grande para facilitar el click
   showValue = false,
   layout = "horizontal",
   mode = "default",
+  onRatingChange,
 }) => {
-   const stars = Array.from({ length: maxStars }, (_, i) => {
-    if (mode === "filter") {
-      return i < rating ? <StarFill key={i} color={color} size={size} /> : <Star key={i} color={color} size={size} />;
+
+  const handleStarClick = (index: number) => {
+    // Si no me pasaron la función, no hago nada (modo solo lectura)
+    if (!onRatingChange) return;
+
+    const newValue = index + 1;
+    // Si toco la misma estrella que ya está seleccionada, deselecciono (envío 0)
+    if (newValue === rating) {
+      onRatingChange(0);
     } else {
+      onRatingChange(newValue);
+    }
+  };
+
+  const cursorStyle = onRatingChange ? { cursor: "pointer" } : { cursor: "default" };
+
+  const stars = Array.from({ length: maxStars }, (_, i) => {
+    // LÓGICA DE FILTRO (Interactivo)
+    if (mode === "filter") {
+      // Usamos Math.floor para pintar enteros (si rating es 4.3, pinta 4)
+      const isFilled = i < Math.floor(rating);
+      
+      const Icon = isFilled ? StarFill : Star;
+      
+      return (
+        <Icon
+          key={i}
+          color={color}
+          size={size}
+          style={cursorStyle}
+          onClick={() => handleStarClick(i)}
+        />
+      );
+    } 
+    // LÓGICA DEFAULT (Solo lectura con decimales)
+    else {
       const fullStars = Math.floor(rating);
       const hasHalfStar = rating % 1 >= 0.5;
+
       if (i < fullStars) return <StarFill key={i} color={color} size={size} />;
       if (i === fullStars && hasHalfStar) return <StarHalf key={i} color={color} size={size} />;
       return <Star key={i} color={color} size={size} />;
@@ -38,32 +75,13 @@ const StarRating: React.FC<StarRatingProps> = ({
           ? "flex-column align-items-center"
           : "flex-row align-items-center"
       }`}
+      style={{ gap: "4px" }}
     >
-      {showValue && layout === "vertical" && (
-        <span
-          style={{
-            fontSize: "2rem",
-            fontWeight: "700",
-            color: "#2c3e50",
-            marginBottom: "4px",
-          }}
-        >
-          {rating.toFixed(1)}
-        </span>
-      )}
-
       <div className="d-flex">{stars}</div>
-
-      {showValue && layout === "horizontal" && (
-        <span
-          style={{
-            marginLeft: "8px",
-            fontSize: "0.9rem",
-            fontWeight: "600",
-            color: "#2c3e50",
-          }}
-        >
-          {rating.toFixed(1)}
+      
+      {showValue && (
+        <span className="ms-2 fw-bold text-muted" style={{ fontSize: "0.9rem" }}>
+          {rating > 0 ? `${rating.toFixed(1)}+` : ""}
         </span>
       )}
     </div>

@@ -1,94 +1,309 @@
-.wine-card {
-  border-radius: 10px;
-  background: #fff;
-  overflow: visible;
-  margin-top: 20px;
-  position: relative;
-  padding-top: 20px;
-  transition: all 0.2s ease;
-  box-shadow: 0 20px 20px #a52a2a;
-}
+/* =========================================
+   ESTILOS PREMIUM (Vid & Food) - FINAL
+   ========================================= */
 
-.wine-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 8px 20px #a52a2a;
-}
-
-.wine-img-floating {
-  position: absolute;
-  top: 120px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  max-height: 500px;
-  z-index: 2;
-  transition: transform 0.3s ease;
-  object-fit: contain;
-}
-
-.wine-card:hover .wine-img-floating {
-  transform: translateX(-50%) scale(1.1);
-}
-
-
-.wine-card-vertical {
-  min-height: 300px;
-  border-radius: 12px;
-  background: #fff;
+.vf-card {
+  background-color: #ffffff;
+  border-radius: 30px; /* Bordes muy curvos estilo iPhone */
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 8px 20px rgba(165, 42, 42, 0.12);
-}
-.wine-card-vertical:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(165, 42, 42, 0.2);
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  height: 550px; /* Altura fija importante para que todas sean iguales */
+  display: flex;
+  flex-direction: column; /* Apila imagen arriba, texto abajo */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0,0,0,0.02);
+  cursor: pointer;
+  margin: 10px; 
 }
 
-.wine-img-vertical {
-  display: block;
+.vf-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(158, 71, 88, 0.12); /* Sombra con tinte de vino */
+}
+
+/* --- 1. SECCIÓN SUPERIOR: IMAGEN (60%) --- */
+.vf-card__media {
+  height: 60%; 
   width: 100%;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  background-color: #f6f6f8; 
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centramos para que el cover funcione mejor */
+  position: relative;
+  padding: 0; /* IMPORTANTE: Eliminamos el padding para que la imagen toque los bordes */
+  overflow: hidden;
 }
 
-.wine-body {
-  padding: 8px 10px 10px;
+.vf-card__img {
+  width: 100%; /* Forzamos ancho completo */
+  height: 100%; /* Forzamos alto completo */
+  max-width: none; /* Quitamos restricciones */
+  
+  /* CLAVE: 'cover' hace que la imagen llene todo el espacio, recortando lo que sobra.
+     Si prefieres que se vea la botella entera sí o sí pero gigante, usa 'contain' con scale,
+     pero 'cover' es lo que da el efecto de "llenar el cuadro" */
+  object-fit: cover; 
+  object-position: center bottom; /* Enfocamos desde abajo para no cortar la base de la botella */
+  
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
 }
 
-.wine-title {
+.vf-card:hover .vf-card__img {
+  transform: scale(1.08) translateY(-5px); /* Zoom y leve subida */
+}
+
+/* Badge 'Featured' / 'Destacado' */
+.vf-card__badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #151515;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* --- 2. SECCIÓN INFERIOR: TEXTO (40%) --- */
+.vf-card__body {
+  height: 40%; /* El resto del espacio */
+  padding: 25px 30px; /* Buen espaciado interno */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribuye info arriba y precio abajo */
+  background-color: #ffffff;
+}
+
+.vf-card__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.vf-card__winery {
+  color: #9e4758; /* Tu color de marca */
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.vf-card__title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.4rem; /* Título grande */
+  font-weight: 700;
+  color: #1d1d1f;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  
+  /* Cortar texto con puntos suspensivos si es muy largo */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vf-card__subtitle {
+  color: #86868b;
   font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: #222;
-}
-.wine-subtitle {
-  font-size: 0.8rem;
-  color: #9b6b7a;
-  line-height: 1.2;
-  margin: 0;
+  font-weight: 500;
 }
 
-.wine-meta {
-  margin-top: 4px;
+/* Footer: Precio y Rating */
+.vf-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Empuja esto al fondo */
+  padding-top: 15px;
+  border-top: 1px solid #f5f5f5;
+}
+
+.vf-card__rating {
   display: flex;
   align-items: center;
-  gap: 4px;
+  background-color: #1d1d1f; /* Pill negra */
+  padding: 5px 12px;
+  border-radius: 12px;
+  gap: 5px;
 }
-.wine-rating-number {
+
+.vf-card__star {
+  color: #fff;
   font-size: 0.8rem;
-  color: #9b6b7a;
-  font-weight: 600;
 }
 
-.wine-rating-count {
-  font-size: 0.75rem;
-  color: #6c757d;
-}
-
-.wine-price-amount {
+.vf-card__ratingVal {
+  font-weight: 700;
+  color: #fff;
   font-size: 0.9rem;
+}
+
+.vf-card__ratingQty {
+  font-size: 0.75rem;
+  color: #ccc;
+  margin-left: 2px;
+}
+
+.vf-card__price {
+  color: #1d1d1f;
+}
+
+.vf-card__priceValue {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+/* --- TARJETA HORIZONTAL PREMIUM --- */
+.wine-card-wide {
+  display: flex;
+  background: #ffffff;
+  border-radius: 20px; /* Bordes suaves */
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  height: 240px; /* Altura fija para que se vea imponente */
+  border: 1px solid rgba(0,0,0,0.02);
+  width: 100%;
+}
+
+.wine-card-wide:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(158, 71, 88, 0.1); /* Sombra color vino */
+}
+
+/* 1. Columna Imagen (Izquierda) */
+.wide-img-wrapper {
+  flex: 0 0 220px; /* Ancho fijo para la imagen */
+  background-color: #f7f7f9; /* Fondo gris estilo Apple */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+.wide-img {
+  max-height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); /* Sombra de botella */
+  transition: transform 0.4s ease;
+}
+
+.wine-card-wide:hover .wide-img {
+  transform: scale(1.1); /* Pequeño zoom al pasar el mouse */
+}
+
+/* 2. Columna Info (Centro) */
+.wide-content {
+  flex: 1; /* Ocupa el espacio sobrante */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid #f9f9f9; /* Separador sutil */
+}
+
+.wide-winery {
+  color: #9e4758;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.wide-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  line-height: 1.1;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.wide-details {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.wide-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.wide-tag {
+  background: #f0f0f0;
+  color: #555;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #2c3e50;
+}
+
+/* 3. Columna Precio/Acción (Derecha) */
+.wide-actions {
+  flex: 0 0 200px; /* Ancho fijo para el precio */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end; /* Alineado a la derecha */
+  text-align: right;
+  background-color: #fff;
+}
+
+.wide-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+}
+
+.wide-rating-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  background: #fff9e6;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.wide-rating-val {
+  font-weight: 700;
+  color: #b45309;
+}
+
+/* Responsive: En movil se apila */
+@media (max-width: 768px) {
+  .wine-card-wide {
+    flex-direction: column;
+    height: auto;
+  }
+  .wide-img-wrapper {
+    height: 250px;
+    width: 100%;
+  }
+  .wide-content {
+    border-right: none;
+    border-bottom: 1px solid #f9f9f9;
+  }
+  .wide-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+  }
 }

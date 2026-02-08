@@ -5,7 +5,7 @@ import "./CustomNavBar.css";
 
 const CustomNavbar = () => {
   const pages = [
-    { name: "Home", href: "/home" },
+   
     { name: "Wines", href: "/wines" },
     { name: "Sommelier AI", href: "/sommelier-ai" },
   ];

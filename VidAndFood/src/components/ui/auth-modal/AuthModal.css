@@ -1,6 +1,7 @@
 .auth-modal-dialog {
   max-width: 900px;
-  width: 1100px
+  width: 1100px;
+  z-index: 500;
 }
 
 .auth-modal-content {
@@ -42,7 +43,6 @@
 }
 
 .auth-modal-header-text {
-  font-family: "Playfair Display", serif;
   font-size: 1.6rem;
   margin-bottom: 24px;
 }
@@ -128,4 +128,18 @@
   .auth-modal-left {
     height: 180px;
   }
+}
+
+/* --- NUEVA CLASE PARA EL BACKDROP (FONDO OSCURO) --- */
+.auth-modal-backdrop {
+  /* Fondo negro con 30% de opacidad */
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  
+  /* Efecto de desenfoque de 8px */
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  
+  /* Sobrescribimos la opacidad default de Bootstrap (que suele ser 0.5) 
+     para que nuestra opacidad del background-color se vea correcta */
+  opacity: 1 !important; 
 }

@@ -16,7 +16,7 @@
 .custom-nav-items {
   display: flex;
   align-items: center;
-  gap: 4rem;
+  gap: 2rem;
 }
 
 
@@ -62,7 +62,6 @@
 
 .profile-container {
   margin-left: 2rem;
-  font-family: "playfair";
 }
 .navbar-inner {
   width: 100%;

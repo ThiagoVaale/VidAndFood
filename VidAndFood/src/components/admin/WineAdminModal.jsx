@@ -271,7 +271,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                   name="description"
                   value={addWine.description}
                   onChange={handleCreateWine}
-                  placeholder="Descripción del vino"
+                  placeholder="Description of wine"
                   disabled={saving}
                 />
               </Col>
@@ -286,7 +286,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                   name="imageUrl"
                   value={addWine.imageUrl}
                   onChange={handleCreateWine}
-                  placeholder="URL de imagen"
+                  placeholder="URL de image"
                   disabled={saving}
                 />
               </Col>
@@ -298,7 +298,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                   options={grapeOptions}
                   value={selectedGrapes}
                   onChange={(opts) => setSelectedGrapes(opts ?? [])}
-                  placeholder="Seleccionar uvas..."
+                  placeholder="Select Grape..."
                   isDisabled={saving}
                   closeMenuOnSelect={false}
                 />

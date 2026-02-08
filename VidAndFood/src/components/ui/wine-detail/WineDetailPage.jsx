@@ -227,7 +227,18 @@ const WineDetailPage = () => {
                     maxStars={5}
                   />
                 </div>
+               
               </div>
+               <div className="wine-detail-price-card">
+                  <div className="wine-detail-price-amount">
+                    {wine.wine.price
+                      ? `$ ${wine.wine.price.toLocaleString()}`
+                      : "No disponible"}
+                  </div>
+                  <p className="wine-detail-price-note">
+                    Estimated price according to affiliated stores.
+                  </p>
+                </div>
 
               <div className="wine-detail-actions">
                 {canUseFavorites && (
@@ -248,17 +259,6 @@ const WineDetailPage = () => {
               </div>
             </div>
 
-            <aside className="wine-detail-price-card">
-              <div className="wine-detail-price-label">Price</div>
-              <div className="wine-detail-price-amount">
-                {wine.wine.price
-                  ? `$ ${wine.wine.price.toLocaleString()}`
-                  : "No disponible"}
-              </div>
-              <p className="wine-detail-price-note">
-                Estimated price according to affiliated stores.
-              </p>
-            </aside>
           </section>
 
           <section className="wine-detail-section">
@@ -291,14 +291,14 @@ const WineDetailPage = () => {
                 </div>
               </div>
 
-               <div className="wine-detail-row">
+              <div className="wine-detail-row">
                 <div className="wine-detail-row-label">Flavor notes</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.notesTaste || "Sin especificar"}
                 </div>
               </div>
 
-               <div className="wine-detail-row">
+              <div className="wine-detail-row">
                 <div className="wine-detail-row-label">Scent</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.aroma || "Sin especificar"}

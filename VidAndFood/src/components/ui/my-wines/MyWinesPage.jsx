@@ -53,7 +53,6 @@ const MyWinesPage = () => {
             <div>
               <h1
                 style={{
-                  fontFamily: "playfair",
                   fontSize: "2rem",
                   marginBottom: "0.5rem",
                 }}
@@ -96,7 +95,6 @@ const MyWinesPage = () => {
               </div>
               <h2
                 style={{
-                  fontFamily: "playfair",
                   fontSize: "1.6rem",
                   marginBottom: "0.5rem",
                 }}

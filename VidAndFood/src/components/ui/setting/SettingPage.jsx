@@ -100,7 +100,7 @@ const SettingPage = () => {
             </p>
           </header>
 
-          <div className="settings-card shadow-sm p-4 mx-auto">
+          <div className="settings-card shadow-sm p-4 ">
             <form>
               <label className="form-label mt-3">Email</label>
               <input
@@ -122,7 +122,7 @@ const SettingPage = () => {
               />
 
               <label className="form-label mt-4">Subscription</label>
-              <div className="membership-group mx-2">
+              <div className="membership-group mx-2"/>
                 {membershipPlans.map((plan) => {
                   const isSelected = accountForm.membership === plan; 
                   const isCurrent = currentRole === plan; 
@@ -154,7 +154,6 @@ const SettingPage = () => {
                     </button>
                   );
                 })}
-              </div>
 
               <div className="text-muted small mb-3">
                 The type of membership defines benefits such as extended history, favorites, creating a wine if it is not available, and advanced recommendations with a chatbot.

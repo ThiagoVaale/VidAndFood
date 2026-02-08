@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row } from "react-bootstrap";
-import { ChatDots } from "react-bootstrap-icons";
+import { Card, Col } from "react-bootstrap";
 import StarRating from "../../../common/StarsRating";
 import "./cardHome.css";
 import COLORS from "../../../../utils/colors";
@@ -13,9 +12,11 @@ const optimizeCloudinaryUrl = (url) => {
     url.includes("cloudinary.com") &&
     url.includes("/upload/")
   ) {
+    // Nota: este transform está más orientado a "cover".
+    // Para botella (contain) el "stage" del carrusel lo arregla visualmente.
     return url.replace(
       "/upload/",
-      "/upload/c_fill,w_800,h_600,q_auto:best,f_auto/",
+      "/upload/c_fill,w_800,h_600,q_auto:best,f_auto/"
     );
   }
 
@@ -44,10 +45,19 @@ const CardHome = ({
     setImgSrc(optimizeCloudinaryUrl(img));
   }, [img]);
 
+  // helpers
+  const handleKeyDown = (e) => {
+    if (!onClick) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <>
       {isHorizontal ? (
-        <Col lg={12} md={12} sm={12} xs={12} className="mb-4">
+        <Col lg={18} md={12} sm={12} xs={12} className="mb-2">
           <Card
             className="wine-card shadow-sm border-0 p-3"
             onClick={onClick}
@@ -84,12 +94,14 @@ const CardHome = ({
                     >
                       {nombre}
                     </h5>
+
                     <p
                       className="wine-subtitle mb-2 text-muted"
                       style={{ fontSize: "0.9rem", marginBottom: "8px" }}
                     >
                       {bodega} {anio_cosecha} {variedad_uva}
                     </p>
+
                     <div className="d-flex align-items-center mb-2">
                       <span className="me-2"></span>
                       <span style={{ fontSize: "0.85rem", color: "#6c757d" }}>
@@ -121,7 +133,11 @@ const CardHome = ({
                         }
                       >
                         <span style={{ fontSize: "0.95rem" }}>★</span>
-                        <span>{bestReview ? Number(bestReview.score).toFixed(1) : "-"}</span>
+                        <span>
+                          {bestReview
+                            ? Number(bestReview.score).toFixed(1)
+                            : "-"}
+                        </span>
                       </div>
 
                       <div style={{ minWidth: 0 }}>
@@ -171,10 +187,12 @@ const CardHome = ({
                         maxStars={5}
                       />
                       <div style={{ fontSize: "0.75rem", color: "#6c757d" }}>
-                        {" "}
-                        {`${valoraciones} ${valoraciones > 1 ? "assessments" : "assessment"}`}{" "}
+                        {`${valoraciones} ${
+                          valoraciones > 1 ? "assessments" : "assessment"
+                        }`}
                       </div>
                     </div>
+
                     <div className="price-section mt-4">
                       <div
                         className="precio-amount"
@@ -196,105 +214,54 @@ const CardHome = ({
             </div>
           </Card>
         </Col>
-      ) : (
-        <Col xs={12} sm={6} md={4} lg={3} className="mb-5 d-flex">
-          <Card
-            className="flex-fill border-0"
-            onClick={onClick}
-            style={{
-              cursor: onClick ? "pointer" : "default",
-              backgroundColor: "transparent",
-            }}
-          >
-            <div className="ratio ratio-4x3 overflow-hidden position-relative mb-3 shadow-sm rounded-4">
-              <Card.Img
-                src={imgSrc || "https://via.placeholder.com/400x300"}
-                alt={nombre || "Vino"}
-                className="w-100 h-100 object-fit-cover"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  if (imgSrc !== img) setImgSrc(img);
-                }}
-                style={{ transition: "transform 0.5s ease" }}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
-              />
+     ) : (
+        /* ========= CARRUSEL PREMIUM (VERTICAL) ========= */
+        <div
+          className="vf-card"
+          onClick={onClick}
+          role="button"
+          tabIndex={0}
+        >
+          {/* 1. SECCIÓN IMAGEN (Fondo Gris) */}
+          <div className="vf-card__media">
+            <div className="vf-card__badge">FEATURED</div>
+            <img
+              src={imgSrc}
+              alt={nombre || "Vino"}
+              className="vf-card__img"
+              loading="lazy"
+              onError={() => setImgSrc("https://via.placeholder.com/600x800?text=Vino")}
+            />
+          </div>
+
+          {/* 2. SECCIÓN TEXTO (Fondo Blanco) */}
+          <div className="vf-card__body">
+            <div className="vf-card__text">
+              <span className="vf-card__winery">{bodega || "Bodega"}</span>
+              <h3 className="vf-card__title" title={nombre}>
+                {nombre} {anio_cosecha}
+              </h3>
+              <p className="vf-card__subtitle">
+                {region ? `${region} • ` : ""}{variedad_uva}
+              </p>
             </div>
 
-            <Card.Body className="p-0 d-flex flex-column">
-              <div className="mb-2">
-                <h6
-                  className="mb-1 text-truncate"
-                  title={nombre}
-                  style={{
-                    fontWeight: "700",
-                    color: "#1a1a1a",
-                    fontSize: "1.05rem",
-                    fontFamily:
-                      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                  }}
-                >
-                  {nombre}
-                </h6>
-
-                <div
-                  className="text-truncate mb-1"
-                  style={{
-                    color: "#9e4758",
-                    fontSize: "0.9rem",
-                    fontWeight: "600",
-                  }}
-                >
-                  {bodega}, {anio_cosecha}
-                </div>
-
-                <div
-                  className="text-truncate text-muted"
-                  style={{ fontSize: "0.85rem" }}
-                >
-                  {variedad_uva}
-                </div>
+            <div className="vf-card__footer">
+              <div className="vf-card__rating">
+                <span className="vf-card__star">★</span>
+                <span className="vf-card__ratingVal">{safeRating.toFixed(1)}</span>
+                <span className="vf-card__ratingQty">({valoraciones || 0})</span>
               </div>
 
-              <div className="d-flex align-items-center justify-content-between mt-auto pt-2">
-                <div className="d-flex align-items-center">
-                  <span
-                    className="me-1"
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "0.9rem",
-                      color: "#333",
-                    }}
-                  >
-                    {safeRating.toFixed(1)}
-                  </span>
-                  <StarRating
-                    rating={safeRating}
-                    size="14px"
-                    color="#a52a2a"
-                    maxStars={1}
-                  />
-                </div>
-
-                {precio && (
-                  <span
-                    style={{
-                      fontSize: "1rem",
-                      fontWeight: "700",
-                      color: "#2c3e50",
-                    }}
-                  >
-                    ${precio.toLocaleString()}
-                  </span>
-                )}
+              {/* Precio grande */}
+              <div className="vf-card__price">
+                <span className="vf-card__priceValue">
+                  ${Number(precio || 0).toLocaleString("es-AR")}
+                </span>
               </div>
-            </Card.Body>
-          </Card>
-        </Col>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

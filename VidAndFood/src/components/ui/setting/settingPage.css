@@ -1,7 +1,7 @@
 .settings-page-wrapper {
   background-color: #fdf9f2ff;
   min-height: 100vh;
-  padding-top: 5rem;
+  padding-top: 10rem;
 }
 
 .header-setting {
@@ -9,7 +9,6 @@
 }
 
 .settings-title {
-  font-family: "Playfair Display", serif;
   font-size: 2rem;
   margin-bottom: 0.25rem;
 }
@@ -20,7 +19,7 @@
 }
 
 .settings-card {
-  max-width: 760px;
+  max-width: 14000px;
   border-radius: 18px;
   background: #fffdf8;
   border: 1px solid rgba(0, 0, 0, 0.04);
@@ -30,7 +29,6 @@
 }
 
 .section-title {
-  font-family: "Playfair Display", serif;
   font-size: 1.1rem;
 }
 
@@ -48,7 +46,6 @@
   border: 1px solid #ddd;
   background-color: #fff;
   color: #555;
-  font-family: "Playfair Display", serif;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
