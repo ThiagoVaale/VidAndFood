@@ -4,7 +4,7 @@ import StarRating from "../../common/StarsRating";
 import "./WineDetailPage.css";
 import { Bookmark } from "react-bootstrap-icons";
 import Footer from "../footer/Footer";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import WishListContext from "../../../services/context/wishListContext/WishListContext";
 import WineReview from "../wineReview/WineReview";
 import {
@@ -14,7 +14,6 @@ import {
 } from "../../../services/wineService";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
 import HistoryContext from "../../../services/context/historyContext/HistoryContext";
-import { addWineToHistory } from "../../../services/historyUserService";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import WineContext from "../../../services/context/winesContext/WinesContext";
 
@@ -24,25 +23,12 @@ const WineDetailPage = () => {
 
   const { isFavorite, toggleFavorite } = useContext(WishListContext);
   const { showResponse } = useContext(ResponseContext);
-  const { isInHistory, toggleHistoryLocal } = useContext(HistoryContext);
   const { user, isAuthenticated, openAuthModal } = useContext(AuthContext);
   const { wines } = useContext(WineContext);
 
   const [wine, setWine] = useState(null);
 
-  const historyTimeoutRef = useRef(null);
-  const historyFiredForWineRef = useRef(null);
-  const isInHistoryRef = useRef(isInHistory);
-  const toggleHistoryLocalRef = useRef(toggleHistoryLocal);
-  const showResponseRef = useRef(showResponse);
-
-  const role = user?.role || null;
-
-  const historyKey = (id) => `vf_history_fired_${String(id)}`;
-
-  const canUseHistory =
-    !!isAuthenticated &&
-    (role === "User" || role === "Sommelier" || role === "Admin");
+  const role = user?.role;
 
   const canUseFavorites =
     !!isAuthenticated && (role === "Sommelier" || role === "Admin");
@@ -57,68 +43,18 @@ const WineDetailPage = () => {
         console.error("Error al cargar el vino:", err);
       }
     };
+
     loadWineWithReview();
   }, [wineId, wines]);
 
   const reloadWine = async () => {
+    try{
     const wineReview = await fetchWineById(wineId);
     setWine(wineReview || null);
+    } catch (err) {
+      console.error("Error reloading the wine: ", err.message)
+    }
   };
-
-  useEffect(() => {
-    if (!canUseHistory) {
-      return;
-    }
-
-    const key = historyKey(wineId);
-
-    if (localStorage.getItem(key) === "1") return;
-
-    if (isInHistoryRef.current(wineId)) {
-      localStorage.setItem(key, "1");
-      return;
-    }
-
-    if (historyTimeoutRef.current) {
-      clearTimeout(historyTimeoutRef.current);
-      historyTimeoutRef.current = null;
-    }
-
-    historyTimeoutRef.current = setTimeout(async () => {
-      historyFiredForWineRef.current = String(wineId);
-
-      try {
-        await addWineToHistory(wineId);
-
-        historyFiredForWineRef.current = String(wineId);
-        localStorage.setItem(key, "1");
-
-        const alredyInHistory = isInHistoryRef.current(wineId);
-        if (!alredyInHistory) {
-          toggleHistoryLocalRef.current(wineId);
-        }
-
-        showResponseRef.current({
-          variant: "success",
-          title: "Agregado en tu historial.",
-          message: "Guardamos este vino en tu historial automaticamente.",
-        });
-      } catch (err) {
-        showResponseRef.current({
-          variant: "error",
-          title: "No se pudo agregar al historial",
-          message: err.message || "Intente nuevamente más tarde.",
-        });
-      }
-    }, 5000);
-
-    return () => {
-      if (historyTimeoutRef.current) {
-        clearTimeout(historyTimeoutRef.current);
-        historyTimeoutRef.current = null;
-      }
-    };
-  }, [wineId, canUseHistory]);
 
   if (!wine) {
     return (
@@ -126,8 +62,8 @@ const WineDetailPage = () => {
         <CustomNavBar />
         <div className="wine-detail-wrapper">
           <div className="wine-detail-main-container">
-            <p>No se encontró el vino seleccionado.</p>
-            <button onClick={() => navigate("/wines")}>Volver a Wines</button>
+            <p>No history available</p>
+            <button onClick={() => navigate("/wines")}>Back to Wines</button>
           </div>
         </div>
       </>
@@ -138,9 +74,10 @@ const WineDetailPage = () => {
     ? wine.wine.grapes.map((g) => g.name).join(", ")
     : "Sin especificar";
 
-  const favorite = isFavorite(wine.id);
+  const favorite = isFavorite(wine.wine.id);
 
   const handleToggleFavorite = async () => {
+    console.log("WINE de estado cargado por fetchs: ", wine)
     if (!isAuthenticated) {
       openAuthModal("login");
       return;
@@ -149,8 +86,8 @@ const WineDetailPage = () => {
     if (!canUseFavorites) {
       showResponse({
         variant: "error",
-        title: "Acción no permitida",
-        message: "Solo Sommeliers pueden gestionar la lista de deseos.",
+        title: "Action not allowed",
+        message: "Only Sommeliers can manage the wish list.",
       });
       return;
     }
@@ -159,28 +96,28 @@ const WineDetailPage = () => {
 
     try {
       if (wasFavorite) {
-        await deleteFavoriteWine(wine.id);
+        await deleteFavoriteWine(wine.wine.id);
       } else {
-        await toggleFavoriteWine(wine.id);
+        await toggleFavoriteWine(wine.wine.id);
       }
 
-      toggleFavorite(wine.id);
+      toggleFavorite(wine.wine.id);
 
       showResponse({
         variant: "success",
         message: wasFavorite
-          ? "Vino eliminado de favoritos"
-          : "Vino agregado a favoritos",
+          ? "Removed from favorites"
+          : "Wine added to favorites",
         title: wasFavorite
-          ? "Actualizamos tu lista"
-          : "Con Vid&Food todo es posible",
+          ? "We updated your list"
+          : "With Vid&Food, everything is possible",
       });
     } catch (err) {
       console.error("Error al actualizar favorito:", err.message);
       showResponse({
         variant: "error",
-        message: err.message || "No se pudo actualizar el estado de favoritos",
-        title: "Intente de nuevo",
+        message: err.message || "Could not update the favorites status",
+        title: "Try again",
       });
     }
   };
@@ -252,8 +189,8 @@ const WineDetailPage = () => {
                       style={{ color: favorite ? "#a52a2a" : undefined }}
                     />
                     {favorite
-                      ? "En tu lista de deseos"
-                      : "Añadir a la lista de deseos"}
+                      ? "In your wish list"
+                      : "Add to wishlist"}
                   </button>
                 )}
               </div>

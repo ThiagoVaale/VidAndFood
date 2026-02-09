@@ -6,8 +6,8 @@ import CustomNavbar from "../ui/nav-bar/CustomNavbar";
 import GenericSidebarFilter from "../../components/common/generic-sideBar-filter";
 import Wines from "../wines/Wines";
 import WineSearch from "../ui/wineSearch/WineSearch";
-import { useNavigate } from "react-router-dom";
 import "./winesPage.css";
+import useNavigateToWineDetail from "../../hooks/useNavigateToWineDetail";
 
 const slugify = (str) => {
   if (!str) return "";
@@ -83,7 +83,7 @@ const WinesPage = () => {
   const [filters, setFilters] = useState({});
   const [filtersConfig, setFiltersConfig] = useState(BASE_WINE_FILTERS);
 
-  const navigate = useNavigate();
+  const navigateToWineDetail = useNavigateToWineDetail();
 
   useEffect(() => {
     if (!winesLoaded && !isLoadingWines) {
@@ -115,17 +115,17 @@ const WinesPage = () => {
         regionSet.set(slug, { label: prev.label, count: prev.count + 1 });
       }
 
-      if (wine.grapeNames) {
-        const grapesArray = Array.isArray(wine.grapeNames)
-          ? wine.grapeNames
-          : wine.grapeNames.split(",");
-        grapesArray.forEach((g) => {
-          const trimmed = g.trim();
-          if (!trimmed) return;
-          const slug = slugify(trimmed);
-          const prev = grapeSet.get(slug) || { label: trimmed, count: 0 };
+      if (Array.isArray(wine.grapes) && wine.grapes.length > 0) {
+        wine.grapes.forEach((g) => {
+          const nameGrape = g.name.trim();
+          if(!nameGrape){
+            return;
+          }
+
+          const slug = slugify(nameGrape);
+          const prev = grapeSet.get(slug) || { label: nameGrape, count: 0 };
           grapeSet.set(slug, { label: prev.label, count: prev.count + 1 });
-        });
+        })
       }
     });
 
@@ -195,7 +195,7 @@ const WinesPage = () => {
   }, [wines, filters]);
 
   const handleSelectWine = (wine) => {
-    navigate(`/wines/${wine.id}`);
+    navigateToWineDetail(wine.id)
   };
 
   return (

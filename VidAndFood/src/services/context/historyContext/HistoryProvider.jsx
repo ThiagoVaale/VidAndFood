@@ -1,22 +1,25 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useContext } from "react";
 import HistoryContext from "./HistoryContext";
+import AuthContext from "../authContext/AuthContext";
 
 const HistoryProvider = ({ children }) => {
+  const { user, token } = useContext(AuthContext);
+
   const [historyIds, setHistoryIds] = useState([]);
 
-  const isInHistory = useCallback(
-    (wineId) => historyIds.includes(String(wineId)),
-    [historyIds]
-  );
+  useEffect(() => {
+    setHistoryIds([]);
+  }, [user?.id, token])
 
-  const toggleHistoryLocal = useCallback((wineId) => {
-    setHistoryIds((prev) => {
-      const id = String(wineId);
-      return prev.includes(id)
-        ? prev.filter((x) => x !== id)
-        : [...prev, id];
-    });
-  }, []);
+  const isInHistory = (wineId) => {
+    const id = String(wineId);
+    return historyIds.includes(id);
+  };
+
+   const toggleHistoryLocal = (wineId) => {
+    const id = String(wineId);
+    setHistoryIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  };
 
   return (
     <HistoryContext.Provider

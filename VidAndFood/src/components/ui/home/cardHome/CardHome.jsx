@@ -12,8 +12,6 @@ const optimizeCloudinaryUrl = (url) => {
     url.includes("cloudinary.com") &&
     url.includes("/upload/")
   ) {
-    // Nota: este transform está más orientado a "cover".
-    // Para botella (contain) el "stage" del carrusel lo arregla visualmente.
     return url.replace(
       "/upload/",
       "/upload/c_fill,w_800,h_600,q_auto:best,f_auto/"
@@ -45,14 +43,6 @@ const CardHome = ({
     setImgSrc(optimizeCloudinaryUrl(img));
   }, [img]);
 
-  // helpers
-  const handleKeyDown = (e) => {
-    if (!onClick) return;
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onClick();
-    }
-  };
 
   return (
     <>
@@ -101,9 +91,7 @@ const CardHome = ({
                     >
                       {bodega} {anio_cosecha} {variedad_uva}
                     </p>
-
-                    <div className="d-flex align-items-center mb-2">
-                      <span className="me-2"></span>
+                    <div className="d-flex justify-content-start align-items-start mb-2">
                       <span style={{ fontSize: "0.85rem", color: "#6c757d" }}>
                         {region}
                       </span>
@@ -215,14 +203,12 @@ const CardHome = ({
           </Card>
         </Col>
      ) : (
-        /* ========= CARRUSEL PREMIUM (VERTICAL) ========= */
         <div
           className="vf-card"
           onClick={onClick}
           role="button"
           tabIndex={0}
         >
-          {/* 1. SECCIÓN IMAGEN (Fondo Gris) */}
           <div className="vf-card__media">
             <div className="vf-card__badge">FEATURED</div>
             <img
@@ -234,7 +220,6 @@ const CardHome = ({
             />
           </div>
 
-          {/* 2. SECCIÓN TEXTO (Fondo Blanco) */}
           <div className="vf-card__body">
             <div className="vf-card__text">
               <span className="vf-card__winery">{bodega || "Bodega"}</span>
@@ -253,7 +238,6 @@ const CardHome = ({
                 <span className="vf-card__ratingQty">({valoraciones || 0})</span>
               </div>
 
-              {/* Precio grande */}
               <div className="vf-card__price">
                 <span className="vf-card__priceValue">
                   ${Number(precio || 0).toLocaleString("es-AR")}

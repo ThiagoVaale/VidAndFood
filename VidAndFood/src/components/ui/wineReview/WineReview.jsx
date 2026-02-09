@@ -21,21 +21,23 @@ const WineReview = ({
 }) => {
   const navigate = useNavigate();
 
-  const reviews = (wineReview ?? []).map((r) => ({
+  const reviews = (wineReview).map((r) => ({
     id: r.id,
     username: r.userName,
     rating: r.score,
     comment: r.review,
+    userId: r.userId,
     isSommelier: r.isSommelierReview,
     createdAt: r.createdAt,
   }));
-  
+
   const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const [newReview, setNewReview] = useState({
     rating: 5,
     comment: "",
   });
+
   const [isPublishing, setIsPublishing] = useState(false);
   const [openMenuForId, setOpenMenuForId] = useState(null);
 
@@ -76,7 +78,6 @@ const WineReview = ({
   };
 
   const handleSubmitReview = async () => {
-    console.log("HOLA HOLA");
     try {
       if (!newReview.comment.trim()) {
         showResponse({
@@ -235,6 +236,14 @@ const WineReview = ({
     }
   };
 
+  const userIdReview = user?.id;
+
+  const userReview = isAuthenticated && userIdReview
+    ? reviews.find((r) => String(r.userId) === String(userIdReview))
+    : null;
+
+  const hasReviewUser = Boolean(userReview);
+
   return (
     <div className="wine-reviews-container">
       <div className="wine-header">
@@ -246,7 +255,7 @@ const WineReview = ({
         </p>
       </div>
 
-      {isAuthenticated && (
+      {isAuthenticated && !hasReviewUser && (
         <div className="review-form-container">
           <h2 className="form-title">Write your review</h2>
           <div className="review-form">
@@ -296,6 +305,15 @@ const WineReview = ({
         </div>
       )}
 
+      {isAuthenticated && hasReviewUser && (
+        <div className="review-form-container">
+          <p style={{ color: "#666", margin: 0 }}>
+            You have already posted a review for this wine. You can edit or
+            delete it.
+          </p>
+        </div>
+      )}
+
       {!isAuthenticated && (
         <div className="auth-cta">
           <p className="auth-cta-text">
@@ -310,14 +328,13 @@ const WineReview = ({
       <div className="reviews-list">
         <h2 className="reviews-title">Reviews ({reviews.length})</h2>
         {reviews.map((review) => {
-
           console.log("REVIEWS: ", reviews);
           console.log("REVIEW: ", review);
-          
+
           const isMine =
             isAuthenticated &&
-            user.fullName &&
-            review.username === user.fullName;
+            userIdReview &&
+            String(review.userId) === String(userIdReview); 
 
           return (
             <article key={review.id} className="review-card">
@@ -335,7 +352,9 @@ const WineReview = ({
                 <div className="review-header-right">
                   <span className="username">
                     @{review.username}
-                    {review.isSommelier && <span className="sommelier-badge"> · Sommelier</span>}
+                    {review.isSommelier && (
+                      <span className="sommelier-badge"> · Sommelier</span>
+                    )}
                   </span>
 
                   {isMine && (
@@ -360,7 +379,7 @@ const WineReview = ({
                             onClick={() => handleEditMenuReview(review)}
                             role="menuitem"
                           >
-                            Editar
+                            Edit
                           </button>
 
                           <button
@@ -369,7 +388,7 @@ const WineReview = ({
                             onClick={() => handleDeleteMenuReview(review)}
                             role="menuitem"
                           >
-                            Eliminar
+                            Delete
                           </button>
                         </div>
                       )}
@@ -418,7 +437,7 @@ const WineReview = ({
                       onClick={handleCancelEdit}
                       disabled={isEditingSaving}
                     >
-                      Cancelar
+                      Cancel
                     </button>
 
                     <button
@@ -448,9 +467,9 @@ const WineReview = ({
       {deleteModalOpen && (
         <div className="modal-backdrop" onClick={handleCloseDeleteModal}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title">¿Eliminar reseña?</h3>
+            <h3 className="modal-title">¿Delete review?</h3>
             <p className="modal-text">
-              Esta acción no se puede deshacer. ¿Estás seguro?
+              This action cannot be undone. Are you sure?
             </p>
 
             <div className="modal-actions">
@@ -460,7 +479,7 @@ const WineReview = ({
                 onClick={handleCloseDeleteModal}
                 disabled={isDeleting}
               >
-                Cancelar
+                Cancel
               </button>
 
               <button
@@ -469,7 +488,7 @@ const WineReview = ({
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
               >
-                {isDeleting ? "Eliminando..." : "Eliminar"}
+                {isDeleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

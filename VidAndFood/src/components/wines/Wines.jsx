@@ -1,13 +1,18 @@
 import { Container, Row, Col } from "react-bootstrap";
 import CardHome from "../ui/home/cardHome/CardHome";
-import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import useNavigateToWineDetail from "../../hooks/useNavigateToWineDetail";
 
 const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
-  const navigate = useNavigate();
-
-  const handleClickWine = (wine) => {
-    navigate(`/wines/${wine.id}`);
-  };
+  const navigateToWineDetail = useNavigateToWineDetail();
+  
+   const handleClickWine = useCallback(
+    (wine) => {
+      if (!wine?.id) return;
+      navigateToWineDetail(wine.id);
+    },
+    [navigateToWineDetail]
+  );
 
   // Si no hay vinos, mostramos un mensaje amigable
   if (!wines || wines.length === 0) {

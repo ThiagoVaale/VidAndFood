@@ -7,14 +7,18 @@ import {
   upgradeAdminToSommelier,
 } from "../../services/roleServices";
 import ResponseContext from "../../services/context/responseContext/ResponseContext";
+import { Field } from "@headlessui/react";
 
 const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
   const isCreate = mode === "create";
   const isRole = mode === "role";
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    fullName: "",
+    rol: "User"
+  })
 
   const [saving, setSaving] = useState(false);
   const [localError, setLocalError] = useState(null);
@@ -27,9 +31,12 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
     setSaving(false);
 
     if (isCreate) {
-      setEmail("");
-      setPassword("");
-      setFullName("");
+      setForm({
+        email: "",
+        password: "",
+        fullName: "",
+        rol: "User"
+      });
     }
   }, [show, isCreate]);
 
@@ -42,11 +49,27 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
     return isSommelier ? "Downgrade a User" : "Upgrade a Sommelier";
   }, [user, isSommelier]);
 
+  const handleChange = (field) => (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: e.target.value
+    }));
+  }
+
   const handleCreate = async () => {
-    if (!email.trim()) return setLocalError("Email es obligatorio.");
-    if (!password || password.length < 6)
-      return setLocalError("Password mínimo 6 caracteres.");
-    if (!fullName.trim()) return setLocalError("Full name es obligatorio.");
+    const { email, password, fullName, rol } = form;
+
+    if (!form.email.trim()){
+      return setLocalError("Email is required.");
+    } 
+
+    if (!form.password || form.password.length < 6){
+      return setLocalError("Password must be at least 6 characters.");
+    }
+
+    if (!form.fullName.trim()){
+      return setLocalError("Full name is required.");
+    } 
 
     try {
       setSaving(true);
@@ -56,11 +79,12 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
         email: email.trim(),
         password,
         fullName: fullName.trim(),
+        rol
       });
       showResponse({
-        title: "Usuario creado",
+        title: "User created",
         variant: "success",
-        message: email.trim(),
+        message: form.email.trim(),
       });
       onClose();
       await onSuccess?.();
@@ -85,9 +109,9 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
 
       if (isAdmin) {
         showResponse({
-          title: "Acción no permitida",
+          title: "Action not allowed",
           variant: "error",
-          message: "No se puede modificar el rol de un usuario Admin.",
+          message: "You cannot change the role of an Admin user.",
         });
         return;
       }
@@ -95,16 +119,16 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
       if (isSommelier) {
         await downgradeAdminToUser(user.id, 1);
         showResponse({
-          title: "Rol actualizado",
+          title: "Role updated",
           variant: "success",
-          message: "Ahora es User",
+          message: "Now it's User",
         });
       } else {
         await upgradeAdminToSommelier(user.id, 2);
         showResponse({
-          title: "Rol actualizado",
+          title: "Role updated",
           variant: "success",
-          message: "Ahora es Sommelier",
+          message: "Now he/she is a Sommelier",
         });
       }
       onClose();
@@ -121,23 +145,11 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
     }
   };
 
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleChangeFullName = (e) => {
-    setFullName(e.target.value);
-  };
-
   return (
     <Modal show={show} onHide={saving ? undefined : onClose} centered>
       <Modal.Header closeButton={!saving}>
         <Modal.Title>
-          {isCreate ? "Alta de usuario" : "Cambiar rol de usuario"}
+          {isCreate ? "User registration" : "Change user role"}
         </Modal.Title>
       </Modal.Header>
 
@@ -150,8 +162,8 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                value={email}
-                onChange={handleChangeEmail}
+                value={form.email}
+                onChange={handleChange("email")}
                 disabled={saving}
                 placeholder="ej: user@mail.com"
               />
@@ -161,21 +173,45 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
-                value={password}
-                onChange={handleChangePassword}
+                value={form.password}
+                onChange={handleChange("password")}
                 disabled={saving}
-                placeholder="mínimo 6 caracteres"
+                placeholder="minimum 6 characters"
               />
             </Form.Group>
 
-            <Form.Group className="mb-2">
+            <Form.Group className="mb-3">
               <Form.Label>Full Name</Form.Label>
               <Form.Control
-                value={fullName}
-                onChange={handleChangeFullName}
+                value={form.fullName}
+                onChange={handleChange("fullName")}
                 disabled={saving}
                 placeholder="Ej: Thiago Vale"
               />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Role</Form.Label>
+              <div className="d-flex justify-content-center gap-4 mt-1">
+                <Form.Check
+                  type="radio"
+                  label="User"
+                  name="rol"
+                  value="User"
+                  checked={form.rol === "User"}
+                  onChange={handleChange("rol")}
+                  disabled={saving}
+                />
+                <Form.Check
+                  type="radio"
+                  label="Sommelier"
+                  name="rol"
+                  value="Sommelier"
+                  checked={form.rol === "Sommelier"}
+                  onChange={handleChange("rol")}
+                  disabled={saving}
+                />
+              </div>
             </Form.Group>
           </Form>
         )}
@@ -186,7 +222,7 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
               <strong>{user.fullName}</strong> — {user.email}
             </div>
             <div className="mb-3">
-              Rol actual:{" "}
+              Current rol:{" "}
               <Badge bg={isSommelier ? "warning" : "secondary"}>
                 {currentRole}
               </Badge>
@@ -194,12 +230,11 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
 
             {isAdmin ? (
               <Alert variant="warning" className="mb-0">
-                Este usuario es <strong>Admin</strong>. No se permite cambiar su
-                rol.
+                This user is <strong>Admin</strong>. Changing your role is not allowed.
               </Alert>
             ) : (
               <Alert variant="info" className="mb-0">
-                Esta acción cambiará el rol del usuario seleccionado.
+                This action will change the role of the selected user.
               </Alert>
             )}
           </div>
@@ -208,12 +243,12 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={saving}>
-          Cancelar
+          Cancel
         </Button>
 
         {isCreate ? (
           <Button variant="success" onClick={handleCreate} disabled={saving}>
-            {saving ? "Creando..." : "Crear"}
+            {saving ? "Creating..." : "Create"}
           </Button>
         ) : (
           <Button
@@ -222,9 +257,9 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
             disabled={saving || !user || isAdmin}
           >
             {saving
-              ? "Actualizando..."
+              ? "Updating..."
               : isAdmin
-                ? "No modificable(Admin)"
+                ? "Not modifiable(Admin)"
                 : roleActionLabel}
           </Button>
         )}

@@ -78,7 +78,7 @@ const ProfileMenu = ({ onLogout }) => {
         {isUserSommelier && !isUserAdmin && (
           <>
             <div className="premium-header px-3 py-2">
-              <span className="premium-question">Bienvenido Sommmelier!</span>
+              <span className="premium-question">Welcome Sommelier!</span>
             </div>
             
             <Dropdown.Divider />

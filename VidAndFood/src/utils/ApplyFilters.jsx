@@ -51,14 +51,15 @@ export default function applyFilters(wines, filters = {}) {
     if (Array.isArray(filters.grape) && filters.grape.length > 0) {
       const selectedGrapes = new Set(filters.grape);
 
-      let wineGrapes = [];
-      if (Array.isArray(wine.grapeNames)) {
-        wineGrapes = wine.grapeNames;
-      } else if (typeof wine.grapeNames === "string") {
-        wineGrapes = wine.grapeNames.split(","); 
-      }
+      let wineGrapesNames = [];
 
-      const grapeSlugs = wineGrapes.map((g) => slugify(g));
+      if (Array.isArray(wine.grapes) && wine.grapes.length > 0) {
+        wineGrapesNames = wine.grapes
+          .map((g) => g.name)
+          .filter(Boolean);
+      } 
+
+      const grapeSlugs = wineGrapesNames.map((g) => slugify(g));
       const hasAnySelected = grapeSlugs.some((g) => selectedGrapes.has(g));
 
       if (!hasAnySelected) {
