@@ -57,6 +57,7 @@ const SysAdminPage = () => {
         userName: r.userName,
         score: r.score,
         review: r.review,
+        isActive: r.isActive,
         isSommelierReview: r.isSommelierReview,
         createdAt: r.createdAt,
       })),
@@ -204,7 +205,8 @@ const SysAdminPage = () => {
           message: `The review for wine ${selectedRating.wineName} has been successfully deleted.`,
         });
 
-        await loadWines();
+        await reloadWines();
+        setSelectedRating(null);
         setShowConfirm(false);
       } catch (e) {
         showResponse({
@@ -266,7 +268,6 @@ const SysAdminPage = () => {
     },
    {
       header: "Grapes",
-      // CORRECCIÓN AQUÍ: Verificamos si es un array y lo mapeamos
       accessor: (w) => {
         if (Array.isArray(w.grapes) && w.grapes.length > 0) {
           return w.grapes.map(g => g.name).join(", ");
@@ -276,6 +277,11 @@ const SysAdminPage = () => {
       className: "admin-col-wide",
       style: { width: "20%" },
     },
+    {
+      header: "Active",
+      accessor: (w) => (w.isActive === true ? "Yes" : w.isActive === false ? "No" : "-"),
+      style: { width: "10%" }
+    }
   ];
 
   const ratingsColums = [
@@ -299,8 +305,13 @@ const SysAdminPage = () => {
       header: "Comment",
       accessor: (r) => r.review || "-",
       className: "admin-col-wide",
-      style: { width: "36%" },
+      style: { width: "35%" },
     },
+    {
+      header: "Active",
+      accessor: (r) => (r.isActive === true ? "Yes" : r.isActive === false ? "No" : "-"),
+      style: { width: "10%" }
+    }
   ];
 
   return (

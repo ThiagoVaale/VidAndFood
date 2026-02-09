@@ -44,6 +44,7 @@ const CardHome = ({
   }, [img]);
 
 
+
   return (
     <>
       {isHorizontal ? (

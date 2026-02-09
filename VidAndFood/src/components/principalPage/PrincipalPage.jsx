@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-// Importación de Swiper
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import { useNavigate } from "react-router-dom";
 import "./principalPage.css";
 import NewsletterBanner from "../banners/NewsletterBanner";
@@ -15,6 +14,8 @@ import Footer from "../ui/footer/Footer";
 import { fetchWinesFeatured } from "../../services/wineService";
 import ResponseContext from "../../services/context/responseContext/ResponseContext";
 import CardHome from "../ui/home/cardHome/CardHome";
+
+const MAX_SLIDERS = import.meta.env.VITE_MAX_SLIDES_PER_VIEW;
 
 const PrincipalPage = () => {
   const { showResponse } = useContext(ResponseContext);
@@ -31,7 +32,7 @@ const PrincipalPage = () => {
         showResponse({
           variant: "error",
           title: "Error",
-          message: err.message
+          message: err.message,
         });
       } finally {
         setLoading(false);
@@ -40,47 +41,58 @@ const PrincipalPage = () => {
     loadWinesFeatured();
   }, []);
 
+  const canLoop = winesFeatured.length >= MAX_SLIDERS * 2;
+
   return (
     <div className="root-style">
-      <main>       
+      <main>
         <section className="hero-intro py-5">
           <Container>
             <Row className="align-items-center gx-5">
               <Col lg={6} className="mb-5 mb-lg-0 order-lg-1">
                 <div className="hero-image-wrapper">
-                  <img 
-                    src="https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?q=80&w=1000&auto=format&fit=crop" 
-                    alt="Vid & Food Experience" 
+                  <img
+                    src="https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?q=80&w=1000&auto=format&fit=crop"
+                    alt="Vid & Food Experience"
                     className="hero-img"
                   />
                   <div className="hero-badge-floating">
-                    <span>Since 2025</span>
+                    <span>Since 2026</span>
                   </div>
                 </div>
               </Col>
-              
+
               <Col lg={6} className="order-lg-0">
                 <div className="hero-content ps-lg-4">
                   <span className="hero-eyebrow">WELCOME TO</span>
-                  <h1 className="display-4 fw-bold mb-4" style={{color: '#424242'}}>
-                    Vid & <span style={{color: '#1a3305'}}>Food</span>
+                  <h1
+                    className="display-4 fw-bold mb-4"
+                    style={{ color: "#424242" }}
+                  >
+                    Vid & <span style={{ color: "#1a3305" }}>Food</span>
                   </h1>
-                  <p className="lead text-muted mb-4" style={{fontSize: '1.1rem', lineHeight: '1.8'}}>
-                    We redefine the experience of enjoying wine. We are your digital bridge between the finest wineries and your table. 
-                    Combine tradition and technology with our <strong>Sommelier AI</strong> to find the perfect pairing in seconds.
+                  <p
+                    className="lead text-muted mb-4"
+                    style={{ fontSize: "1.1rem", lineHeight: "1.8" }}
+                  >
+                    We redefine the experience of enjoying wine. We are your
+                    digital bridge between the finest wineries and your table.
+                    Combine tradition and technology with our{" "}
+                    <strong>Sommelier AI</strong> to find the perfect pairing in
+                    seconds.
                   </p>
                   <div className="d-flex gap-3">
-                    <Button 
-                      variant="dark" 
+                    <Button
+                      variant="dark"
                       className="rounded-pill px-4 py-2"
-                      onClick={() => navigate('/sommelier-ai')}
+                      onClick={() => navigate("/sommelier-ai")}
                     >
                       Try AI
                     </Button>
-                    <Button 
-                      variant="outline-dark" 
+                    <Button
+                      variant="outline-dark"
                       className="rounded-pill px-4 py-2"
-                      onClick={() => navigate('/wines')}
+                      onClick={() => navigate("/wines")}
                     >
                       View Wines
                     </Button>
@@ -102,7 +114,6 @@ const PrincipalPage = () => {
           </div>
         </section>
 
-        {/* CARRUSEL DE VINOS */}
         <div className="home-content pb-5">
           <section className="home-wines-section">
             {loading ? (
@@ -114,14 +125,29 @@ const PrincipalPage = () => {
                 <Swiper
                   modules={[Autoplay, Pagination, Navigation]}
                   spaceBetween={50}
-                  slidesPerView={1} 
-                  centeredSlides={true}
-                  loop={true}
                   autoplay={{ delay: 4000, disableOnInteraction: false }}
                   pagination={{ clickable: true }}
+                  navigation
+                  watchOverflow={true}
                   breakpoints={{
-                    720: { slidesPerView: 2, centeredSlides: true },
-                    1024: { slidesPerView: 3, centeredSlides: true },
+                    0: {
+                      slidesPerView: 1,
+                      slidesPerGroup: 1,
+                      centeredSlides: true,
+                      loop: winesFeatured.length >= 2,
+                    },
+                    720: {
+                      slidesPerView: 2,
+                      slidesPerGroup: 2,
+                      centeredSlides: true,
+                      loop: winesFeatured.length >= 4,
+                    },
+                    1024: {
+                      slidesPerView: 3,
+                      slidesPerGroup: 3,
+                      centeredSlides: false, 
+                      loop: canLoop, 
+                    },
                   }}
                   className="pb-5 vf-swiper"
                 >
@@ -149,7 +175,7 @@ const PrincipalPage = () => {
           <div className="section-divider"></div>
           <MatchBanner />
           <div className="section-divider"></div>
-          
+
           <Footer />
         </div>
       </main>

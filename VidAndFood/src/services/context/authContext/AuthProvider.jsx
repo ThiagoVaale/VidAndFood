@@ -106,7 +106,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const registerRequest = async ({ email, password, fullName }) => {
-    await authService.registerRequest({ email, password, fullName })
+    await authService.registerRequest({ email, password, fullName })    
     
     const loginData = await authService.loginRequest({ email, password });
     const tokenValue = loginData.token;

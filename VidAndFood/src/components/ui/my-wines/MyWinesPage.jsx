@@ -45,7 +45,7 @@ const MyWinesPage = () => {
         style={{
           backgroundColor: "#fdf9f2ff",
           minHeight: "100vh",
-          paddingTop: "5rem",
+          paddingTop: "2rem",
         }}
       >
         <div className="container py-4">

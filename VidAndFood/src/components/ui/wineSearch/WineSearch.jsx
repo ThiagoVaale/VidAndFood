@@ -1,9 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./wineSearch.css";
+import AuthContext from "../../../services/context/authContext/AuthContext";
+import WineAdminModal from "../../admin/WineAdminModal";
 
-const WineSearch = ({ wines = [], onSelectWine }) => {
+
+const WineSearch = ({ wines = [], onSelectWine, onWineCreated }) => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+
+  const [showWineModal, setShowWineModal] = useState(false);
+  const [wineModalMode, setWineModalMode] = useState("create");
+  const [wineTarget, setWineTarget] = useState(null);
+
+  const { user } = useContext(AuthContext);
 
   const wrapRef = useRef(null);
 
@@ -50,6 +59,25 @@ const WineSearch = ({ wines = [], onSelectWine }) => {
     onSelectWine?.(wine);
   };
 
+  const userIsSommelier = user?.role === "Sommelier";
+
+   const handleOpenCreateWine = () => {
+    setOpen(false);
+    setWineModalMode("create");
+    setWineTarget(null);
+    setShowWineModal(true);
+  };
+
+  const handleCloseCreateWine = () => {
+    setShowWineModal(false);
+  };
+
+  const handleSuccessCreateWine = async () => {
+    await onWineCreated?.();
+    setSearch("");
+    setShowWineModal(false);
+  };
+
   return (
     <div className="wine-search" ref={wrapRef}>
       <input
@@ -63,7 +91,19 @@ const WineSearch = ({ wines = [], onSelectWine }) => {
       {open && (
         <div className="wine-search-dropdown">
           {filtered.length === 0 ? (
-            <div className="wine-search-empty">No se encontraron vinos</div>
+            <div className="wine-search-empty">
+              <div>No wines were found</div>
+
+              {userIsSommelier && (
+                <button
+                  type="button"
+                  className="wine-search-create-btn"
+                  onClick={handleOpenCreateWine}
+                >
+                  + Create wine
+                </button>
+              )}
+            </div>
           ) : (
             filtered.map((w) => (
               <button
@@ -83,6 +123,15 @@ const WineSearch = ({ wines = [], onSelectWine }) => {
           )}
         </div>
       )}
+
+      <WineAdminModal
+        show={showWineModal}
+        mode={wineModalMode}
+        wine={wineTarget}
+        onClose={handleCloseCreateWine}
+        onSuccess={handleSuccessCreateWine}
+      />
+
     </div>
   );
 };

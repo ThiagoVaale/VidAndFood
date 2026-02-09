@@ -1,13 +1,12 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Modal, Button, Form, Alert, Badge } from "react-bootstrap";
 
-import { registerRequest } from "../../services/authServices";
+import { registerRequestAdmin } from "../../services/authServices";
 import {
   downgradeAdminToUser,
   upgradeAdminToSommelier,
 } from "../../services/roleServices";
 import ResponseContext from "../../services/context/responseContext/ResponseContext";
-import { Field } from "@headlessui/react";
 
 const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
   const isCreate = mode === "create";
@@ -17,7 +16,7 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
     email: "",
     password: "",
     fullName: "",
-    rol: "User"
+    rol: "string"
   })
 
   const [saving, setSaving] = useState(false);
@@ -75,7 +74,7 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
       setSaving(true);
       setLocalError(null);
 
-      await registerRequest({
+      await registerRequestAdmin({
         email: email.trim(),
         password,
         fullName: fullName.trim(),

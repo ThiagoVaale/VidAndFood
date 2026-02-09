@@ -24,12 +24,13 @@ export async function loginRequest({ email, password }) {
   return handleResponse(res);
 }
 
-export async function registerRequest({ email, password, fullName, rol }) {
+export async function registerRequestAdmin({ email, password, fullName, rol }) {
   const token = localStorage.getItem(TOKEN_KEY);
 
   if (!token) {
     throw new Error("Usuario no autenticado");
   }
+
   const res = await fetch(`${API_BASE_URL}/User/register`, {
     method: "POST",
     headers: {
@@ -38,6 +39,16 @@ export async function registerRequest({ email, password, fullName, rol }) {
     },
     body: JSON.stringify({ email, password, fullName, rol }),
   });
+  return handleResponse(res);
+}
 
+export async function registerRequest({ email, password, fullName }) {
+  const res = await fetch(`${API_BASE_URL}/User/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password, fullName }),
+  });
   return handleResponse(res);
 }

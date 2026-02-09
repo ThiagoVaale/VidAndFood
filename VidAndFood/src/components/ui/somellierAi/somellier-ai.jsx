@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Container, Row, Col, Form, Button, InputGroup, Card } from "react-bootstrap";
 import { Send, Magic } from "react-bootstrap-icons"; 
 import "./somellier.css";
@@ -46,6 +46,7 @@ const SommelierAI = () => {
       };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
+      console.error(error)
       setMessages((prev) => [...prev, {
         id: Date.now(),
         sender: "ai",
@@ -65,16 +66,14 @@ return (
           <Row className="justify-content-center flex-grow-1 ai-main-row">
             <Col md={10} lg={7} className="d-flex flex-column py-4">
               
-              {/* Encabezado: Ahora con margen superior para no ser tapado */}
               <div className="ai-header-content text-center mb-3">
                  <div className="ai-icon-circle">
                     <Magic size={24} color="#9e4758" />
                  </div>
                  <h2 className="ai-main-title">Sommelier IA</h2>
-                 <p className="text-muted small">Personaliza tu experiencia gastronómica</p>
+                 <p className="text-muted small">Customize your dining experience</p>
               </div>
 
-              {/* Card de Chat con altura flexible pero controlada */}
               <Card className="ai-chat-card border-0 shadow-lg flex-grow-1">
                 <Card.Body className="d-flex flex-column p-0 overflow-hidden">
                   

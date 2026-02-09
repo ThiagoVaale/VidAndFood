@@ -41,7 +41,7 @@ const HistoryPage = () => {
         style={{
           backgroundColor: "#fdf9f2ff",
           minHeight: "100vh",
-          paddingTop: "10rem",
+          paddingTop: "2rem",
           
         }}
       >

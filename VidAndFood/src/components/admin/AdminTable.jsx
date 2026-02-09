@@ -38,17 +38,15 @@ const AdminTable = ({
   const isSelectable = typeof onRowSelect === "function";
 
   return (
-    <Card className="admin-card mb-5"> {/* Clase nueva */}
-      <Card.Body className="p-0"> {/* Padding 0 para que la tabla llegue al borde */}
+    <Card className="admin-card mb-5"> 
+      <Card.Body className="p-0"> 
         
-        {/* HEADER: Título y Acciones */}
         <div className="d-flex align-items-center justify-content-between p-4 pb-2">
           <h3 className="admin-title m-0">
             {title}
           </h3>
           {headerActions && (
             <div className="d-flex gap-2">
-                {/* Aquí inyectamos los botones con las clases nuevas si es necesario */}
                 {headerActions}
             </div>
           )}
@@ -96,7 +94,7 @@ const AdminTable = ({
                         key={id ?? rowIndex}
                         onClick={isSelectable ? () => onRowSelect(row) : undefined}
                         className="admin-table-row"
-                        data-selected={isSelected} // Usamos data attribute para el CSS
+                        data-selected={isSelected} 
                         style={{ cursor: isSelectable ? "pointer" : "default" }}
                       >
                         {columns.map((col, colIndex) => (
@@ -111,11 +109,10 @@ const AdminTable = ({
               </tbody>
             </Table>
 
-            {/* FOOTER: Paginación Minimalista */}
             {totalItems > 0 && (
               <div className="admin-pagination d-flex justify-content-between align-items-center">
                 <span className="pagination-text">
-                  Mostrando {startIndex + 1} - {Math.min(endIndex, totalItems)} de {totalItems}
+                  Showing {startIndex + 1} - {Math.min(endIndex, totalItems)} de {totalItems}
                 </span>
                 
                 <div>
@@ -124,14 +121,14 @@ const AdminTable = ({
                     disabled={currentPage === 1}
                     onClick={handlePrev}
                   >
-                    ← Anterior
+                    ← previous
                   </button>
                   <button
                     className="pagination-btn"
                     disabled={currentPage === totalPages}
                     onClick={handleNext}
                   >
-                    Siguiente →
+                    Next →
                   </button>
                 </div>
               </div>

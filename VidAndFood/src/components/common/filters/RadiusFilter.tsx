@@ -1,19 +1,18 @@
 import React from "react";
-import { RatingOption } from "../types/FilterTypes"; // Importa tus tipos
+import { RatingOption } from "../types/FilterTypes"; 
 import StarRating from "../StarsRating";
 
 interface RatingFilterProps {
-  options?: RatingOption[]; // No lo usamos visualmente en las estrellas, pero viene del padre
+  options?: RatingOption[]; 
   filterId: string;
-  value: number | null; // El valor actual seleccionado
-  onChange: (val: number) => void; // La función para actualizar el estado global
+  value: number | null; 
+  onChange: (val: number) => void; 
 }
 
 const RatingFilter: React.FC<RatingFilterProps> = ({
   value,
   onChange,
 }) => {
-  // Manejamos el cambio que viene desde StarRating
   const handleRatingChange = (newRating: number) => {
     onChange(newRating);
   };
@@ -21,23 +20,22 @@ const RatingFilter: React.FC<RatingFilterProps> = ({
   return (
     <div className="rating-filter-container py-2">
       <div className="d-flex align-items-center justify-content-between mb-2">
-        <span className="text-muted small">Mínimo de estrellas:</span>
+        <span className="text-muted small">Minimum number of stars:</span>
         <span className="fw-bold" style={{ color: "#a52a2a" }}>
           {value ? `${value}.0` : "Todos"}
         </span>
       </div>
 
       <StarRating
-        rating={value || 0} // Si es null, pasamos 0
-        mode="filter"       // Activamos el modo interactivo
+        rating={value || 0} 
+        mode="filter"       
         maxStars={5}
         size="1.4rem"
-        onRatingChange={handleRatingChange} // Conectamos la lógica
+        onRatingChange={handleRatingChange} 
       />
       
-      {/* Texto de ayuda opcional */}
       <div className="mt-2 text-muted" style={{ fontSize: "0.75rem", fontStyle: "italic" }}>
-        * Filtra vinos con {value || 0} o más estrellas.
+        * Filters wines with {value || 0} or more stars.
       </div>
     </div>
   );

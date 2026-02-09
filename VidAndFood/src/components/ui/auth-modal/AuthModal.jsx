@@ -28,7 +28,7 @@ const AuthModal = () => {
   const [formRegister, setFormRegister] = useState({
     email: "",
     password: "",
-    fullName: "",
+    fullName: ""
   });
 
   const [submitting, setSubmitting] = useState(false);
@@ -232,7 +232,6 @@ const AuthModal = () => {
       centered
       dialogClassName="auth-modal-dialog"
       contentClassName="auth-modal-content"
-      // AQUÍ ESTÁ EL CAMBIO IMPORTANTE:
       backdropClassName="auth-modal-backdrop"
     >
       <button type="button" className="auth-modal-close" onClick={handleHide}>
@@ -371,7 +370,7 @@ const AuthModal = () => {
               </p>
             ) : (
               <p>
-                ¿Ya tenés cuenta?{" "}
+                ¿Do you already have an account?{" "}
                 <button
                   type="button"
                   className="auth-modal-link"
