@@ -1,0 +1,22 @@
+.mywines-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-bottom: 1px solid #eee0c9;
+  padding-bottom: 0.75rem;
+  padding-top: 5rem;
+}
+
+.mywines-summary {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.mywines-list {
+  margin-top: 1.5rem;
+}
+
+.mywines-empty h2 {
+  text-align: center;
+}

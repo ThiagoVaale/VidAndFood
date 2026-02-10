@@ -5,7 +5,13 @@
   outline: none;
   position: relative;
   overflow: hidden;
-  background-color: transparent; 
+  width: 400px;
+  min-width: 400px;
+  flex: 0 0 300px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: transparent;
 }
 
 .sidebar-content {
@@ -13,7 +19,7 @@
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: transparent;
+  background: transparent;
 }
 
 .sidebar-content::-webkit-scrollbar {

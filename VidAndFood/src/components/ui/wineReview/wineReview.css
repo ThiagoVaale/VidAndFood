@@ -1,0 +1,446 @@
+.wine-reviews-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #fafafa;
+  min-height: 100vh;
+}
+
+.wine-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.wine-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.wine-subtitle {
+  font-size: 18px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.review-form-container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 20px 0;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.rating-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.2s;
+}
+
+.star-button:hover {
+  transform: scale(1.1);
+}
+
+.rating-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #F59E0B;
+  margin-left: 8px;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.submit-button {
+  background-color: #a52a2a;
+  color: #fdf9f2ff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #4A0D15;
+  transition: 0.5s;
+}
+
+.submit-button:active {
+  background-color: #6D28D9;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 50px;
+}
+
+.reviews-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.review-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.review-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star-icon {
+  color: #F59E0B;
+}
+
+.score {
+  font-size: 18px;
+  font-weight: 700;
+  color: #F59E0B;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.review-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #374151;
+  margin: 0 0 12px 0;
+}
+
+.review-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.review-date {
+  font-size: 13px;
+  color: #9CA3AF;
+  margin-top: 15px;
+}
+
+
+.toggle-button:hover {
+  background-color: #D1D5DB;
+}
+
+.toggle-button:active {
+  background-color: #C4C9D0;
+}
+
+.auth-cta {
+  margin-top: 40px;
+  padding: 16px 20px;
+  text-align: center;
+  border-radius: 12px;
+}
+
+.auth-cta-text {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #6B7280;                        
+}
+
+.auth-button {
+  background-color: #a52a2a;            
+  color: #fdf9f2ff;
+  border: none;
+  border-radius: 9999px;                 
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.1s;
+}
+
+.auth-button:hover {
+  background-color: #4A0D15;             
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+.review-header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-actions-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  font-size: 18px;
+  color: #888;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.review-actions-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  color: #111;
+}
+
+.review-actions-btn:active {
+  transform: scale(0.95);
+}
+
+.review-actions-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.review-actions-menu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 8px); /* hacia la derecha */
+  min-width: 140px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+  padding: 6px;
+  z-index: 50;
+}
+
+.review-actions-item {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 10px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+.review-actions-item:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.review-actions-item.danger {
+  color: #b42318;
+}
+
+.review-actions-item.danger:hover {
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.review-edit-box {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.edit-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.edit-cancel-btn,
+.edit-save-btn {
+  border: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.edit-cancel-btn {
+  background: transparent;
+  border: 1px solid #4A0D15;
+}
+
+.edit-save-btn {
+  background: #a52a2a;
+  color: #fff;
+}
+
+.edit-save-btn:hover {
+  background-color: #4A0D15;
+  transition: 0.5s;
+}
+
+edit-cancel-btn:hover{
+  border: 1px solid #4A0D15;
+  transition: 0.5s;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+.modal-card {
+  width: min(420px, 92vw);
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.modal-title {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+}
+
+.modal-text {
+  margin: 0 0 14px 0;
+  color: #444;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-cancel-btn,
+.modal-danger-btn {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal-cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.modal-danger-btn {
+  background: #b42318;
+  color: #fff;
+}
+
+.sommelier-badge {
+  font-variant: small-caps;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  margin-left: 4px;
+  opacity: 0.9;
+
+  color: #D4AF37;
+}
+
+
+@media (max-width: 640px) {
+  .wine-reviews-container {
+    padding: 16px;
+  }
+
+  .wine-title {
+    font-size: 24px;
+  }
+
+  .wine-subtitle {
+    font-size: 16px;
+  }
+
+  .review-card {
+    padding: 16px;
+  }
+
+  .review-form-container {
+    padding: 16px;
+  }
+
+  .form-title {
+    font-size: 18px;
+  }
+}

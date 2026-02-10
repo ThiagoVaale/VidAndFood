@@ -1,0 +1,80 @@
+.settings-page-wrapper {
+  background-color: #fdf9f2ff;
+  min-height: 100vh;
+  padding-top: 10rem;
+}
+
+.header-setting {
+  text-align: left;
+}
+
+.settings-title {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.settings-subtitle {
+  color: #666;
+  margin: 0;
+}
+
+.settings-card {
+  max-width: 14000px;
+  border-radius: 18px;
+  background: #fffdf8;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  min-height: 400px;            
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+}
+
+.membership-group {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.membership-pill {
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #555;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.membership-pill:hover {
+  border-color: #1a3305;
+  color: #1a3305;
+}
+
+.membership-pill.active {
+  background-color: #1a3305;
+  border-color: #1a3305;
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(26, 51, 5, 0.2);
+}
+
+.membership-tag {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.button-save{
+  background-color: #1a3305;
+  color: white;
+}
+
+.button-save:hover{
+  transition: 0.5;
+  background-color: #254b07;
+}
