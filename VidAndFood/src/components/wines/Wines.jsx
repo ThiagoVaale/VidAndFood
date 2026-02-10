@@ -1,21 +1,23 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import CardHome from "../ui/home/cardHome/CardHome";
 import { useCallback, useMemo } from "react";
 import useNavigateToWineDetail from "../../hooks/useNavigateToWineDetail";
+import "./wines.css";
+
 
 const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
   const navigateToWineDetail = useNavigateToWineDetail();
-  
-   const handleClickWine = useCallback(
+
+  const handleClickWine = useCallback(
     (wine) => {
       if (!wine?.id) return;
       navigateToWineDetail(wine.id);
     },
-    [navigateToWineDetail]
+    [navigateToWineDetail],
   );
 
   const activeWines = useMemo(() => {
-    if(!Array.isArray(wines)){
+    if (!Array.isArray(wines)) {
       return [];
     }
 
@@ -32,10 +34,13 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
   }
 
   return (
-    <section>
-      <Row className="g-3"> 
+    <section className="wines-page">
+      <div className="wines-results">
+      <Row className="g-3">
         {activeWines.map((wine) => {
-          const activeReviews = Array.isArray(wine.reviews) ? wine.reviews.filter((r) => r?.isActive !== false) : [];
+          const activeReviews = Array.isArray(wine.reviews)
+            ? wine.reviews.filter((r) => r?.isActive !== false)
+            : [];
           const bestReview =
             activeReviews.length > 0
               ? activeReviews.reduce((best, current) => {
@@ -59,22 +64,17 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
               : null;
 
           return (
-            <Col
-              key={wine.id}
-              xs={12}
-              md={isHorizontal ? 12 : 6}
-              lg={isHorizontal ? 12 : 4}
-            >
+            <Col key={wine.id} xs={12}>
               <CardHome
                 id={wine.id}
                 img={wine.imageUrl}
-                nombre={wine.name} 
+                nombre={wine.name}
                 region={wine.regionName}
                 anio_cosecha={wine.vintageYear}
                 bodega={wine.wineryName}
                 rating={wine.averageScore}
                 precio={wine.price}
-                variedad_uva={wine.grapes?.name || wine.grapeNames} 
+                variedad_uva={wine.grapes?.name || wine.grapeNames}
                 valoraciones={wine.reviews?.length ?? 0}
                 bestReview={bestReview}
                 isHorizontal={isHorizontal}
@@ -95,6 +95,7 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
           );
         })}
       </Row>
+      </div>
     </section>
   );
 };

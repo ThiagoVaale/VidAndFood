@@ -46,29 +46,28 @@ const CardHome = ({
   return (
     <>
       {isHorizontal ? (
-        // Se eliminó el wrapper <Col>. Ahora <Card> es hijo directo de la Col en Wines.jsx
-        <Card
-          className="wine-card wine-card-horizontal shadow-sm border-0 p-3 mb-2" // Se agregó mb-2 aquí para mantener el margen
-          onClick={onClick}
-          style={{ cursor: onClick ? "pointer" : "default" }}
-        >
-          <div className="d-flex align-items-start h-100">
-            <div className="wine-card-horizontal__img-wrapper me-4">
-              <Card.Img
-                src={imgSrc || "https://via.placeholder.com/150"}
-                alt={nombre || "Vino"}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  if (imgSrc !== img) setImgSrc(img);
-                }}
-                style={{
-                  width: "100%",
-                  height: "160px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-            </div>
+          <Card
+            className="wine-card wine-card-horizontal shadow-sm border-0 p-3"
+            onClick={onClick}
+            style={{ cursor: onClick ? "pointer" : "default" }}
+          >
+            <div className="d-flex align-items-start">
+              <div className="me-4">
+                <Card.Img
+                  src={imgSrc || "https://via.placeholder.com/150"}
+                  alt={nombre || "Vino"}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    if (imgSrc !== img) setImgSrc(img);
+                  }}
+                  style={{
+                    width: "100%",
+                    height: "160px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+              </div>
 
             <div className="flex-grow-1 d-flex justify-content-between align-items-center">
               <div className="d-flex justify-content-between align-items-start w-100">
