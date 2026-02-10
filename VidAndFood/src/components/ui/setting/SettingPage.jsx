@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import CustomNavbar from "../nav-bar/CustomNavbar";
-import "./SettingPage.css";
+import "./settingPage.css";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
 import {
   downgradeToUser,
