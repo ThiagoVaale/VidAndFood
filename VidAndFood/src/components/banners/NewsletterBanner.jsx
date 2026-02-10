@@ -6,7 +6,7 @@ const NewsletterBanner = () => {
       <div className="newsletter-left">
         <div className="newsletter-icon">
           <img
-            src="../../../public/assets/images/banner_mail.png" 
+            src="/assets/images/banner_mail.png" 
             alt="Ofertas de vino por mail"
             className="newsletter-icon-img"
           />

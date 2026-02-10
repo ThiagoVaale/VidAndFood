@@ -9,7 +9,7 @@ const MatchBanner = () => {
     <section className="match-banner">
       <div className="match-illustration">
         <img 
-          src="../../../public/assets/images/banner_match.png" 
+          src="/assets/images/banner_match.png" 
           alt="Pareja perfecta de vinos"
           className="match-img" 
           />
