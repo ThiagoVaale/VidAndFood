@@ -8,6 +8,7 @@ import Wines from "../wines/Wines";
 import WineSearch from "../ui/wineSearch/WineSearch";
 import "./winesPage.css";
 import useNavigateToWineDetail from "../../hooks/useNavigateToWineDetail";
+import { wineTypeToLabel } from "../../utils/wineType";
 
 const slugify = (str) => {
   if (!str) return "";
@@ -18,6 +19,17 @@ const slugify = (str) => {
     .toLowerCase()
     .trim()
     .replace(/\s+/g, "_");
+};
+
+const labelToFilterValue = (label) => {
+  const v = slugify(label);
+  if (v === "espumoso") return "espumante";
+  return v;
+};
+
+const wineTypeToFilterValue = (wineTypeRaw) => {
+  const label = wineTypeToLabel(wineTypeRaw);
+  return labelToFilterValue(label);
 };
 
 const BASE_WINE_FILTERS = [
@@ -77,7 +89,8 @@ const BASE_WINE_FILTERS = [
 ];
 
 const WinesPage = () => {
-  const { wines, loadWines, winesLoaded, isLoadingWines } = useContext(WineContext);
+  const { wines, loadWines, winesLoaded, isLoadingWines } =
+    useContext(WineContext);
   const { isFavorite, toggleFavorite } = useContext(WishListContext);
 
   const [filters, setFilters] = useState({});
@@ -95,6 +108,7 @@ const WinesPage = () => {
     const winerySet = new Map();
     const regionSet = new Map();
     const grapeSet = new Map();
+    const typeSet = new Map();
 
     wines.forEach((wine) => {
       if (wine.wineryName) {
@@ -115,17 +129,23 @@ const WinesPage = () => {
         regionSet.set(slug, { label: prev.label, count: prev.count + 1 });
       }
 
+      if (wine.wineType !== null && wine.wineType !== undefined) {
+        const typeValue = wineTypeToFilterValue(wine.wineType);
+        const prev = typeSet.get(typeValue) || { count: 0 };
+        typeSet.set(typeValue, { count: prev.count + 1 });
+      }
+
       if (Array.isArray(wine.grapes) && wine.grapes.length > 0) {
         wine.grapes.forEach((g) => {
           const nameGrape = g.name.trim();
-          if(!nameGrape){
+          if (!nameGrape) {
             return;
           }
 
           const slug = slugify(nameGrape);
           const prev = grapeSet.get(slug) || { label: nameGrape, count: 0 };
           grapeSet.set(slug, { label: prev.label, count: prev.count + 1 });
-        })
+        });
       }
     });
 
@@ -156,6 +176,20 @@ const WinesPage = () => {
       }),
     );
 
+    const typeOptions = Array.from(typeSet.entries()).map(([value, data]) => ({
+      id: value,
+      value,
+      label:
+        value === "tinto"
+          ? "Tinto"
+          : value === "blanco"
+            ? "Blanco"
+            : value === "rosado"
+              ? "Rosado"
+              : "Espumoso",
+      count: data.count,
+    }));
+
     setFiltersConfig((prev) =>
       prev.map((f) => {
         if (f.id === "brand") {
@@ -167,15 +201,42 @@ const WinesPage = () => {
         if (f.id === "grape") {
           return { ...f, options: grapeOptions };
         }
+        if (f.id === "type") {
+          const fallback = [
+            { id: "tinto", value: "tinto", label: "Tinto", count: 0 },
+            { id: "blanco", value: "blanco", label: "Blanco", count: 0 },
+            { id: "rosado", value: "rosado", label: "Rosado", count: 0 },
+            {
+              id: "espumante",
+              value: "espumante",
+              label: "Espumoso",
+              count: 0,
+            },
+          ];
+
+          const merged = fallback.map((opt) => {
+            const found = typeOptions.find((t) => t.value === opt.value);
+            return found ? { ...opt, count: found.count } : opt;
+          });
+
+          return { ...f, options: merged };
+        }
         return f;
       }),
     );
   }, [winesLoaded, isLoadingWines, loadWines, wines]);
 
   const filteredWines = useMemo(() => {
-    const { rating, ...otherFilters } = filters;
+    const { rating, type, ...otherFilters } = filters;
 
     let result = applyFilters(wines, otherFilters);
+
+    if (Array.isArray(type) && type.length > 0) {
+      result = result.filter((wine) => {
+        const wineTypeValue = wineTypeToFilterValue(wine.wineType);
+        return type.includes(wineTypeValue);
+      });
+    }
 
     if (typeof rating === "number" && rating > 0) {
       result = result.filter((wine) => {
@@ -183,14 +244,16 @@ const WinesPage = () => {
         return Math.floor(score) === rating;
       });
     } else {
-      result = [...result].sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0));
+      result = [...result].sort(
+        (a, b) => (b.averageScore || 0) - (a.averageScore || 0),
+      );
     }
 
     return result;
   }, [wines, filters]);
 
   const handleSelectWine = (wine) => {
-    navigateToWineDetail(wine.id)
+    navigateToWineDetail(wine.id);
   };
 
   return (

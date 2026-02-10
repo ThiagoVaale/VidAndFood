@@ -1,14 +1,14 @@
 .newsletter-banner {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   gap: 32px;
   padding: 24px 28px;
   border-radius: 16px;
   background-color: #ffffff;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03);
-  width: 100%;
-  margin-top: 80px;
+  width: 80%;
+  margin: 80px auto 0 auto;
 }
 
 .newsletter-left {
