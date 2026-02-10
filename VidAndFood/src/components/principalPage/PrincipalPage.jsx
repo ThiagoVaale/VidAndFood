@@ -71,7 +71,7 @@ const PrincipalPage = () => {
 
               <Col lg={6} className="order-lg-0">
                 <div className="hero-content ps-lg-4">
-                  <span className="hero-eyebrow">WELCOME TO</span>
+                  <span className="hero-eyebrow">BIENVENIDO A</span>
                   <h1
                     className="display-4 fw-bold mb-4"
                     style={{ color: "#424242" }}
@@ -82,11 +82,11 @@ const PrincipalPage = () => {
                     className="lead text-muted mb-4"
                     style={{ fontSize: "1.1rem", lineHeight: "1.8" }}
                   >
-                    We redefine the experience of enjoying wine. We are your
-                    digital bridge between the finest wineries and your table.
-                    Combine tradition and technology with our{" "}
-                    <strong>Sommelier AI</strong> to find the perfect pairing in
-                    seconds.
+                    Redefinimos la experiencia de disfrutar el vino. Somos tu puente
+                    digital entre las mejores bodegas y tu mesa. Combina tradición y
+                    tecnología con nuestro{" "}
+                    <strong>Sommelier IA</strong> para encontrar el maridaje perfecto
+                    en segundos.
                   </p>
                   <div className="d-flex gap-3">
                     <Button
@@ -94,14 +94,14 @@ const PrincipalPage = () => {
                       className="rounded-pill px-4 py-2"
                       onClick={() => navigate("/sommelier-ai")}
                     >
-                      Try AI
+                      Prueba IA
                     </Button>
                     <Button
                       variant="outline-dark"
                       className="rounded-pill px-4 py-2"
                       onClick={() => navigate("/wines")}
                     >
-                      View Wines
+                      Ver Vinos
                     </Button>
                   </div>
                 </div>
@@ -112,11 +112,11 @@ const PrincipalPage = () => {
 
         <section id="featured-section" className="featured-section-header mt-5">
           <div className="header-content text-center">
-            <span className="header-eyebrow">SELECTION OF THE MONTH</span>
-            <h2 className="header-title">Explore Featured Wines</h2>
+            <span className="header-eyebrow">SELECCIÓN DEL MES</span>
+            <h2 className="header-title">Explora Vinos Destacados</h2>
             <div className="header-separator"></div>
             <p className="header-subtitle">
-              Curated by our expert sommeliers for your delight.
+              Seleccionado por nuestros sommeliers expertos para tu deleite.
             </p>
           </div>
         </section>
@@ -152,8 +152,8 @@ const PrincipalPage = () => {
                     1024: {
                       slidesPerView: 3,
                       slidesPerGroup: 3,
-                      centeredSlides: false, 
-                      loop: canLoop, 
+                      centeredSlides: false,
+                      loop: canLoop,
                     },
                   }}
                   className="pb-5 vf-swiper"

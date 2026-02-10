@@ -45,8 +45,15 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
 
   const roleActionLabel = useMemo(() => {
     if (!user) return "";
-    return isSommelier ? "Downgrade a User" : "Upgrade a Sommelier";
+    return isSommelier ? "Degradar a Usuario" : "Promover a Sommelier";
   }, [user, isSommelier]);
+
+  const displayRole = useMemo(() => {
+    const r = String(currentRole).toLowerCase();
+    if (r.includes("sommelier")) return "Sommelier";
+    if (r.includes("admin")) return "Admin";
+    return "Usuario";
+  }, [currentRole]);
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({
@@ -58,17 +65,17 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
   const handleCreate = async () => {
     const { email, password, fullName, rol } = form;
 
-    if (!form.email.trim()){
-      return setLocalError("Email is required.");
-    } 
-
-    if (!form.password || form.password.length < 6){
-      return setLocalError("Password must be at least 6 characters.");
+    if (!form.email.trim()) {
+      return setLocalError("El correo es obligatorio.");
     }
 
-    if (!form.fullName.trim()){
-      return setLocalError("Full name is required.");
-    } 
+    if (!form.password || form.password.length < 6) {
+      return setLocalError("La contraseña debe tener al menos 6 caracteres.");
+    }
+
+    if (!form.fullName.trim()) {
+      return setLocalError("El nombre completo es obligatorio.");
+    }
 
     try {
       setSaving(true);
@@ -81,7 +88,7 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
         rol
       });
       showResponse({
-        title: "User created",
+        title: "Usuario creado",
         variant: "success",
         message: form.email.trim(),
       });
@@ -108,9 +115,9 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
 
       if (isAdmin) {
         showResponse({
-          title: "Action not allowed",
+          title: "Acción no permitida",
           variant: "error",
-          message: "You cannot change the role of an Admin user.",
+          message: "No puedes cambiar el rol de un usuario Admin.",
         });
         return;
       }
@@ -118,16 +125,16 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
       if (isSommelier) {
         await downgradeAdminToUser(user.id, 1);
         showResponse({
-          title: "Role updated",
+          title: "Rol actualizado",
           variant: "success",
-          message: "Now it's User",
+          message: "Ahora es Usuario",
         });
       } else {
         await upgradeAdminToSommelier(user.id, 2);
         showResponse({
-          title: "Role updated",
+          title: "Rol actualizado",
           variant: "success",
-          message: "Now he/she is a Sommelier",
+          message: "Ahora es Sommelier",
         });
       }
       onClose();
@@ -148,7 +155,7 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
     <Modal show={show} onHide={saving ? undefined : onClose} centered>
       <Modal.Header closeButton={!saving}>
         <Modal.Title>
-          {isCreate ? "User registration" : "Change user role"}
+          {isCreate ? "Registro de usuario" : "Cambiar rol de usuario"}
         </Modal.Title>
       </Modal.Header>
 
@@ -158,7 +165,7 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
         {isCreate && (
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>Correo electrónico</Form.Label>
               <Form.Control
                 type="email"
                 value={form.email}
@@ -169,18 +176,18 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 value={form.password}
                 onChange={handleChange("password")}
                 disabled={saving}
-                placeholder="minimum 6 characters"
+                placeholder="mínimo 6 caracteres"
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Full Name</Form.Label>
+              <Form.Label>Nombre completo</Form.Label>
               <Form.Control
                 value={form.fullName}
                 onChange={handleChange("fullName")}
@@ -190,11 +197,11 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Role</Form.Label>
+              <Form.Label>Rol</Form.Label>
               <div className="d-flex justify-content-center gap-4 mt-1">
                 <Form.Check
                   type="radio"
-                  label="User"
+                  label="Usuario"
                   name="rol"
                   value="User"
                   checked={form.rol === "User"}
@@ -221,19 +228,19 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
               <strong>{user.fullName}</strong> — {user.email}
             </div>
             <div className="mb-3">
-              Current rol:{" "}
+              Rol actual: {" "}
               <Badge bg={isSommelier ? "warning" : "secondary"}>
-                {currentRole}
+                {displayRole}
               </Badge>
             </div>
 
             {isAdmin ? (
               <Alert variant="warning" className="mb-0">
-                This user is <strong>Admin</strong>. Changing your role is not allowed.
+                Este usuario es <strong>Admin</strong>. No está permitido cambiar su rol.
               </Alert>
             ) : (
               <Alert variant="info" className="mb-0">
-                This action will change the role of the selected user.
+                Esta acción cambiará el rol del usuario seleccionado.
               </Alert>
             )}
           </div>
@@ -242,12 +249,12 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={saving}>
-          Cancel
+          Cancelar
         </Button>
 
         {isCreate ? (
           <Button variant="success" onClick={handleCreate} disabled={saving}>
-            {saving ? "Creating..." : "Create"}
+            {saving ? "Creando..." : "Crear"}
           </Button>
         ) : (
           <Button
@@ -256,9 +263,9 @@ const UserAdminModal = ({ show, mode, user, onClose, onSuccess }) => {
             disabled={saving || !user || isAdmin}
           >
             {saving
-              ? "Updating..."
+              ? "Actualizando..."
               : isAdmin
-                ? "Not modifiable(Admin)"
+                ? "No modificable (Admin)"
                 : roleActionLabel}
           </Button>
         )}

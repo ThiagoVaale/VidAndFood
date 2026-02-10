@@ -19,17 +19,17 @@ const MatchBanner = () => {
   return (
     <section className="match-banner">
       <div className="match-illustration">
-        <img 
-          src="../../../public/assets/images/banner_match.png" 
+        <img
+          src="../../../public/assets/images/banner_match.png"
           alt="Pareja perfecta de vinos"
-          className="match-img" 
-          />
+          className="match-img"
+        />
       </div>
 
       <div className="match-content">
-        <h2>Find your perfect match</h2>
+        <h2>Encuentra tu pareja perfecta</h2>
         <p>
-          Get personalized wine recommendations. Log in to find wines that suit your taste.
+          Obtén recomendaciones de vinos personalizadas. Inicia sesión para encontrar vinos que se ajusten a tu gusto.
         </p>
 
         {!isAuthenticated ? (
@@ -38,7 +38,7 @@ const MatchBanner = () => {
           className="match-button"
           onClick={() => openAuthModal("login")}
         >
-          Log in to your account
+          Inicia sesión en tu cuenta
         </button>
         ) : (
           <button

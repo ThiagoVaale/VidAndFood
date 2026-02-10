@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomNavbar from "../nav-bar/CustomNavbar";
 import Wines from "../../wines/Wines";
-import "../my-wines/MyWinesPage"; 
+import "../my-wines/MyWinesPage";
 import HistoryContext from "../../../services/context/historyContext/HistoryContext";
 import { fetchHistoryWines } from "../../../services/historyUserService";
 
@@ -42,7 +42,7 @@ const HistoryPage = () => {
           backgroundColor: "#fdf9f2ff",
           minHeight: "100vh",
           paddingTop: "2rem",
-          
+
         }}
       >
         <div className="container py-4">
@@ -54,16 +54,16 @@ const HistoryPage = () => {
                   marginBottom: "0.5rem",
                 }}
               >
-                History
+                Historial
               </h1>
               <p style={{ margin: 0, color: "#666" }}>
-                Wines you recently added to your history.
+                Vinos que agregaste recientemente a tu historial.
               </p>
             </div>
 
             {hasHistory && (
               <div className="mywines-summary">
-                <span>{historyWines.length} wines</span>
+                <span>{historyWines.length} vinos</span>
               </div>
             )}
           </header>
@@ -103,17 +103,17 @@ const HistoryPage = () => {
                   marginBottom: "0.5rem",
                 }}
               >
-                You don't have any wines in your history yet
+                Aún no tienes vinos en tu historial
               </h2>
               <p style={{ color: "#666", maxWidth: 420, textAlign: "center" }}>
-                Go to a wine's detail page and it will automatically be added to your history.
+                Visita la página de detalle de un vino y se agregará automáticamente a tu historial.
               </p>
               <button
                 type="button"
                 className="btn btn-dark mt-3"
                 onClick={() => navigate("/wines")}
               >
-                Explore wines
+                Explorar vinos
               </button>
             </section>
           )}

@@ -82,8 +82,8 @@ const WineReview = ({
       if (!newReview.comment.trim()) {
         showResponse({
           variant: "error",
-          title: "Empty comment",
-          message: "The comment cannot be empty.",
+          title: "Comentario vacío",
+          message: "El comentario no puede estar vacío.",
         });
         return;
       }
@@ -98,14 +98,14 @@ const WineReview = ({
 
       showResponse({
         variant: "success",
-        title: "Review published",
-        message: "Your review has been successfully published.",
+        title: "Reseña publicada",
+        message: "Tu reseña ha sido publicada exitosamente.",
       });
     } catch (error) {
       showResponse({
         variant: "error",
-        title: "Error posting review",
-        message: error.message || "There was a problem posting your review.",
+        title: "Error al publicar reseña",
+        message: error.message || "Hubo un problema al publicar tu reseña.",
       });
       return;
     } finally {
@@ -172,8 +172,8 @@ const WineReview = ({
     if (!editForm.comment.trim()) {
       showResponse({
         variant: "error",
-        title: "Empty comment",
-        message: "The comment cannot be empty.",
+        title: "Comentario vacío",
+        message: "El comentario no puede estar vacío.",
       });
       return;
     }
@@ -190,16 +190,16 @@ const WineReview = ({
 
       showResponse({
         variant: "success",
-        title: "Updated review",
-        message: "Your review has been successfully updated.",
+        title: "Reseña actualizada",
+        message: "Tu reseña ha sido actualizada exitosamente.",
       });
 
       handleCancelEdit();
     } catch (err) {
       showResponse({
         variant: "error",
-        title: "Error updating review",
-        message: err.message || "There was a problem updating your review.",
+        title: "Error al actualizar reseña",
+        message: err.message || "Hubo un problema al actualizar tu reseña.",
       });
     } finally {
       setIsEditingSaving(false);
@@ -216,8 +216,8 @@ const WineReview = ({
 
       showResponse({
         variant: "success",
-        title: "Review deleted",
-        message: "Your review was removed",
+        title: "Reseña eliminada",
+        message: "Tu reseña fue eliminada",
       });
 
       if (reviewToDelete?.id === editingReviewId) {
@@ -228,8 +228,8 @@ const WineReview = ({
     } catch (err) {
       showResponse({
         variant: "error",
-        title: "Error deleting review",
-        message: err.messag || "The review could not be deleted",
+        title: "Error al eliminar reseña",
+        message: err.messag || "La reseña no pudo ser eliminada",
       });
     } finally {
       setIsDeleting(false);
@@ -257,18 +257,17 @@ const WineReview = ({
 
       {isAuthenticated && !hasReviewUser && (
         <div className="review-form-container">
-          <h2 className="form-title">Write your review</h2>
+          <h2 className="form-title">Escribe tu reseña</h2>
           <div className="review-form">
             <div className="form-group">
-              <label className="form-label">Rating:</label>
+              <label className="form-label">Calificación:</label>
               <div className="rating-selector">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
-                    className={`star-button ${
-                      newReview.rating >= star ? "active" : ""
-                    }`}
+                    className={`star-button ${newReview.rating >= star ? "active" : ""
+                      }`}
                     onClick={() => handleRatingChange(star)}
                   >
                     <Star
@@ -286,20 +285,20 @@ const WineReview = ({
 
             <div className="form-group">
               <label className="form-label" htmlFor="comment">
-                Comment:
+                Comentario:
               </label>
               <textarea
                 id="comment"
                 className="form-textarea"
                 rows="4"
-                placeholder="Share your experience with this wine..."
+                placeholder="Comparte tu experiencia con este vino..."
                 value={newReview.comment}
                 onChange={handleCommentChange}
               />
             </div>
 
             <button onClick={handleSubmitReview} className="submit-button">
-              {isPublishing ? "Posting review..." : "Post review"}
+              {isPublishing ? "Publicando reseña..." : "Publicar reseña"}
             </button>
           </div>
         </div>
@@ -308,8 +307,8 @@ const WineReview = ({
       {isAuthenticated && hasReviewUser && (
         <div className="review-form-container">
           <p style={{ color: "#666", margin: 0 }}>
-            You have already posted a review for this wine. You can edit or
-            delete it.
+            Ya has publicado una reseña para este vino. Puedes editarla o
+            eliminarla.
           </p>
         </div>
       )}
@@ -317,21 +316,21 @@ const WineReview = ({
       {!isAuthenticated && (
         <div className="auth-cta">
           <p className="auth-cta-text">
-            <b>¿Do you want to share your experience with this wine?</b>
+            <b>¿Quieres compartir tu experiencia con este vino?</b>
           </p>
           <button onClick={handleIsAuthenticated} className="auth-button">
-            Log in to review
+            Inicia sesión para reseñar
           </button>
         </div>
       )}
 
       <div className="reviews-list">
-        <h2 className="reviews-title">Reviews ({reviews.length})</h2>
+        <h2 className="reviews-title">Reseñas ({reviews.length})</h2>
         {reviews.map((review) => {
           const isMine =
             isAuthenticated &&
             userIdReview &&
-            String(review.userId) === String(userIdReview); 
+            String(review.userId) === String(userIdReview);
 
           return (
             <article key={review.id} className="review-card">
@@ -376,7 +375,7 @@ const WineReview = ({
                             onClick={() => handleEditMenuReview(review)}
                             role="menuitem"
                           >
-                            Edit
+                            Editar
                           </button>
 
                           <button
@@ -385,7 +384,7 @@ const WineReview = ({
                             onClick={() => handleDeleteMenuReview(review)}
                             role="menuitem"
                           >
-                            Delete
+                            Eliminar
                           </button>
                         </div>
                       )}
@@ -434,7 +433,7 @@ const WineReview = ({
                       onClick={handleCancelEdit}
                       disabled={isEditingSaving}
                     >
-                      Cancel
+                      Cancelar
                     </button>
 
                     <button
@@ -464,9 +463,9 @@ const WineReview = ({
       {deleteModalOpen && (
         <div className="modal-backdrop" onClick={handleCloseDeleteModal}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title">¿Delete review?</h3>
+            <h3 className="modal-title">¿Eliminar reseña?</h3>
             <p className="modal-text">
-              This action cannot be undone. Are you sure?
+              Esta acción no se puede deshacer. ¿Estás seguro?
             </p>
 
             <div className="modal-actions">
@@ -476,7 +475,7 @@ const WineReview = ({
                 onClick={handleCloseDeleteModal}
                 disabled={isDeleting}
               >
-                Cancel
+                Cancelar
               </button>
 
               <button
@@ -485,7 +484,7 @@ const WineReview = ({
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
               >
-                {isDeleting ? "Deleting..." : "Delete"}
+                {isDeleting ? "Eliminando..." : "Eliminar"}
               </button>
             </div>
           </div>
