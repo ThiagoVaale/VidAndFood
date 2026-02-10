@@ -4,7 +4,6 @@ import { useCallback, useMemo } from "react";
 import useNavigateToWineDetail from "../../hooks/useNavigateToWineDetail";
 import "./wines.css";
 
-
 const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
   const navigateToWineDetail = useNavigateToWineDetail();
 
@@ -23,6 +22,7 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
 
     return wines.filter((w) => w?.isActive !== false);
   }, [wines]);
+  
 
   if (!wines || wines.length === 0) {
     return (
@@ -75,7 +75,7 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
                 rating={wine.averageScore}
                 precio={wine.price}
                 variedad_uva={wine.grapes?.name || wine.grapeNames}
-                valoraciones={wine.reviews?.length ?? 0}
+                valoraciones={activeReviews.length === 0 ? "0" : activeReviews.length}
                 bestReview={bestReview}
                 isHorizontal={isHorizontal}
                 onClick={() => handleClickWine(wine)}

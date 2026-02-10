@@ -43,6 +43,8 @@ const CardHome = ({
     setImgSrc(optimizeCloudinaryUrl(img));
   }, [img]);
 
+  console.log("Valoraciones: ", valoraciones)
+
   return (
     <>
       {isHorizontal ? (
@@ -173,7 +175,7 @@ const CardHome = ({
                       maxStars={5}
                     />
                     <div style={{ fontSize: "0.75rem", color: "#6c757d" }}>
-                      {`${valoraciones} ${valoraciones > 1 ? "evaluaciones" : "evaluación"
+                      {`${valoraciones} ${valoraciones === 1 ? "evaluación" : "evaluaciones"
                         }`}
                     </div>
                   </div>
@@ -230,7 +232,6 @@ const CardHome = ({
               <div className="vf-card__rating">
                 <span className="vf-card__star">★</span>
                 <span className="vf-card__ratingVal">{safeRating.toFixed(1)}</span>
-                <span className="vf-card__ratingQty">({valoraciones || 0})</span>
               </div>
 
               <div className="vf-card__price">

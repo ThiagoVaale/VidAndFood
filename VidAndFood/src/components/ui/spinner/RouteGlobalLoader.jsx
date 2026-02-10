@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import GlobalLoadingContext from "../../../services/context/globalLoadingContext/GlobalLoadingContext";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
+import WineContext from "../../../services/context/winesContext/WinesContext";
 
 const RouteGlobalLoader = ({ delayMs = 700 }) => {
   const location = useLocation();
@@ -11,7 +12,7 @@ const RouteGlobalLoader = ({ delayMs = 700 }) => {
   const { setGlobalLoading, setGlobalMessage } =
     useContext(GlobalLoadingContext);
   const { user } = useContext(AuthContext);
-  const { showResponse } = useContext(ResponseContext)
+  const { showResponse } = useContext(ResponseContext);
 
   const timerRef = useRef(null);
   const redirectRef = useRef(null);
