@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "./wineReview.css";
+import "./WineReview.css";
 import { Star } from "react-bootstrap-icons";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
 import {

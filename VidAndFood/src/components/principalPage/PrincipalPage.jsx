@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { useNavigate } from "react-router-dom";
-import "./principalPage.css";
+import "./PrincipalPage.css";
 import NewsletterBanner from "../banners/NewsletterBanner";
 import MatchBanner from "../banners/MatchBanner";
 import Footer from "../ui/footer/Footer";

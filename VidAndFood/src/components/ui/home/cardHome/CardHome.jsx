@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col } from "react-bootstrap";
 import StarRating from "../../../common/StarsRating";
-import "./cardHome.css";
+import "./CardHome.css";
 import COLORS from "../../../../utils/colors";
 
 const optimizeCloudinaryUrl = (url) => {

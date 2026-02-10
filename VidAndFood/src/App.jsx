@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./components/principalPage/principalPage.css";
+import "./components/principalPage/PrincipalPage.css";
 import WineDetailPage from "./components/ui/wine-detail/WineDetailPage";
 import AuthModal from "./components/ui/auth-modal/AuthModal";
 import MyWinesPage from "./components/ui/my-wines/MyWinesPage";

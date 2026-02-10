@@ -15,7 +15,7 @@ import CheckBoxFilter from "./filters/CheckBoxFilter";
 import RangerFilter from "./filters/RangeFilter";
 import RatingFilter from "./filters/RadiusFilter";
 import WineFilterDisclosure from "./FilterDisclosure";
-import "./sidebar.css";
+import "./Sidebar.css";
 
 const GenericSidebarFilter: React.FC<GenericSideBarFilterProps> = ({
   filters,

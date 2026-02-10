@@ -13,7 +13,7 @@ import UserAdminModal from "../../admin/UserAdminModal.jsx";
 import ConfirmModal from "../../admin/ConfirmModal.jsx";
 import WineContext from "../../../services/context/winesContext/WinesContext.jsx";
 
-import "./sysAdminPage.css";
+import "./SysAdminPage.css";
 import WineAdminModal from "../../admin/WineAdminModal.jsx";
 import {
   deleteReviewAdmin,

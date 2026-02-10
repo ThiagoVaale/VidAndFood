@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import "./wineSearch.css";
+import "./WineSearch.css";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import WineAdminModal from "../../admin/WineAdminModal";
 

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card, Table, Alert, Button } from "react-bootstrap";
 import GlobalLoaderOverlay from "../ui/spinner/GlobalLoaderOverlay";
-import "./adminTable.css";
+import "./AdminTable.css";
 
 const AdminTable = ({
   title,
