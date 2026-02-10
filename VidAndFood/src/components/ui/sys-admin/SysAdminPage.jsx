@@ -395,7 +395,6 @@ const SysAdminPage = () => {
                       <Button
                         variant="success"
                         size="sm"
-                        className="admin-action-btn btn-wine-primary"
                         onClick={() => openUserModal("create")}
                       >
                         + Añadir
@@ -445,7 +444,7 @@ const SysAdminPage = () => {
                         size="sm"
                         onClick={() => openWineModal("create")}
                       >
-                        Añadir
+                        + Añadir
                       </Button>
 
                       <Button

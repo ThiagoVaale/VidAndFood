@@ -221,7 +221,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                 />
               </Col>
 
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Label>Bodega</Form.Label>
                 <Select
                   options={wineryOptions}
@@ -294,8 +294,6 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
           <Form.Group className="mb-3">
             <Row>
-              <Col md={6}/>
-                <Form.Label>Precio</Form.Label>
               <Col md={4}>
                 <Form.Label>Añada</Form.Label>
                 <Form.Control
@@ -308,7 +306,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={4}>
-                <Form.Label>Price</Form.Label>
+                <Form.Label>Precio</Form.Label>
                 <Form.Control
                   name="price"
                   value={addWine.price}
@@ -318,7 +316,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                 />
               </Col>
 
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Label>Descripción</Form.Label>
                 <Form.Control
                   name="description"
