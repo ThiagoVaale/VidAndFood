@@ -97,8 +97,6 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           fetchAllGrapes(),
         ]);
 
-        console.log(("GRAPES: ", grapes));
-
         const wineriesOptions = wineries.map((name) => ({
           value: name,
           label: name,
@@ -143,7 +141,6 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
       setSaving(true);
 
       if (isEdit) {
-        console.log("Vino antes de actualizar: ", payload);
         await fetchUpdateWineAdmin(payload, wine.id);
         showResponse({
           title: "Vino actualizado",
@@ -151,7 +148,6 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           message: "El vino se actualizó correctamente",
         });
       } else {
-        console.log("Vino antes de crear: ", payload);
         await fetchAddWineAdmin(payload);
         showResponse({
           title: "Vino creado",

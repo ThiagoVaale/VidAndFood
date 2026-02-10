@@ -328,9 +328,6 @@ const WineReview = ({
       <div className="reviews-list">
         <h2 className="reviews-title">Reviews ({reviews.length})</h2>
         {reviews.map((review) => {
-          console.log("REVIEWS: ", reviews);
-          console.log("REVIEW: ", review);
-
           const isMine =
             isAuthenticated &&
             userIdReview &&

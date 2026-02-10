@@ -31,7 +31,7 @@ const WineDetailPage = () => {
   const role = user?.role;
 
   const canUseFavorites =
-    !!isAuthenticated && (role === "Sommelier" || role === "Admin");
+    !!isAuthenticated && (role === "Sommelier");
 
   useEffect(() => {
     const loadWineWithReview = async () => {
@@ -76,17 +76,16 @@ const WineDetailPage = () => {
   const favorite = isFavorite(wine.wine.id);
 
   const handleToggleFavorite = async () => {
-    if (!isAuthenticated) {
-      openAuthModal("login");
-      return;
-    }
-
-    if (!canUseFavorites) {
+    if(!canUseFavorites){
       showResponse({
         variant: "error",
-        title: "Action not allowed",
-        message: "Only Sommeliers can manage the wish list.",
-      });
+        title: "Accion no permitida",
+        message: "Para esta accion necesitas ser sommelier."
+      })
+      return;
+    }
+    if (!isAuthenticated) {
+      openAuthModal("login");
       return;
     }
 
@@ -176,7 +175,6 @@ const WineDetailPage = () => {
                 </div>
 
               <div className="wine-detail-actions">
-                {canUseFavorites && (
                   <button
                     type="button"
                     className="wine-detail-action-link"
@@ -190,7 +188,7 @@ const WineDetailPage = () => {
                       ? "In your wish list"
                       : "Add to wishlist"}
                   </button>
-                )}
+                
               </div>
             </div>
 

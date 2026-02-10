@@ -22,11 +22,6 @@ const WineProvider = ({ children }) => {
 
       const [data] = await Promise.all([fetchAllWines(), delay(500)]);
 
-      console.log("WINES: ", data);
-      console.log("SAMPLE WINE:", data?.[0]);
-      console.log("SAMPLE notesTaste:", data?.[0]?.notesTaste);
-      console.log("SAMPLE aroma:", data?.[0]?.aroma);
-
       setWines(Array.isArray(data) ? data : []);
       setWinesLoaded(true);
     } catch (err) {
