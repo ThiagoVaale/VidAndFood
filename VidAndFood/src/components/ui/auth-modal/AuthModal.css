@@ -130,16 +130,9 @@
   }
 }
 
-/* --- NUEVA CLASE PARA EL BACKDROP (FONDO OSCURO) --- */
 .auth-modal-backdrop {
-  /* Fondo negro con 30% de opacidad */
   background-color: rgba(0, 0, 0, 0.3) !important;
-  
-  /* Efecto de desenfoque de 8px */
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
-  
-  /* Sobrescribimos la opacidad default de Bootstrap (que suele ser 0.5) 
-     para que nuestra opacidad del background-color se vea correcta */
   opacity: 1 !important; 
 }

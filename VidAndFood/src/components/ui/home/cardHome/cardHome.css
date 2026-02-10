@@ -1,16 +1,12 @@
-/* =========================================
-   ESTILOS PREMIUM (Vid & Food) - FINAL
-   ========================================= */
-
 .vf-card {
   background-color: #ffffff;
-  border-radius: 30px; /* Bordes muy curvos estilo iPhone */
+  border-radius: 30px; 
   overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  height: 550px; /* Altura fija importante para que todas sean iguales */
+  height: 550px;
   display: flex;
-  flex-direction: column; /* Apila imagen arriba, texto abajo */
+  flex-direction: column; 
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0,0,0,0.02);
   cursor: pointer;
@@ -19,42 +15,38 @@
 
 .vf-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 25px 50px rgba(158, 71, 88, 0.12); /* Sombra con tinte de vino */
+  box-shadow: 0 25px 50px rgba(158, 71, 88, 0.12); 
 }
 
-/* --- 1. SECCIÓN SUPERIOR: IMAGEN (60%) --- */
 .vf-card__media {
   height: 60%; 
   width: 100%;
   background-color: #f6f6f8; 
   display: flex;
   justify-content: center;
-  align-items: center; /* Centramos para que el cover funcione mejor */
+  align-items: center; 
   position: relative;
-  padding: 0; /* IMPORTANTE: Eliminamos el padding para que la imagen toque los bordes */
+  padding: 0; 
   overflow: hidden;
 }
 
 .vf-card__img {
-  width: 100%; /* Forzamos ancho completo */
-  height: 100%; /* Forzamos alto completo */
-  max-width: none; /* Quitamos restricciones */
+  width: 100%;
+  height: 100%; 
+  max-width: none; 
   
-  /* CLAVE: 'cover' hace que la imagen llene todo el espacio, recortando lo que sobra.
-     Si prefieres que se vea la botella entera sí o sí pero gigante, usa 'contain' con scale,
-     pero 'cover' es lo que da el efecto de "llenar el cuadro" */
+  
   object-fit: cover; 
-  object-position: center bottom; /* Enfocamos desde abajo para no cortar la base de la botella */
+  object-position: center bottom; 
   
   transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 1;
 }
 
 .vf-card:hover .vf-card__img {
-  transform: scale(1.08) translateY(-5px); /* Zoom y leve subida */
+  transform: scale(1.08) translateY(-5px); 
 }
 
-/* Badge 'Featured' / 'Destacado' */
 .vf-card__badge {
   position: absolute;
   top: 20px;
@@ -71,13 +63,12 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* --- 2. SECCIÓN INFERIOR: TEXTO (40%) --- */
 .vf-card__body {
-  height: 40%; /* El resto del espacio */
-  padding: 25px 30px; /* Buen espaciado interno */
+  height: 40%;
+  padding: 25px 30px; 
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Distribuye info arriba y precio abajo */
+  justify-content: space-between; 
   background-color: #ffffff;
 }
 
@@ -87,7 +78,7 @@
 }
 
 .vf-card__winery {
-  color: #9e4758; /* Tu color de marca */
+  color: #9e4758; 
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -97,13 +88,12 @@
 
 .vf-card__title {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 1.4rem; /* Título grande */
+  font-size: 1.4rem; 
   font-weight: 700;
   color: #1d1d1f;
   line-height: 1.1;
   margin-bottom: 6px;
   
-  /* Cortar texto con puntos suspensivos si es muy largo */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -116,12 +106,11 @@
   font-weight: 500;
 }
 
-/* Footer: Precio y Rating */
 .vf-card__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto; /* Empuja esto al fondo */
+  margin-top: auto; 
   padding-top: 15px;
   border-top: 1px solid #f5f5f5;
 }
@@ -129,7 +118,7 @@
 .vf-card__rating {
   display: flex;
   align-items: center;
-  background-color: #1d1d1f; /* Pill negra */
+  background-color: #1d1d1f;
   padding: 5px 12px;
   border-radius: 12px;
   gap: 5px;
@@ -161,28 +150,27 @@
   font-weight: 800;
   letter-spacing: -0.5px;
 }
-/* --- TARJETA HORIZONTAL PREMIUM --- */
+
 .wine-card-wide {
   display: flex;
   background: #ffffff;
-  border-radius: 20px; /* Bordes suaves */
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
-  height: 240px; /* Altura fija para que se vea imponente */
+  height: 240px; 
   border: 1px solid rgba(0,0,0,0.02);
   width: 100%;
 }
 
 .wine-card-wide:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(158, 71, 88, 0.1); /* Sombra color vino */
+  box-shadow: 0 15px 30px rgba(158, 71, 88, 0.1); 
 }
 
-/* 1. Columna Imagen (Izquierda) */
 .wide-img-wrapper {
-  flex: 0 0 220px; /* Ancho fijo para la imagen */
-  background-color: #f7f7f9; /* Fondo gris estilo Apple */
+  flex: 0 0 220px; 
+  background-color: #f7f7f9; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,22 +183,21 @@
   width: auto;
   max-width: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); /* Sombra de botella */
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); 
   transition: transform 0.4s ease;
 }
 
 .wine-card-wide:hover .wide-img {
-  transform: scale(1.1); /* Pequeño zoom al pasar el mouse */
+  transform: scale(1.1); 
 }
 
-/* 2. Columna Info (Centro) */
 .wide-content {
-  flex: 1; /* Ocupa el espacio sobrante */
+  flex: 1; 
   padding: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-right: 1px solid #f9f9f9; /* Separador sutil */
+  border-right: 1px solid #f9f9f9; 
 }
 
 .wide-winery {
@@ -251,14 +238,13 @@
   font-weight: 600;
 }
 
-/* 3. Columna Precio/Acción (Derecha) */
 .wide-actions {
-  flex: 0 0 200px; /* Ancho fijo para el precio */
+  flex: 0 0 200px; 
   padding: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end; /* Alineado a la derecha */
+  align-items: flex-end; 
   text-align: right;
   background-color: #fff;
 }
@@ -285,7 +271,13 @@
   color: #b45309;
 }
 
-/* Responsive: En movil se apila */
+.wine-card-horizontal {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 @media (max-width: 768px) {
   .wine-card-wide {
     flex-direction: column;

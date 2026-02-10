@@ -46,9 +46,8 @@ const CardHome = ({
   return (
     <>
       {isHorizontal ? (
-        <Col lg={18} md={12} sm={12} xs={12} className="mb-2">
           <Card
-            className="wine-card shadow-sm border-0 p-3"
+            className="wine-card wine-card-horizontal shadow-sm border-0 p-3"
             onClick={onClick}
             style={{ cursor: onClick ? "pointer" : "default" }}
           >
@@ -200,7 +199,6 @@ const CardHome = ({
               </div>
             </div>
           </Card>
-        </Col>
      ) : (
         <div
           className="vf-card"
