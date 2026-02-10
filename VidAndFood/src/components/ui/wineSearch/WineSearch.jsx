@@ -39,11 +39,11 @@ const WineSearch = ({ wines = [], onSelectWine, onWineCreated }) => {
     };
 
     document.addEventListener("mousedown", onMouseDown);
-    document.addEventListener("keydown" , onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
 
     return () => {
-        document.removeEventListener("mousedown", onMouseDown);
-        document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("keydown", onKeyDown);
     };
   }, []);
 
@@ -61,7 +61,7 @@ const WineSearch = ({ wines = [], onSelectWine, onWineCreated }) => {
 
   const userIsSommelier = user?.role === "Sommelier";
 
-   const handleOpenCreateWine = () => {
+  const handleOpenCreateWine = () => {
     setOpen(false);
     setWineModalMode("create");
     setWineTarget(null);
@@ -82,7 +82,7 @@ const WineSearch = ({ wines = [], onSelectWine, onWineCreated }) => {
     <div className="wine-search" ref={wrapRef}>
       <input
         className="wine-search-input"
-        placeholder="Search for any wine"
+        placeholder="Buscar cualquier vino"
         value={search}
         onChange={handleChange}
         onFocus={() => setOpen(!!search.trim())}
@@ -92,7 +92,7 @@ const WineSearch = ({ wines = [], onSelectWine, onWineCreated }) => {
         <div className="wine-search-dropdown">
           {filtered.length === 0 ? (
             <div className="wine-search-empty">
-              <div>No wines were found</div>
+              <div>No se encontraron vinos</div>
 
               {userIsSommelier && (
                 <button
@@ -100,7 +100,7 @@ const WineSearch = ({ wines = [], onSelectWine, onWineCreated }) => {
                   className="wine-search-create-btn"
                   onClick={handleOpenCreateWine}
                 >
-                  + Create wine
+                  + Crear vino
                 </button>
               )}
             </div>

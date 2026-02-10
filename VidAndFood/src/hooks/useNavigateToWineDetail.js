@@ -18,10 +18,6 @@ export default function useNavigateToWineDetail() {
 
   const navigateToWineDetail = useCallback(
     async (wineId) => {
-      console.log("[NAV] click wineId:", wineId);
-      console.log("[NAV] canUseHistory:", canUseHistory);
-      console.log("[NAV] isInHistory:", isInHistory(wineId));
-
       navigate(`/wines/${wineId}`);
 
       if (!canUseHistory) {

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import CustomNavBar from "../../ui/nav-bar/CustomNavbar";
 import StarRating from "../../common/StarsRating";
 import "./WineDetailPage.css";
-import { Bookmark } from "react-bootstrap-icons";
+import { Heart } from "react-bootstrap-icons";
 import Footer from "../footer/Footer";
 import { useContext, useEffect, useState } from "react";
 import WishListContext from "../../../services/context/wishListContext/WishListContext";
@@ -13,9 +13,9 @@ import {
   toggleFavoriteWine,
 } from "../../../services/wineService";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
-import HistoryContext from "../../../services/context/historyContext/HistoryContext";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import WineContext from "../../../services/context/winesContext/WinesContext";
+import { wineTypeToLabel } from "../../../utils/wineType";
 
 const WineDetailPage = () => {
   const { wineId } = useParams();
@@ -31,13 +31,12 @@ const WineDetailPage = () => {
   const role = user?.role;
 
   const canUseFavorites =
-    !!isAuthenticated && (role === "Sommelier" || role === "Admin");
+    !!isAuthenticated && (role === "Sommelier");
 
   useEffect(() => {
     const loadWineWithReview = async () => {
       try {
         const wineReview = await fetchWineById(wineId);
-        console.log("VINO POR ID DESDE BACK: ", wineReview);
         setWine(wineReview || null);
       } catch (err) {
         console.error("Error al cargar el vino:", err);
@@ -48,9 +47,9 @@ const WineDetailPage = () => {
   }, [wineId, wines]);
 
   const reloadWine = async () => {
-    try{
-    const wineReview = await fetchWineById(wineId);
-    setWine(wineReview || null);
+    try {
+      const wineReview = await fetchWineById(wineId);
+      setWine(wineReview || null);
     } catch (err) {
       console.error("Error reloading the wine: ", err.message)
     }
@@ -62,8 +61,8 @@ const WineDetailPage = () => {
         <CustomNavBar />
         <div className="wine-detail-wrapper">
           <div className="wine-detail-main-container">
-            <p>No history available</p>
-            <button onClick={() => navigate("/wines")}>Back to Wines</button>
+            <p>No hay detalles disponibles</p>
+            <button onClick={() => navigate("/wines")}>Volver a vinos</button>
           </div>
         </div>
       </>
@@ -77,7 +76,14 @@ const WineDetailPage = () => {
   const favorite = isFavorite(wine.wine.id);
 
   const handleToggleFavorite = async () => {
-    console.log("WINE de estado cargado por fetchs: ", wine)
+    if(!canUseFavorites){
+      showResponse({
+        variant: "error",
+        title: "Accion no permitida",
+        message: "Para esta accion necesitas ser sommelier."
+      })
+      return;
+    }
     if (!isAuthenticated) {
       openAuthModal("login");
       return;
@@ -86,8 +92,8 @@ const WineDetailPage = () => {
     if (!canUseFavorites) {
       showResponse({
         variant: "error",
-        title: "Action not allowed",
-        message: "Only Sommeliers can manage the wish list.",
+        title: "Acción no permitida",
+        message: "Solo Sommeliers pueden gestionar Favoritos.",
       });
       return;
     }
@@ -106,18 +112,18 @@ const WineDetailPage = () => {
       showResponse({
         variant: "success",
         message: wasFavorite
-          ? "Removed from favorites"
-          : "Wine added to favorites",
+          ? "Eliminado de Favoritos"
+          : "Vino agregado a Favoritos",
         title: wasFavorite
-          ? "We updated your list"
-          : "With Vid&Food, everything is possible",
+          ? "Lista actualizada"
+          : "Con Vid&Food, todo es posible",
       });
     } catch (err) {
       console.error("Error al actualizar favorito:", err.message);
       showResponse({
         variant: "error",
-        message: err.message || "Could not update the favorites status",
-        title: "Try again",
+        message: err.message || "No se pudo actualizar el estado de Favoritos",
+        title: "Intenta de nuevo",
       });
     }
   };
@@ -164,53 +170,50 @@ const WineDetailPage = () => {
                     maxStars={5}
                   />
                 </div>
-               
+
               </div>
-               <div className="wine-detail-price-card">
-                  <div className="wine-detail-price-amount">
-                    {wine.wine.price
-                      ? `$ ${wine.wine.price.toLocaleString()}`
-                      : "No disponible"}
-                  </div>
-                  <p className="wine-detail-price-note">
-                    Estimated price according to affiliated stores.
-                  </p>
+              <div className="wine-detail-price-card">
+                <div className="wine-detail-price-amount">
+                  {wine.wine.price
+                    ? `$ ${wine.wine.price.toLocaleString()}`
+                    : "No disponible"}
                 </div>
+                <p className="wine-detail-price-note">
+                  Estimated price according to affiliated stores.
+                </p>
+              </div>
 
               <div className="wine-detail-actions">
-                {canUseFavorites && (
                   <button
                     type="button"
                     className="wine-detail-action-link"
                     onClick={handleToggleFavorite}
                   >
-                    <Bookmark
+                    <Heart
                       className="wine-detail-action-icon"
                       style={{ color: favorite ? "#a52a2a" : undefined }}
                     />
-                    {favorite
-                      ? "In your wish list"
-                      : "Add to wishlist"}
+                    {favorite ? "En Favoritos" : "Agregar a Favoritos"}
                   </button>
-                )}
+                
               </div>
             </div>
 
           </section>
 
           <section className="wine-detail-section">
-            <h3 className="wine-detail-section-title">Facts about wine</h3>
+            <h3 className="wine-detail-section-title">Datos sobre el vino</h3>
 
             <div className="wine-detail-data-table">
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Winery</div>
+                <div className="wine-detail-row-label">Bodega</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.wineryName}
                 </div>
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Grapes</div>
+                <div className="wine-detail-row-label">Uvas</div>
                 <div className="wine-detail-row-value wine-detail-grapes">
                   {wine.wine.grapes.map((g, index) => (
                     <span key={g.id} className="wine-grape-tag">
@@ -229,16 +232,23 @@ const WineDetailPage = () => {
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Flavor notes</div>
+                <div className="wine-detail-row-label">Notas de sabor</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.notesTaste || "Sin especificar"}
                 </div>
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Scent</div>
+                <div className="wine-detail-row-label">Aroma</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.aroma || "Sin especificar"}
+                </div>
+              </div>
+
+              <div className="wine-detail-row">
+                <div className="wine-detail-row-label">Tipo de vino</div>
+                <div className="wine-detail-row-value">
+                  {wineTypeToLabel(wine.wine.wineType)}
                 </div>
               </div>
             </div>

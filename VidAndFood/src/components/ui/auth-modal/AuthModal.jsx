@@ -37,7 +37,7 @@ const AuthModal = () => {
   const passwordRef = useRef(null);
   const fullNameRef = useRef(null);
 
-  const title = authModalMode === "login" ? "Log in" : "Create account";
+  const title = authModalMode === "login" ? "Iniciar sesión" : "Crear cuenta";
 
   const navigate = useNavigate();
 
@@ -97,8 +97,8 @@ const AuthModal = () => {
 
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "Email and password cannot be empty"
+            title: "Campos incompletos",
+            message: "El correo electrónico y la contraseña no pueden estar vacíos"
           });
           setSubmitting(false);
           return;
@@ -108,8 +108,8 @@ const AuthModal = () => {
           markInvalid(emailRef);
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "The email cannot be empty"
+            title: "Campos incompletos",
+            message: "El correo electrónico no puede estar vacío"
           });
           setSubmitting(false);
           return;
@@ -119,8 +119,8 @@ const AuthModal = () => {
           markInvalid(passwordRef);
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "The password cannot be empty"
+            title: "Campos incompletos",
+            message: "La contraseña no puede estar vacía"
           });
           setSubmitting(false);
           return;
@@ -137,8 +137,8 @@ const AuthModal = () => {
         }
         showResponse({
           variant: "success",
-          title: "Login successful!",
-          message: "Welcome to Vid&Food!",
+          title: "¡Inicio de sesión exitoso!",
+          message: "¡Bienvenido a Vid&Food!",
         });
 
       } else {
@@ -149,8 +149,8 @@ const AuthModal = () => {
 
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "Email, password, and first and last name cannot be empty"
+            title: "Campos incompletos",
+            message: "El correo electrónico, la contraseña y el nombre completo no pueden estar vacíos"
           });
           setSubmitting(false);
           return;
@@ -160,8 +160,8 @@ const AuthModal = () => {
           markInvalid(emailRef);
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "The email cannot be empty"
+            title: "Campos incompletos",
+            message: "El correo electrónico no puede estar vacío"
           });
           setSubmitting(false);
           return;
@@ -171,8 +171,8 @@ const AuthModal = () => {
           markInvalid(passwordRef);
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "The password cannot be empty"
+            title: "Campos incompletos",
+            message: "La contraseña no puede estar vacía"
           });
           setSubmitting(false);
           return;
@@ -182,8 +182,8 @@ const AuthModal = () => {
           markInvalid(fullNameRef);
           showResponse({
             variant: "error",
-            title: "Incomplete fields",
-            message: "The full name cannot be empty"
+            title: "Campos incompletos",
+            message: "El nombre completo no puede estar vacío"
           });
           setSubmitting(false);
           return;
@@ -194,16 +194,16 @@ const AuthModal = () => {
 
         showResponse({
           variant: "success",
-          title: "Account successfully created!",
-          message: "Your account was created successfully. Enjoy Vid&Food!",
+          title: "¡Cuenta creada con éxito!",
+          message: "Tu cuenta fue creada con éxito. ¡Disfruta Vid&Food!",
         });
       }
       closeAuthModal();
     } catch {
       showResponse({
         variant: "error",
-        title: "Error logging in",
-        message: "Incorrect email or password" ,
+        title: "Error al iniciar sesión",
+        message: "Correo electrónico o contraseña incorrectos" ,
       });
     } finally {
       setSubmitting(false);
@@ -261,7 +261,7 @@ const AuthModal = () => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="authPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Contraseña</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
@@ -285,7 +285,7 @@ const AuthModal = () => {
                       className="me-2"
                       role="status"
                     />
-                    Processing...
+                    Cargando...
                   </>
                 ) : isLogin ? (
                   "Continue"
@@ -309,7 +309,7 @@ const AuthModal = () => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="authPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Contraseña</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
@@ -321,11 +321,11 @@ const AuthModal = () => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="authPassword">
-                <Form.Label>First and last name</Form.Label>
+                <Form.Label>Nombre y Apellido</Form.Label>
                 <Form.Control
                   type="text"
                   name="fullName"
-                  placeholder="Enter your first and last name. e.g., First Name Last Name"
+                  placeholder="Ingrese su nombre y apellido. p.ej., Nombre Apellido"
                   value={formRegister.fullName}
                   onChange={handleChangeRegister}
                   ref={fullNameRef}
@@ -345,12 +345,12 @@ const AuthModal = () => {
                       className="me-2"
                       role="status"
                     />
-                    Processing...
+                    Cargando...
                   </>
                 ) : isLogin ? (
-                  "Continue"
+                  "Continuar"
                 ) : (
-                  "Create account"
+                  "Crear cuenta"
                 )}
               </Button>
             </Form>
@@ -359,24 +359,24 @@ const AuthModal = () => {
           <div className="auth-modal-footer-links">
             {isLogin ? (
               <p>
-                ¿You don't have a profile?{" "}
+                ¿No tienes un perfil?{" "}
                 <button
                   type="button"
                   className="auth-modal-link"
                   onClick={handleSwitchMode}
                 >
-                  Join Vid&Food
+                  Únete a Vid&Food
                 </button>
               </p>
             ) : (
               <p>
-                ¿Do you already have an account?{" "}
+                ¿Ya tienes una cuenta?{" "}
                 <button
                   type="button"
                   className="auth-modal-link"
                   onClick={handleSwitchMode}
                 >
-                  Log in
+                  Iniciar sesión
                 </button>
               </p>
             )}

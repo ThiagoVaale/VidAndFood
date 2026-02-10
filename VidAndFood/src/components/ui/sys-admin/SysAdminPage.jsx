@@ -38,7 +38,7 @@ const SysAdminPage = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmTitle, setConfirmTitle] = useState("");
   const [confirmBody, setConfirmBody] = useState("");
-  const [confirmAction, setConfirmAction] = useState(async () => {});
+  const [confirmAction, setConfirmAction] = useState(async () => { });
 
   const [userTarget, setUserTarget] = useState(null);
   const [users, setUsers] = useState([]);
@@ -122,24 +122,24 @@ const SysAdminPage = () => {
 
   const openUserDeleteConfirm = () => {
     if (!selectedUser) return;
-    setConfirmTitle("Delete user");
+    setConfirmTitle("Eliminar usuario");
     setConfirmBody(
-      `¿Are you sure you want to delete ${selectedUser.fullName} (${selectedUser.email})?`,
+      `¿Estás seguro de que deseas eliminar a ${selectedUser.fullName} (${selectedUser.email})?`,
     );
     setConfirmAction(() => async () => {
       try {
         setConfirmLoading(true);
         await deleteUserAdmin(selectedUser.id);
         showResponse({
-          title: "User deleted",
+          title: "Usuario eliminado",
           variant: "success",
-          message: `The user ${selectedUser.fullName} It has been deleted successfully.`,
+          message: `El usuario ${selectedUser.fullName} ha sido eliminado correctamente.`,
         });
         await reloadUsers();
         setShowConfirm(false);
       } catch (e) {
         showResponse({
-          title: "The user could not be deleted",
+          title: "No se pudo eliminar el usuario",
           variant: "error",
           message: `${e.message}`,
         });
@@ -153,9 +153,9 @@ const SysAdminPage = () => {
   const openWineDeleteConfirm = () => {
     if (!selectedWine) return;
 
-    setConfirmTitle("Remove wine");
+    setConfirmTitle("Eliminar vino");
     setConfirmBody(
-      `¿Are you sure you want to delete the wine? ${selectedWine.name}`,
+      `¿Estás seguro de que deseas eliminar el vino ${selectedWine.name}?`,
     );
 
     setConfirmAction(() => async () => {
@@ -165,16 +165,16 @@ const SysAdminPage = () => {
         await fetchDeleteWineAdmin(selectedWine.id);
 
         showResponse({
-          title: "Wine removed",
+          title: "Vino eliminado",
           variant: "success",
-          message: `The wine ${selectedWine.name} has been successfully deleted.`,
+          message: `El vino ${selectedWine.name} ha sido eliminado correctamente.`,
         });
 
-        await loadWines();
+        reloadWines();
         setShowConfirm(false);
       } catch (e) {
         showResponse({
-          title: "The wine could not be removed",
+          title: "No se pudo eliminar el vino",
           variant: "error",
           message: `${e.message}`,
         });
@@ -188,9 +188,9 @@ const SysAdminPage = () => {
   const openReviewDeleteConfirm = () => {
     if (!selectedRating) return;
 
-    setConfirmTitle("Remove review");
+    setConfirmTitle("Eliminar reseña");
     setConfirmBody(
-      `¿Are you sure you want to delete this wine review? (${selectedRating.wineName})?`,
+      `¿Estás seguro de que deseas eliminar la reseña del vino ${selectedRating.wineName}?`,
     );
 
     setConfirmAction(() => async () => {
@@ -200,9 +200,9 @@ const SysAdminPage = () => {
         await deleteReviewAdmin(selectedRating.id);
 
         showResponse({
-          title: "Review removed",
+          title: "Reseña eliminada",
           variant: "success",
-          message: `The review for wine ${selectedRating.wineName} has been successfully deleted.`,
+          message: `La reseña del vino ${selectedRating.wineName} ha sido eliminada correctamente.`,
         });
 
         await reloadWines();
@@ -210,7 +210,7 @@ const SysAdminPage = () => {
         setShowConfirm(false);
       } catch (e) {
         showResponse({
-          title: "The review could not be removed",
+          title: "No se pudo eliminar la reseña",
           variant: "error",
           message: `${e.message}`,
         });
@@ -223,13 +223,13 @@ const SysAdminPage = () => {
 
   const userColumns = [
     {
-      header: "First and Last Name",
+      header: "Nombre y apellido",
       accessor: (u) => u.fullName || "-",
       className: "admin-col-wide",
       style: { width: "38%" },
     },
     {
-      header: "Email",
+      header: "Correo electrónico",
       accessor: (u) => u.email || "-",
       className: "admin-col-wide",
       style: { widht: "44%" },
@@ -239,35 +239,35 @@ const SysAdminPage = () => {
 
   const winesColums = [
     {
-      header: "Name",
+      header: "Nombre",
       accessor: (w) => w.name || "-",
       className: "admin-col-wide",
       style: { width: "30%" },
     },
     {
-      header: "Winery",
+      header: "Bodega",
       accessor: (w) => w.wineryName || "-",
       className: "admin-col-wide",
       style: { width: "20%" },
     },
     {
-      header: "Price",
+      header: "Precio",
       accessor: (w) => w.price ?? "-",
       style: { width: "12%" },
     },
     {
-      header: "Harvest year",
+      header: "Año de cosecha",
       accessor: (w) => w.vintageYear ?? "-",
       style: { width: "12%" },
     },
     {
-      header: "Average score",
+      header: "Puntuación media",
       accessor: (w) =>
         w.averageScore != null ? w.averageScore.toFixed(1) : "-",
       style: { width: "12%" },
     },
-   {
-      header: "Grapes",
+    {
+      header: "Uvas",
       accessor: (w) => {
         if (Array.isArray(w.grapes) && w.grapes.length > 0) {
           return w.grapes.map(g => g.name).join(", ");
@@ -278,38 +278,38 @@ const SysAdminPage = () => {
       style: { width: "20%" },
     },
     {
-      header: "Active",
-      accessor: (w) => (w.isActive === true ? "Yes" : w.isActive === false ? "No" : "-"),
+      header: "Activo",
+      accessor: (w) => (w.isActive === true ? "Sí" : w.isActive === false ? "No" : "-"),
       style: { width: "10%" }
     }
   ];
 
   const ratingsColums = [
     {
-      header: "Wine",
+      header: "Vino",
       accessor: (r) => r.wineName || "-",
       className: "admin-col-wide",
       style: { width: "36%" },
     },
     {
-      header: "User",
+      header: "Usuario",
       accessor: (r) => r.userName || "-",
       style: { width: "18%" },
     },
     {
-      header: "Score",
+      header: "Puntuación",
       accessor: (r) => r.score ?? "-",
       style: { width: "10%" },
     },
     {
-      header: "Comment",
+      header: "Comentario",
       accessor: (r) => r.review || "-",
       className: "admin-col-wide",
       style: { width: "35%" },
     },
     {
-      header: "Active",
-      accessor: (r) => (r.isActive === true ? "Yes" : r.isActive === false ? "No" : "-"),
+      header: "Activo",
+      accessor: (r) => (r.isActive === true ? "Sí" : r.isActive === false ? "No" : "-"),
       style: { width: "10%" }
     }
   ];
@@ -335,10 +335,10 @@ const SysAdminPage = () => {
                 marginTop: "2rem",
               }}
             >
-              SysAdmin – Administration Panel
+              SysAdmin – Panel de administración
             </h1>
             <p className="text-muted">
-              Management of users, wines, and ratings in the Vid&Food system.
+              Gestión de usuarios, vinos y valoraciones en el sistema Vid&Food.
             </p>
           </header>
 
@@ -348,7 +348,7 @@ const SysAdminPage = () => {
               className={`admin-tab ${activeTab === "users" ? "active" : ""}`}
               onClick={() => setActiveTab("users")}
             >
-              Users
+              Usuarios
             </button>
 
             <button
@@ -356,7 +356,7 @@ const SysAdminPage = () => {
               className={`admin-tab ${activeTab === "wines" ? "active" : ""}`}
               onClick={() => setActiveTab("wines")}
             >
-              Wines
+              Vinos
             </button>
 
             <button
@@ -364,7 +364,7 @@ const SysAdminPage = () => {
               className={`admin-tab ${activeTab === "ratings" ? "active" : ""}`}
               onClick={() => setActiveTab("ratings")}
             >
-              Ratings
+              Valoraciones
             </button>
           </div>
 
@@ -372,7 +372,7 @@ const SysAdminPage = () => {
             <Row>
               <Col lg={12} className="mb-3">
                 <AdminTable
-                  title="Users"
+                  title="Usuarios"
                   columns={userColumns}
                   data={users}
                   loading={loadingUsers}
@@ -384,9 +384,9 @@ const SysAdminPage = () => {
                     setSelectedUser(u);
                     if (String(u.role).toLowerCase() === "admin") {
                       showResponse({
-                        title: "Protected user",
+                        title: "Usuario protegido",
                         variant: "info",
-                        message: "Admin users cannot be modified or deleted.",
+                        message: "Los usuarios Admin no pueden ser modificados ni eliminados.",
                       });
                     }
                   }}
@@ -395,10 +395,10 @@ const SysAdminPage = () => {
                       <Button
                         variant="success"
                         size="sm"
-                        className="className="admin-action-btn btn-wine-primary
+                        className="admin-action-btn btn-wine-primary"
                         onClick={() => openUserModal("create")}
                       >
-                        + Add
+                        + Añadir
                       </Button>
 
                       <Button
@@ -407,7 +407,7 @@ const SysAdminPage = () => {
                         disabled={!selectedUser || selectedIsAdmin}
                         onClick={() => openUserModal("role")}
                       >
-                        Change role
+                        Cambiar rol
                       </Button>
 
                       <Button
@@ -416,7 +416,7 @@ const SysAdminPage = () => {
                         disabled={!selectedUser || selectedIsAdmin}
                         onClick={() => openUserDeleteConfirm()}
                       >
-                        Delete
+                        Eliminar
                       </Button>
                     </>
                   }
@@ -429,7 +429,7 @@ const SysAdminPage = () => {
             <Row>
               <Col lg={12} className="mb-3">
                 <AdminTable
-                  title="Wines"
+                  title="Vinos"
                   columns={winesColums}
                   data={wines}
                   loading={isLoadingWines}
@@ -445,7 +445,7 @@ const SysAdminPage = () => {
                         size="sm"
                         onClick={() => openWineModal("create")}
                       >
-                        Add
+                        Añadir
                       </Button>
 
                       <Button
@@ -454,7 +454,7 @@ const SysAdminPage = () => {
                         disabled={!selectedWine}
                         onClick={() => openWineModal("edit")}
                       >
-                        Edit
+                        Editar
                       </Button>
 
                       <Button
@@ -463,7 +463,7 @@ const SysAdminPage = () => {
                         disabled={!selectedWine}
                         onClick={() => openWineDeleteConfirm()}
                       >
-                        Delete
+                        Eliminar
                       </Button>
                     </>
                   }
@@ -476,7 +476,7 @@ const SysAdminPage = () => {
             <Row>
               <Col lg={12} className="mb-3">
                 <AdminTable
-                  title="Ratings"
+                  title="Valoraciones"
                   columns={ratingsColums}
                   data={ratingsData}
                   loading={isLoadingWines}
@@ -493,7 +493,7 @@ const SysAdminPage = () => {
                         disabled={!selectedRating}
                         onClick={() => openReviewDeleteConfirm()}
                       >
-                        Delete
+                        Eliminar
                       </Button>
                     </>
                   }
@@ -523,7 +523,7 @@ const SysAdminPage = () => {
           show={showConfirm}
           title={confirmTitle}
           body={confirmBody}
-          confirmText="Delete"
+          confirmText="Eliminar"
           confirmVariant="danger"
           loading={confirmLoading}
           onClose={() => setShowConfirm(false)}

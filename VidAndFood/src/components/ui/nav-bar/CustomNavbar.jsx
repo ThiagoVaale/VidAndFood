@@ -5,9 +5,9 @@ import "./CustomNavBar.css";
 
 const CustomNavbar = () => {
   const pages = [
-   
-    { name: "Wines", href: "/wines" },
-    { name: "Sommelier AI", href: "/sommelier-ai" },
+
+    { name: "Vinos", href: "/wines" },
+    { name: "Sommelier IA", href: "/sommelier-ai" },
   ];
 
   return (
@@ -17,7 +17,7 @@ const CustomNavbar = () => {
       className="shadow-sm fixed-top custom-navbar"
     >
       <Container fluid className="d-flex align-items-center justify-content-between">
-        
+
         <Navbar.Brand as={NavLink} to="/home" className="brand-title">
           Vid & Food
         </Navbar.Brand>

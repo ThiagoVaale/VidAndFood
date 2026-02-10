@@ -32,7 +32,6 @@ export async function fecthAllUsers() {
 
 export async function createGrape(grapeName) {
   const token = localStorage.getItem(TOKEN_KEY);
-  console.log("NOMBRE DE UVA ANTES DE FETCH: ", grapeName)
   if (!token) {
     throw new Error("Usuario no autenticado");
   }

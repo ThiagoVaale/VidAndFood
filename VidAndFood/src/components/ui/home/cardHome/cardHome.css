@@ -307,3 +307,33 @@
     text-align: left;
   }
 }
+
+
+/* =========================================
+   ESTILOS ESPECÍFICOS: TARJETA HORIZONTAL
+   ========================================= */
+.wine-card-horizontal {
+  width: 100%;
+  min-height: 200px;
+  /* max-height opcional, cuidado si el texto es muy largo */
+  /* max-height: 220px; */ 
+}
+
+/* Controla la columna de la imagen */
+.wine-card-horizontal .wine-card-horizontal__img-wrapper {
+  flex: 0 0 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+/* Controla la columna de precio/rating */
+.wine-card-horizontal .rating-price-section {
+  flex: 0 0 140px;
+  min-width: 140px;
+}
+
+/* Asegura que el texto central no desborde ni rompa el flex */
+.wine-card-horizontal .wine-info {
+  min-width: 0;
+}
+

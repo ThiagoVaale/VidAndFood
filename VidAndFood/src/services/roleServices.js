@@ -15,8 +15,6 @@ async function handleResponse(response) {
 export async function upgradeAdminToSommelier(userId, newRole) {
   const token = localStorage.getItem(TOKEN_KEY);
 
-  console.log("USERID Y NEWROLE DESDE SERVICE: ", userId, newRole)
-
   if (!token) {
     throw new Error("Usuario no autenticado");
   }
@@ -70,7 +68,7 @@ export async function upgradeToSommelier() {
   return handleResponse(res);
 }
 
-export async function downgradeToSommelier() {
+export async function downgradeToUser() {
   const token = localStorage.getItem(TOKEN_KEY);
 
   if (!token) {

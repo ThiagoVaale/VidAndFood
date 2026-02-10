@@ -13,11 +13,14 @@ const emptyWine = {
   name: "",
   wineryName: "",
   regionName: "",
-  vintageYear: "",
-  price: "",
+  wineType: null,
+  notesTaste: "",
+  aroma: "",
+  countryName: "Argentina",
+  vintageYear: 0,
+  price: 0,
   description: "",
   imageUrl: "",
-  grapes: "",
 };
 
 const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
@@ -50,13 +53,15 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
     if (isEdit && wine) {
       setAddWine({
         name: wine.name ?? "",
-        wineryName: "",
+        wineryName: wine.wineryName ?? "",
         regionName: wine.regionName ?? "",
-        vintageYear: wine.vintageYear ?? "",
-        price: wine.price ?? "",
+        wineType: typeof wine.wineType === "number" ? wine.wineType : null,
+        notesTaste: wine.notesTaste ?? "",
+        aroma: wine.aroma ?? "",
+        vintageYear: wine.vintageYear ?? 0,
+        price: wine.price ?? 0,
         description: wine.description ?? "",
         imageUrl: wine.imageUrl ?? "",
-        grapes: "",
       });
 
       setSelectedWinery(
@@ -92,14 +97,12 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           fetchAllGrapes(),
         ]);
 
-        console.log(("GRAPES: ", grapes));
-
-        const wineriesOptions = (wineries).map((name) => ({
+        const wineriesOptions = wineries.map((name) => ({
           value: name,
           label: name,
         }));
 
-        const grapesOptions = (grapes).map((g) => ({
+        const grapesOptions = grapes.map((g) => ({
           value: g.id,
           label: g.name,
         }));
@@ -119,8 +122,17 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
   }, [show, showResponse]);
 
   const payload = {
-    ...addWine,
+    name: addWine.name,
     wineryName: selectedWinery?.value ?? "",
+    regionName: addWine.regionName,
+    wineType: addWine.wineType ?? 0,
+    notesTaste: addWine.notesTaste,
+    aroma: addWine.aroma,
+    countryName: "Argentina",
+    vintageYear: addWine.vintageYear ?? 0,
+    price: addWine.price ?? 0,
+    description: addWine.description,
+    imageUrl: addWine.imageUrl,
     grapes: selectedGrapes.map((g) => g.value),
   };
 
@@ -159,10 +171,13 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
   const handleCreateWine = (e) => {
     const { name, value } = e.target;
-    setAddWine((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    setAddWine((prev) => {
+      if (name === "wineType" || name === "vintageYear" || name === "price") {
+        return { ...prev, [name]: value === "" ? 0 : Number(value) };
+      }
+      return { ...prev, [name]: value };
+    });
   };
 
   const viewGrapesWine = (wine, grapeOptions) => {
@@ -170,36 +185,32 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
       return [];
     }
 
-    // if (Array.isArray(wine.grapes) && wine.grapes.length > 0) {
-    //   const ids = wine.grapes.map(String);
-    //   return grapeOptions.filter((o) => ids.includes(String(o.value)));
-    // }
-
-    if(typeof wine.grapeNames === "string" && wine.grapeNames.trim()){
-      const names = wine.grapeNames
-        .split(",")
-        .map((s) => s.trim().toLowerCase())
-        .filter(Boolean);
-
-        return grapeOptions.filter((o) => 
-          names.includes(String(o.label).toLowerCase())
-        )
+    if (Array.isArray(wine.grapes) && wine.grapes.length > 0) {
+      const ids = wine.grapes.map((g) => String(g.id));
+      return grapeOptions.filter((o) => ids.includes(String(o.value)));
     }
     return [];
   };
 
+  const wineTypeOptions = [
+    { value: 0, label: "Espumoso" },
+    { value: 1, label: "Tinto" },
+    { value: 2, label: "Blanco" },
+    { value: 3, label: "Rosado" },
+  ];
+
   return (
-    <Modal show={show} onHide={saving ? undefined : onClose} centered>
+    <Modal show={show} onHide={saving ? undefined : onClose} centered size="lg">
       <Modal.Header closeButton={!saving}>
-        <Modal.Title>{isEdit ? "Edit wine" : "Add wine"}</Modal.Title>
+        <Modal.Title>{isEdit ? "Editar vino" : "Añadir vino"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
             <Row>
-              <Col md={6}>
-                <Form.Label>Name</Form.Label>
+              <Col md={4}>
+                <Form.Label>Nombre</Form.Label>
                 <Form.Control
                   name="name"
                   value={addWine.name}
@@ -211,7 +222,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Winery</Form.Label>
+                <Form.Label>Bodega</Form.Label>
                 <Select
                   options={wineryOptions}
                   value={selectedWinery}
@@ -221,13 +232,9 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                   isClearable
                 />
               </Col>
-            </Row>
-          </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Row>
-              <Col md={6}>
-                <Form.Label>Region</Form.Label>
+              <Col md={4}>
+                <Form.Label>Región</Form.Label>
                 <Form.Control
                   name="regionName"
                   value={addWine.regionName}
@@ -236,15 +243,49 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                   disabled={saving}
                 />
               </Col>
+            </Row>
+          </Form.Group>
 
-              <Col md={6}>
-                <Form.Label>Harvest year</Form.Label>
+          <Form.Group className="mb-3">
+            <Row>
+              <Col md={4}>
+                <Form.Label>Tipo de vino</Form.Label>
+                <Select
+                  options={wineTypeOptions}
+                  value={
+                    wineTypeOptions.find((o) => o.value === addWine.wineType) ??
+                    null
+                  }
+                  onChange={(opt) =>
+                    setAddWine((prev) => ({
+                      ...prev,
+                      wineType: opt?.value ?? 0,
+                    }))
+                  }
+                  placeholder="Seleccionar tipo de vino..."
+                  isDisabled={saving}
+                  isClearable
+                />
+              </Col>
+
+              <Col md={4}>
+                <Form.Label>Notas de cata</Form.Label>
                 <Form.Control
-                  name="vintageYear"
-                  type="number"
-                  value={addWine.vintageYear}
+                  name="notesTaste"
+                  value={addWine.notesTaste}
                   onChange={handleCreateWine}
-                  placeholder="Ej: 2021"
+                  placeholder="Ej: Amaderado"
+                  disabled={saving}
+                />
+              </Col>
+
+              <Col md={4}>
+                <Form.Label>Aroma</Form.Label>
+                <Form.Control
+                  name="aroma"
+                  value={addWine.aroma}
+                  onChange={handleCreateWine}
+                  placeholder="Ej: Frutal"
                   disabled={saving}
                 />
               </Col>
@@ -253,11 +294,23 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
           <Form.Group className="mb-3">
             <Row>
-              <Col md={6}>
+              <Col md={6}/>
+                <Form.Label>Precio</Form.Label>
+              <Col md={4}>
+                <Form.Label>Añada</Form.Label>
+                <Form.Control
+                  name="vintageYear"
+                  value={addWine.vintageYear}
+                  onChange={handleCreateWine}
+                  placeholder="Ej: 2020"
+                  disabled={saving}
+                />
+              </Col>
+
+              <Col md={4}>
                 <Form.Label>Price</Form.Label>
                 <Form.Control
                   name="price"
-                  type="number"
                   value={addWine.price}
                   onChange={handleCreateWine}
                   placeholder="Ej: 8500"
@@ -266,12 +319,12 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Description</Form.Label>
+                <Form.Label>Descripción</Form.Label>
                 <Form.Control
                   name="description"
                   value={addWine.description}
                   onChange={handleCreateWine}
-                  placeholder="Description of wine"
+                  placeholder="Descripción del vino"
                   disabled={saving}
                 />
               </Col>
@@ -281,7 +334,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={6}>
-                <Form.Label>Image</Form.Label>
+                <Form.Label>Imagen</Form.Label>
                 <Form.Control
                   name="imageUrl"
                   value={addWine.imageUrl}
@@ -292,13 +345,13 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Grapes</Form.Label>
+                <Form.Label>Uvas</Form.Label>
                 <Select
                   isMulti
                   options={grapeOptions}
                   value={selectedGrapes}
                   onChange={(opts) => setSelectedGrapes(opts ?? [])}
-                  placeholder="Select Grape..."
+                  placeholder="Seleccionar uva..."
                   isDisabled={saving}
                   closeMenuOnSelect={false}
                 />
@@ -310,10 +363,10 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={saving}>
-          Cancel
+          Cancelar
         </Button>
         <Button variant="primary" onClick={handleSave} disabled={saving}>
-          {saving ? "Saving..." : "Save"}
+          {saving ? "Guardando..." : "Guardar"}
         </Button>
       </Modal.Footer>
     </Modal>
