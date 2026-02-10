@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import CustomNavBar from "../../ui/nav-bar/CustomNavbar";
 import StarRating from "../../common/StarsRating";
 import "./WineDetailPage.css";
-import { Bookmark } from "react-bootstrap-icons";
+import { Heart } from "react-bootstrap-icons";
 import Footer from "../footer/Footer";
 import { useContext, useEffect, useState } from "react";
 import WishListContext from "../../../services/context/wishListContext/WishListContext";
@@ -47,9 +47,9 @@ const WineDetailPage = () => {
   }, [wineId, wines]);
 
   const reloadWine = async () => {
-    try{
-    const wineReview = await fetchWineById(wineId);
-    setWine(wineReview || null);
+    try {
+      const wineReview = await fetchWineById(wineId);
+      setWine(wineReview || null);
     } catch (err) {
       console.error("Error reloading the wine: ", err.message)
     }
@@ -61,8 +61,8 @@ const WineDetailPage = () => {
         <CustomNavBar />
         <div className="wine-detail-wrapper">
           <div className="wine-detail-main-container">
-            <p>No history available</p>
-            <button onClick={() => navigate("/wines")}>Back to Wines</button>
+            <p>No hay detalles disponibles</p>
+            <button onClick={() => navigate("/wines")}>Volver a vinos</button>
           </div>
         </div>
       </>
@@ -89,6 +89,15 @@ const WineDetailPage = () => {
       return;
     }
 
+    if (!canUseFavorites) {
+      showResponse({
+        variant: "error",
+        title: "Acción no permitida",
+        message: "Solo Sommeliers pueden gestionar Favoritos.",
+      });
+      return;
+    }
+
     const wasFavorite = favorite;
 
     try {
@@ -103,18 +112,18 @@ const WineDetailPage = () => {
       showResponse({
         variant: "success",
         message: wasFavorite
-          ? "Removed from favorites"
-          : "Wine added to favorites",
+          ? "Eliminado de Favoritos"
+          : "Vino agregado a Favoritos",
         title: wasFavorite
-          ? "We updated your list"
-          : "With Vid&Food, everything is possible",
+          ? "Lista actualizada"
+          : "Con Vid&Food, todo es posible",
       });
     } catch (err) {
       console.error("Error al actualizar favorito:", err.message);
       showResponse({
         variant: "error",
-        message: err.message || "Could not update the favorites status",
-        title: "Try again",
+        message: err.message || "No se pudo actualizar el estado de Favoritos",
+        title: "Intenta de nuevo",
       });
     }
   };
@@ -161,18 +170,18 @@ const WineDetailPage = () => {
                     maxStars={5}
                   />
                 </div>
-               
+
               </div>
-               <div className="wine-detail-price-card">
-                  <div className="wine-detail-price-amount">
-                    {wine.wine.price
-                      ? `$ ${wine.wine.price.toLocaleString()}`
-                      : "No disponible"}
-                  </div>
-                  <p className="wine-detail-price-note">
-                    Estimated price according to affiliated stores.
-                  </p>
+              <div className="wine-detail-price-card">
+                <div className="wine-detail-price-amount">
+                  {wine.wine.price
+                    ? `$ ${wine.wine.price.toLocaleString()}`
+                    : "No disponible"}
                 </div>
+                <p className="wine-detail-price-note">
+                  Estimated price according to affiliated stores.
+                </p>
+              </div>
 
               <div className="wine-detail-actions">
                   <button
@@ -180,13 +189,11 @@ const WineDetailPage = () => {
                     className="wine-detail-action-link"
                     onClick={handleToggleFavorite}
                   >
-                    <Bookmark
+                    <Heart
                       className="wine-detail-action-icon"
                       style={{ color: favorite ? "#a52a2a" : undefined }}
                     />
-                    {favorite
-                      ? "In your wish list"
-                      : "Add to wishlist"}
+                    {favorite ? "En Favoritos" : "Agregar a Favoritos"}
                   </button>
                 
               </div>
@@ -195,18 +202,18 @@ const WineDetailPage = () => {
           </section>
 
           <section className="wine-detail-section">
-            <h3 className="wine-detail-section-title">Facts about wine</h3>
+            <h3 className="wine-detail-section-title">Datos sobre el vino</h3>
 
             <div className="wine-detail-data-table">
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Winery</div>
+                <div className="wine-detail-row-label">Bodega</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.wineryName}
                 </div>
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Grapes</div>
+                <div className="wine-detail-row-label">Uvas</div>
                 <div className="wine-detail-row-value wine-detail-grapes">
                   {wine.wine.grapes.map((g, index) => (
                     <span key={g.id} className="wine-grape-tag">
@@ -225,14 +232,14 @@ const WineDetailPage = () => {
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Flavor notes</div>
+                <div className="wine-detail-row-label">Notas de sabor</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.notesTaste || "Sin especificar"}
                 </div>
               </div>
 
               <div className="wine-detail-row">
-                <div className="wine-detail-row-label">Scent</div>
+                <div className="wine-detail-row-label">Aroma</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.aroma || "Sin especificar"}
                 </div>

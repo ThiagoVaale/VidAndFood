@@ -3,12 +3,12 @@ import { Button } from "react-bootstrap";
 import COLORS from "../../../utils/colors";
 import { forwardRef } from "react";
 
-const ProfileMenuToggle = forwardRef(({ onClick, open })  => {
+const ProfileMenuToggle = forwardRef(({ onClick, open }) => {
   return (
     <Button
       variant="link"
       className="p-0 border-0 shadow-none"
-      aria-label="Open profile menu"
+      aria-label="Abrir menú de perfil"
       aria-expanded={open ? "true" : "false"}
       onClick={(e) => {
         e.preventDefault();

@@ -20,7 +20,7 @@ const ConfirmModal = ({
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={loading}>
-          Cancel
+          Cancelar
         </Button>
         <Button variant={confirmVariant} onClick={onConfirm} disabled={loading}>
           {loading ? "Processing..." : confirmText}

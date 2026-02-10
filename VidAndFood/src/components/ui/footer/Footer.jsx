@@ -6,35 +6,35 @@ const Footer = () => {
     <section className="footer-banner">
       <div className="footer-container">
         <h2 className="footer-title">
-          Thousands of people trust Vid&Food to find<br />
-          the perfect pairing over and over again.
+          Miles de personas confían en Vid&Food para encontrar<br />
+          el maridaje perfecto una y otra vez.
         </h2>
 
         <div className="footer-features">
           <div className="feature-item">
             <Heart className="feature-icon" />
             <p>
-              Find your perfect pairing with smart recommendations based on your tastes.
+              Encuentra tu maridaje perfecto con recomendaciones inteligentes basadas en tus gustos.
             </p>
           </div>
 
           <div className="feature-item">
             <ChatDots className="feature-icon" />
             <p>
-              We have an AI chatbot ready to give you advice on wines, food, and ideal pairings.
+              Contamos con un chatbot de IA listo para darte consejos sobre vinos, comida y maridajes ideales.
             </p>
           </div>
 
           <div className="feature-item">
             <Stars className="feature-icon" />
             <p>
-              Check honest reviews about any wine before buying it.
+              Consulta reseñas honestas sobre cualquier vino antes de comprarlo.
             </p>
           </div>
         </div>
 
         <div className="footer-legal">
-          © Vid&Food 2026  —  All rights reserved.
+          © Vid&Food 2026  —  Todos los derechos reservados.
         </div>
       </div>
     </section>

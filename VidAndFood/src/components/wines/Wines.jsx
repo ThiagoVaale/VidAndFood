@@ -27,8 +27,8 @@ const Wines = ({ wines, isHorizontal, isFavorite, onToggleFavorite }) => {
   if (!wines || wines.length === 0) {
     return (
       <div className="text-center py-5 text-muted">
-        <h4>No wines found</h4>
-        <p>Try adjusting your filters.</p>
+        <h4>No se encontraron vinos</h4>
+        <p>Intenta ajustar tus filtros.</p>
       </div>
     );
   }

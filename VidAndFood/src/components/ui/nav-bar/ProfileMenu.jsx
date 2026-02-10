@@ -59,7 +59,7 @@ const ProfileMenu = ({ onLogout }) => {
               to="/sys-admin"
               onClick={() => setOpen(false)}
             >
-              Sys Admin Panel
+              Panel Admin del Sistema
             </Dropdown.Item>
 
             <Dropdown.Divider />
@@ -70,7 +70,7 @@ const ProfileMenu = ({ onLogout }) => {
               onClick={handleLogout}
               style={{ fontWeight: "lighter" }}
             >
-              Log out
+              Cerrar sesión
             </Dropdown.Item>
           </>
         )}
@@ -78,9 +78,9 @@ const ProfileMenu = ({ onLogout }) => {
         {isUserSommelier && !isUserAdmin && (
           <>
             <div className="premium-header px-3 py-2">
-              <span className="premium-question">Welcome Sommelier!</span>
+              <span className="premium-question">¡Bienvenido Sommelier!</span>
             </div>
-            
+
             <Dropdown.Divider />
 
             <Dropdown.Item
@@ -88,11 +88,11 @@ const ProfileMenu = ({ onLogout }) => {
               to="/my-wines"
               onClick={() => setOpen(false)}
             >
-              My Wines
+              Favoritos
             </Dropdown.Item>
 
             <Dropdown.Item onClick={() => navigate("/history")}>
-              History
+              Historial
             </Dropdown.Item>
 
             <Dropdown.Item
@@ -100,7 +100,7 @@ const ProfileMenu = ({ onLogout }) => {
               to="/setting"
               onClick={() => setOpen(false)}
             >
-              Settings
+              Configuración
             </Dropdown.Item>
 
             <Dropdown.Divider />
@@ -111,7 +111,7 @@ const ProfileMenu = ({ onLogout }) => {
               onClick={handleLogout}
               style={{ fontWeight: "lighter" }}
             >
-              Log out
+              Cerrar sesión
             </Dropdown.Item>
           </>
         )}
@@ -119,7 +119,7 @@ const ProfileMenu = ({ onLogout }) => {
         {isUser && !isUserSommelier && !isUserAdmin && (
           <>
             <div className="premium-header px-6 py-3 mx-7">
-              <span className="premium-question">¿Do you want to be a Sommelier?</span>
+              <span className="premium-question">¿Quieres ser Sommelier?</span>
 
               <Button
                 variant="outline-dark"
@@ -137,7 +137,7 @@ const ProfileMenu = ({ onLogout }) => {
             <Dropdown.Divider />
 
             <Dropdown.Item onClick={() => navigate("/history")}>
-              History
+              Historial
             </Dropdown.Item>
 
             <Dropdown.Item
@@ -145,7 +145,7 @@ const ProfileMenu = ({ onLogout }) => {
               to="/setting"
               onClick={() => setOpen(false)}
             >
-              Settings
+              Configuración
             </Dropdown.Item>
 
             <Dropdown.Divider />
@@ -156,7 +156,7 @@ const ProfileMenu = ({ onLogout }) => {
               onClick={handleLogout}
               style={{ fontWeight: "lighter" }}
             >
-              Log out
+              Cerrar sesión
             </Dropdown.Item>
           </>
         )}
