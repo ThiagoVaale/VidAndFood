@@ -202,7 +202,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
   return (
     <Modal show={show} onHide={saving ? undefined : onClose} centered size="lg">
       <Modal.Header closeButton={!saving}>
-        <Modal.Title>{isEdit ? "Edit wine" : "Add wine"}</Modal.Title>
+        <Modal.Title>{isEdit ? "Editar vino" : "Añadir vino"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -210,7 +210,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={4}>
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Nombre</Form.Label>
                 <Form.Control
                   name="name"
                   value={addWine.name}
@@ -221,8 +221,8 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                 />
               </Col>
 
-              <Col md={4}>
-                <Form.Label>Winery</Form.Label>
+              <Col md={6}>
+                <Form.Label>Bodega</Form.Label>
                 <Select
                   options={wineryOptions}
                   value={selectedWinery}
@@ -234,7 +234,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={4}>
-                <Form.Label>Region</Form.Label>
+                <Form.Label>Región</Form.Label>
                 <Form.Control
                   name="regionName"
                   value={addWine.regionName}
@@ -249,7 +249,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={4}>
-                <Form.Label>Wine Type</Form.Label>
+                <Form.Label>Tipo de vino</Form.Label>
                 <Select
                   options={wineTypeOptions}
                   value={
@@ -262,14 +262,14 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                       wineType: opt?.value ?? 0,
                     }))
                   }
-                  placeholder="Select wine type..."
+                  placeholder="Seleccionar tipo de vino..."
                   isDisabled={saving}
                   isClearable
                 />
               </Col>
 
               <Col md={4}>
-                <Form.Label>Notes Taste</Form.Label>
+                <Form.Label>Notas de cata</Form.Label>
                 <Form.Control
                   name="notesTaste"
                   value={addWine.notesTaste}
@@ -294,8 +294,10 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
           <Form.Group className="mb-3">
             <Row>
+              <Col md={6}/>
+                <Form.Label>Precio</Form.Label>
               <Col md={4}>
-                <Form.Label>Vintage Year</Form.Label>
+                <Form.Label>Añada</Form.Label>
                 <Form.Control
                   name="vintageYear"
                   value={addWine.vintageYear}
@@ -316,13 +318,13 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
                 />
               </Col>
 
-              <Col md={4}>
-                <Form.Label>Descripton</Form.Label>
+              <Col md={6}>
+                <Form.Label>Descripción</Form.Label>
                 <Form.Control
                   name="description"
                   value={addWine.description}
                   onChange={handleCreateWine}
-                  placeholder="Ej: Blanco seco"
+                  placeholder="Descripción del vino"
                   disabled={saving}
                 />
               </Col>
@@ -332,7 +334,7 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
           <Form.Group className="mb-3">
             <Row>
               <Col md={6}>
-                <Form.Label>Image</Form.Label>
+                <Form.Label>Imagen</Form.Label>
                 <Form.Control
                   name="imageUrl"
                   value={addWine.imageUrl}
@@ -343,13 +345,13 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
               </Col>
 
               <Col md={6}>
-                <Form.Label>Grapes</Form.Label>
+                <Form.Label>Uvas</Form.Label>
                 <Select
                   isMulti
                   options={grapeOptions}
                   value={selectedGrapes}
                   onChange={(opts) => setSelectedGrapes(opts ?? [])}
-                  placeholder="Select Grape..."
+                  placeholder="Seleccionar uva..."
                   isDisabled={saving}
                   closeMenuOnSelect={false}
                 />
@@ -361,10 +363,10 @@ const WineAdminModal = ({ show, mode, wine, onClose, onSuccess }) => {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={saving}>
-          Cancel
+          Cancelar
         </Button>
         <Button variant="primary" onClick={handleSave} disabled={saving}>
-          {saving ? "Saving..." : "Save"}
+          {saving ? "Guardando..." : "Guardar"}
         </Button>
       </Modal.Footer>
     </Modal>

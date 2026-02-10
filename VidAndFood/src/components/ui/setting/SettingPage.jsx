@@ -48,7 +48,7 @@ const SettingPage = () => {
     try {
       if (currentRole === "Sommelier" && newRole === "User") {
         const { token: newToken } = await downgradeToUser();
-        
+
         if (!newToken) {
           throw new Error("No token was received from the backend");
         }
@@ -93,22 +93,6 @@ const SettingPage = () => {
       });
       setAccountForm((prev) => ({ ...prev, membership: currentRole }));
       return;
-    }
-
-    setSaving(true);
-
-    try {
-      await upgradeToSommelier();
-
-      const updatedUser = { ...user, role: "Sommelier" };
-      onLogin(updatedUser, token);
-
-      showResponse({
-        variant: "success",
-        title: "Suscripción actualizada",
-        message:
-          "Ahora eres Sommelier en Vid&Food. Disfruta los beneficios de tu nueva suscripción.",
-      });
     } catch (err) {
       showResponse({
         variant: "error",
