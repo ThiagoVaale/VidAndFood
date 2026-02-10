@@ -70,7 +70,7 @@ export async function upgradeToSommelier() {
   return handleResponse(res);
 }
 
-export async function downgradeToSommelier() {
+export async function downgradeToUser() {
   const token = localStorage.getItem(TOKEN_KEY);
 
   if (!token) {

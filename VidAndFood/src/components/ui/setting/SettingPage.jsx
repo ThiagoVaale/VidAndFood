@@ -3,13 +3,14 @@ import AuthContext from "../../../services/context/authContext/AuthContext";
 import CustomNavbar from "../nav-bar/CustomNavbar";
 import "./SettingPage.css";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
-import { upgradeToSommelier } from "../../../services/roleServices";
+import {
+  downgradeToUser,
+  upgradeToSommelier,
+} from "../../../services/roleServices";
 
 const SettingPage = () => {
-  const { user, token, onLogin } = useContext(AuthContext);
+  const { user, onLogin } = useContext(AuthContext);
   const { showResponse } = useContext(ResponseContext);
-
-  console.log("USER desde contexto: ", user)
 
   const [accountForm, setAccountForm] = useState({
     fullname: user?.fullName,
@@ -29,51 +30,76 @@ const SettingPage = () => {
     const currentRole = user.role;
     const newRole = accountForm.membership;
 
-    if( currentRole === newRole ){
-      showResponse({
-        variant: "error",
-        title: "Error updating subscription",
-        message: "You didn't make any changes to your subscription type."
-      });
+    if (!currentRole) {
       return;
     }
 
-    const isUserToSommelier = currentRole === "User" && newRole === "Sommelier";
-    if (!isUserToSommelier) {
+    if (currentRole === newRole) {
       showResponse({
         variant: "error",
-        title: "Role change not available",
-        message:
-          "From this screen, you can only upgrade your subscription from User to Sommelier.",
+        title: "Error updating subscription",
+        message: "You didn't make any changes to your subscription type.",
       });
-
-      setAccountForm((prev) => ({ ...prev, membership: currentRole }));
       return;
     }
 
     setSaving(true);
 
     try {
-      await upgradeToSommelier();
+      if (currentRole === "Sommelier" && newRole === "User") {
+        const { token: newToken } = await downgradeToUser();
+        
+        if (!newToken) {
+          throw new Error("No token was received from the backend");
+        }
 
-      const updatedUser = { ...user, role: "Sommelier" };
-      onLogin(updatedUser, token);
+        onLogin(newToken);
+
+        showResponse({
+          variant: "info",
+          title: "Subscription updated",
+          message: "Your subscription was updated.",
+        });
+
+        setAccountForm((prev) => ({ ...prev, membership: "User" }));
+        return;
+      }
+
+      if (currentRole === "User" && newRole === "Sommelier") {
+        const { token: newToken, message } = await upgradeToSommelier();
+
+        if (!newToken) {
+          throw new Error("No token was received from the backend");
+        }
+
+        onLogin(newToken);
+        showResponse({
+          variant: "success",
+          title: "Subscription updated",
+          message:
+            message ||
+            "You are now a Sommelier at Vid&Food. Enjoy the benefits of your new subscription.",
+        });
+
+        setAccountForm((prev) => ({ ...prev, membership: "Sommelier" }));
+        return;
+      }
 
       showResponse({
-        variant: "success",
-        title: "Subscription updated",
+        variant: "error",
+        title: "Role change not available",
         message:
-          "You are now a Sommelier at Vid&Food. Enjoy the benefits of your new subscription.",
+          "From this screen, you can only upgrade from User to Sommelier, or downgrade from Sommelier to User.",
       });
+      setAccountForm((prev) => ({ ...prev, membership: currentRole }));
     } catch (err) {
       showResponse({
         variant: "error",
         title: "Your subscription could not be updated",
         message:
-          err.message ||
+          err?.message ||
           "An error occurred while updating your membership type.",
       });
-
       setAccountForm((prev) => ({ ...prev, membership: currentRole }));
     } finally {
       setSaving(false);
@@ -122,44 +148,48 @@ const SettingPage = () => {
               />
 
               <label className="form-label mt-4">Subscription</label>
-              <div className="membership-group mx-2"/>
-                {membershipPlans.map((plan) => {
-                  const isSelected = accountForm.membership === plan; 
-                  const isCurrent = currentRole === plan; 
+              <div className="membership-group mx-2" />
+              {membershipPlans.map((plan) => {
+                const isSelected = accountForm.membership === plan;
+                const isCurrent = currentRole === plan;
 
-                  let tagText = "";
-                  if (isCurrent) {
-                    tagText = "(current)";
-                  } else if (
-                    currentRole === "User" &&
-                    plan === "Sommelier"
-                  ) {
-                    tagText = "(update)";
-                  }
+                let tagText = "";
+                if (isCurrent) {
+                  tagText = "(current)";
+                } else if (currentRole === "User" && plan === "Sommelier") {
+                  tagText = "(update)";
+                }
 
-                  return (
-                    <button
-                      key={plan}
-                      type="button"
-                      className={
-                        "btn btn-sm membership-pill" +
-                        (isSelected ? " active" : "")
-                      }
-                      onClick={() => handleSelectMembership(plan)}
-                    >
-                      <span>{plan}</span>
-                      {tagText && (
-                        <span className="membership-tag"> {tagText}</span>
-                      )}
-                    </button>
-                  );
-                })}
+                return (
+                  <button
+                    key={plan}
+                    type="button"
+                    className={
+                      "btn btn-sm membership-pill" +
+                      (isSelected ? " active" : "")
+                    }
+                    onClick={() => handleSelectMembership(plan)}
+                  >
+                    <span>{plan}</span>
+                    {tagText && (
+                      <span className="membership-tag"> {tagText}</span>
+                    )}
+                  </button>
+                );
+              })}
 
               <div className="text-muted small mb-3">
-                The type of membership defines benefits such as extended history, favorites, creating a wine if it is not available, and advanced recommendations with a chatbot.
+                The type of membership defines benefits such as extended
+                history, favorites, creating a wine if it is not available, and
+                advanced recommendations with a chatbot.
               </div>
 
-              <button type="submit" className="btn btn-dark button-save" disabled={saving} onClick={handleSaveAll}>
+              <button
+                type="submit"
+                className="btn btn-dark button-save"
+                disabled={saving}
+                onClick={handleSaveAll}
+              >
                 {saving ? "Saving..." : "Save changes"}
               </button>
             </form>

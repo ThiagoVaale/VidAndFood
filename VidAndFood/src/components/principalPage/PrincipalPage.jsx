@@ -14,6 +14,7 @@ import Footer from "../ui/footer/Footer";
 import { fetchWinesFeatured } from "../../services/wineService";
 import ResponseContext from "../../services/context/responseContext/ResponseContext";
 import CardHome from "../ui/home/cardHome/CardHome";
+import useNavigateToWineDetail from "../../hooks/useNavigateToWineDetail";
 
 const MAX_SLIDERS = import.meta.env.VITE_MAX_SLIDES_PER_VIEW;
 
@@ -22,6 +23,8 @@ const PrincipalPage = () => {
   const [winesFeatured, setWinesFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const navigateToWineDetail = useNavigateToWineDetail();
 
   useEffect(() => {
     const loadWinesFeatured = async () => {
@@ -42,6 +45,10 @@ const PrincipalPage = () => {
   }, []);
 
   const canLoop = winesFeatured.length >= MAX_SLIDERS * 2;
+
+  const handleClickWineSwiper = (wine) => {
+    navigateToWineDetail(wine.id);
+  }
 
   return (
     <div className="root-style">
@@ -161,7 +168,7 @@ const PrincipalPage = () => {
                         precio={wine.price}
                         rating={wine.averageScore}
                         isHorizontal={false}
-                        onClick={() => navigate(`/wines/${wine.id}`)}
+                        onClick={() => handleClickWineSwiper(wine)}
                       />
                     </SwiperSlide>
                   ))}

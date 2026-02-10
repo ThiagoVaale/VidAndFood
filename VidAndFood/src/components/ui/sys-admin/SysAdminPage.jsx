@@ -170,7 +170,7 @@ const SysAdminPage = () => {
           message: `The wine ${selectedWine.name} has been successfully deleted.`,
         });
 
-        await loadWines();
+        reloadWines();
         setShowConfirm(false);
       } catch (e) {
         showResponse({

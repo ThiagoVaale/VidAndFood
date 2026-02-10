@@ -13,9 +13,9 @@ import {
   toggleFavoriteWine,
 } from "../../../services/wineService";
 import ResponseContext from "../../../services/context/responseContext/ResponseContext";
-import HistoryContext from "../../../services/context/historyContext/HistoryContext";
 import AuthContext from "../../../services/context/authContext/AuthContext";
 import WineContext from "../../../services/context/winesContext/WinesContext";
+import { wineTypeToLabel } from "../../../utils/wineType";
 
 const WineDetailPage = () => {
   const { wineId } = useParams();
@@ -37,7 +37,6 @@ const WineDetailPage = () => {
     const loadWineWithReview = async () => {
       try {
         const wineReview = await fetchWineById(wineId);
-        console.log("VINO POR ID DESDE BACK: ", wineReview);
         setWine(wineReview || null);
       } catch (err) {
         console.error("Error al cargar el vino:", err);
@@ -77,7 +76,6 @@ const WineDetailPage = () => {
   const favorite = isFavorite(wine.wine.id);
 
   const handleToggleFavorite = async () => {
-    console.log("WINE de estado cargado por fetchs: ", wine)
     if (!isAuthenticated) {
       openAuthModal("login");
       return;
@@ -239,6 +237,13 @@ const WineDetailPage = () => {
                 <div className="wine-detail-row-label">Scent</div>
                 <div className="wine-detail-row-value">
                   {wine.wine.aroma || "Sin especificar"}
+                </div>
+              </div>
+
+              <div className="wine-detail-row">
+                <div className="wine-detail-row-label">Tipo de vino</div>
+                <div className="wine-detail-row-value">
+                  {wineTypeToLabel(wine.wine.wineType)}
                 </div>
               </div>
             </div>

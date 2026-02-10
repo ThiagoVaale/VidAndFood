@@ -1,9 +1,20 @@
 import { useContext } from "react";
 import "./MatchBanner.css";
 import AuthContext from "../../services/context/authContext/AuthContext";
+import ResponseContext from "../../services/context/responseContext/ResponseContext";
 
 const MatchBanner = () => {
-  const { openAuthModal } = useContext(AuthContext);
+  const { openAuthModal, isAuthenticated, onLogout } = useContext(AuthContext);
+  const { showResponse } = useContext(ResponseContext);
+
+  const handleLogOutAccount = () => {
+    onLogout();
+    showResponse({
+      variant: "success",
+      title: "Cerrar sesión",
+      message: "Tu cuenta se ha cerrado con éxito. Hasta la próxima."
+    });
+  }
 
   return (
     <section className="match-banner">
@@ -21,13 +32,23 @@ const MatchBanner = () => {
           Get personalized wine recommendations. Log in to find wines that suit your taste.
         </p>
 
-        <button
+        {!isAuthenticated ? (
+          <button
           type="button"
           className="match-button"
           onClick={() => openAuthModal("login")}
         >
           Log in to your account
         </button>
+        ) : (
+          <button
+          type="button"
+          className="match-button"
+          onClick={handleLogOutAccount}
+        >
+          Cerrar sesión
+        </button>
+        )}
       </div>
     </section>
   );

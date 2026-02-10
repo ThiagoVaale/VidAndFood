@@ -43,8 +43,6 @@ const CardHome = ({
     setImgSrc(optimizeCloudinaryUrl(img));
   }, [img]);
 
-
-
   return (
     <>
       {isHorizontal ? (
